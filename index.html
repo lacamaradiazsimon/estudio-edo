@@ -1,0 +1,1878 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0">
+<meta name="theme-color" content="#0f1220">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>EDO · Control 1</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global', scale: 1.0 },
+  options: { enableMenu: false },
+  startup: {
+    typeset: false,
+    ready: () => {
+      window.MathJax.startup.defaultReady();
+      window.__mjReady = true;
+      if (window.__retypeset) window.__retypeset();
+    }
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f1220; --bg2:#090b14; --surf:#141828; --card:#161b2c; --card2:#1c2236; --elev:#202741;
+  --txt:#eef0f8; --txt2:#c4cade; --muted:#8b93b0; --faint:#5c6485;
+  --accent:#6ea8fe; --accent2:#5ce2c0; --accent3:#c9a6ff;
+  --ok:#36d399; --bad:#fb7185; --warn:#fbbf24;
+  --border:#242b45; --hair:#1c2338; --edge:rgba(255,255,255,.06);
+  --shadow:rgba(0,0,0,.5);
+  --font-ui:"Geist",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --font-mono:"Geist Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  color-scheme:dark;
+}
+html[data-theme="light"]{
+  --bg:#f4f6fc; --bg2:#e7ebf6; --surf:#ffffff; --card:#ffffff; --card2:#f3f5fc; --elev:#ffffff;
+  --txt:#141a30; --txt2:#2c344f; --muted:#5a6485; --faint:#8a93b2;
+  --accent:#2f6bdd; --accent2:#0ea98a; --accent3:#7c4ddb;
+  --ok:#0f9d63; --bad:#d63a52; --warn:#b8780a;
+  --border:#dde2f0; --hair:#eef1f8; --edge:rgba(20,26,48,.04);
+  --shadow:rgba(30,40,80,.14);
+  color-scheme:light;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:radial-gradient(1300px 900px at 82% -12%, rgba(110,168,254,.14), transparent 58%),
+             radial-gradient(1000px 800px at -12% 112%, rgba(92,226,192,.10), transparent 55%),
+             radial-gradient(700px 600px at 50% 40%, rgba(201,166,255,.05), transparent 60%),
+             var(--bg);
+  color:var(--txt);
+  font-family:var(--font-ui);
+  font-size:16.5px; line-height:1.64; -webkit-text-size-adjust:100%;
+  font-feature-settings:"ss01","cv01"; letter-spacing:-.005em;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+a{color:var(--accent);text-decoration:none}
+a:hover{color:color-mix(in srgb,var(--accent) 78%, var(--txt))}
+::selection{background:color-mix(in srgb,var(--accent) 32%, transparent)}
+/* ---------- Scrollbars ---------- */
+html{scrollbar-width:thin;scrollbar-color:color-mix(in srgb,var(--faint) 55%,transparent) transparent}
+::-webkit-scrollbar{width:12px;height:12px;background:transparent}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--faint) 55%,transparent);border:3px solid transparent;background-clip:content-box;border-radius:99px}
+::-webkit-scrollbar-thumb:hover{background:color-mix(in srgb,var(--faint) 85%,transparent);border:3px solid transparent;background-clip:content-box}
+::-webkit-scrollbar-corner{background:transparent}
+/* ---------- Top bar ---------- */
+#topbar{
+  position:sticky; top:0; z-index:40;
+  display:flex; align-items:center; gap:12px;
+  padding:calc(11px + env(safe-area-inset-top)) 20px 11px;
+  background:color-mix(in srgb, var(--bg) 72%, transparent);
+  backdrop-filter:saturate(180%) blur(18px); -webkit-backdrop-filter:saturate(180%) blur(18px);
+  border-bottom:1px solid var(--border);
+  box-shadow:0 1px 0 var(--edge);
+}
+#menuBtn{
+  display:none; border:1px solid var(--border); background:var(--card);
+  color:var(--txt); width:40px; height:40px; border-radius:11px; font-size:18px; cursor:pointer;
+  align-items:center; justify-content:center;
+}
+#brand{font-weight:600; font-size:15px; letter-spacing:-.01em; display:flex; align-items:center; gap:11px}
+#brand .logo{
+  width:32px;height:32px;border-radius:9px;flex:none;display:grid;place-items:center;
+  background:linear-gradient(145deg,var(--accent),#4f7ee6 60%,var(--accent2));
+  box-shadow:0 4px 14px -4px color-mix(in srgb,var(--accent) 60%,transparent), inset 0 1px 0 rgba(255,255,255,.35);
+  color:#0a1024;font-family:var(--font-mono);font-weight:600;font-size:15px;
+}
+#brand .wm{display:flex;flex-direction:column;line-height:1.12}
+#brand .wm b{font-weight:600;font-size:14.5px;color:var(--txt);letter-spacing:-.01em}
+#brand small{color:var(--faint); font-weight:500; font-size:11px; letter-spacing:.02em; font-family:var(--font-mono)}
+#brand .dot{color:var(--accent2)}
+#topRight{margin-left:auto; display:flex; align-items:center; gap:12px}
+#themeBtn{border:1px solid var(--border); background:var(--card); color:var(--txt); width:40px;height:40px;border-radius:11px;font-size:16px;cursor:pointer;transition:background .15s,border .15s}
+#themeBtn:hover{background:var(--card2);border-color:color-mix(in srgb,var(--accent) 40%,var(--border))}
+#progWrap{display:flex;align-items:center;gap:9px;min-width:120px;padding:6px 12px 6px 13px;border:1px solid var(--border);border-radius:99px;background:color-mix(in srgb,var(--card) 60%,transparent)}
+#progBar{flex:1;height:6px;background:color-mix(in srgb,var(--faint) 25%,transparent);border-radius:99px;overflow:hidden;min-width:56px}
+#progFill{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .5s cubic-bezier(.4,0,.1,1);box-shadow:0 0 10px color-mix(in srgb,var(--accent2) 60%,transparent)}
+#progTxt{font-size:12px;color:var(--txt2);font-variant-numeric:tabular-nums;font-family:var(--font-mono);font-weight:500}
+/* ---------- Layout ---------- */
+#layout{display:flex; max-width:1200px; margin:0 auto; gap:0}
+#sidebar{
+  width:296px; flex:none; padding:22px 16px 60px; position:sticky; top:65px; align-self:flex-start;
+  max-height:calc(100vh - 65px); overflow-y:auto;
+}
+#sidebar h3{font-size:10.5px;text-transform:uppercase;letter-spacing:.16em;color:var(--faint);margin:4px 10px 12px;font-family:var(--font-mono);font-weight:500}
+.navItem{
+  display:flex; align-items:center; gap:12px; padding:9px 11px; border-radius:12px; cursor:pointer;
+  color:var(--txt2); border:1px solid transparent; margin-bottom:3px; position:relative;
+  transition:background .16s,border .16s,color .16s;
+}
+.navItem:hover{background:var(--card);color:var(--txt)}
+.navItem.active{background:linear-gradient(180deg,var(--card2),var(--card));border-color:var(--border);color:var(--txt);box-shadow:0 6px 20px -14px var(--shadow)}
+.navItem.active::before{content:"";position:absolute;left:-16px;top:50%;transform:translateY(-50%);width:3px;height:20px;border-radius:2px;background:linear-gradient(var(--accent),var(--accent2))}
+.navItem .ic{font-size:16px; width:32px; height:32px; flex:none; display:grid; place-items:center; border-radius:9px; background:var(--card2); border:1px solid var(--border); transition:background .16s}
+.navItem.active .ic{background:color-mix(in srgb,var(--accent) 16%, var(--card2));border-color:color-mix(in srgb,var(--accent) 34%,var(--border))}
+.navItem .nm{font-size:13.5px; font-weight:600; line-height:1.25; letter-spacing:-.01em}
+.navItem .nm small{display:block;color:var(--faint);font-weight:450;font-size:11px;margin-top:2px;letter-spacing:0}
+.navItem .chk{margin-left:auto; color:var(--ok); font-size:12px; opacity:0; flex:none; width:18px;height:18px;border-radius:50%;background:color-mix(in srgb,var(--ok) 18%,transparent);display:grid;place-items:center;transition:opacity .2s}
+.navItem.done .chk{opacity:1}
+.navItem.done .ic{opacity:.6}
+#scrim{display:none; position:fixed; inset:0; background:rgba(4,6,14,.62); backdrop-filter:blur(3px); z-index:35}
+/* ---------- Content ---------- */
+#main{flex:1; min-width:0; padding:28px 26px 130px; border-left:1px solid var(--hair)}
+.mhead{margin:6px 0 26px;animation:rise .5s cubic-bezier(.2,.7,.2,1)}
+.mhead .kick{color:var(--accent2);font-weight:500;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;font-family:var(--font-mono);display:inline-flex;align-items:center;gap:8px}
+.mhead .kick::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent2);box-shadow:0 0 8px var(--accent2)}
+.mhead h1{font-size:32px;line-height:1.12;margin:11px 0 7px;font-weight:700;letter-spacing:-.025em}
+.mhead h1 .e{margin-right:12px;font-size:.9em}
+.mhead p{color:var(--muted);margin:0;font-size:16px;max-width:70ch}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.section{margin:36px 0}
+.section > .stitle{
+  display:flex;align-items:center;gap:11px;font-size:11.5px;font-weight:500;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 16px;font-family:var(--font-mono);
+}
+.section > .stitle .sdot{width:7px;height:7px;border-radius:2px;background:var(--accent);flex:none}
+.section > .stitle::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
+.card{background:linear-gradient(180deg,color-mix(in srgb,var(--card2) 45%,var(--card)),var(--card));border:1px solid var(--border);border-radius:16px;padding:22px 22px;box-shadow:0 1px 0 var(--edge) inset,0 18px 40px -30px var(--shadow);margin-bottom:14px}
+.para{margin:0 0 14px}
+.para:last-child{margin-bottom:0}
+.formula{
+  background:radial-gradient(120% 120% at 0% 0%, color-mix(in srgb,var(--accent) 6%,var(--card2)), var(--card2));
+  border:1px solid var(--border);border-radius:13px;padding:14px 16px;margin:16px 0;
+  overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; text-align:center;
+  box-shadow:0 1px 0 var(--edge) inset;
+}
+.formula .cap{display:block;color:var(--muted);font-size:13px;margin-top:9px;text-align:center;line-height:1.5;font-family:var(--font-ui)}
+.callout{
+  position:relative;border:1px solid color-mix(in srgb,var(--accent) 30%, var(--border));
+  background:linear-gradient(180deg, color-mix(in srgb,var(--accent) 11%, var(--card)), color-mix(in srgb,var(--accent) 4%, var(--card)));
+  border-radius:13px;padding:14px 16px 14px 46px;margin:16px 0;box-shadow:0 1px 0 var(--edge) inset;
+}
+.callout::before{content:"💡";position:absolute;left:13px;top:13px;font-size:15px;width:22px;height:22px;display:grid;place-items:center;border-radius:7px;background:color-mix(in srgb,var(--accent) 18%,transparent)}
+strong{color:var(--txt);font-weight:600}
+code{background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:1.5px 6px;font-size:.9em;font-family:var(--font-mono)}
+/* ---------- Interactive bits ---------- */
+.btn{
+  appearance:none;border:1px solid var(--border);background:var(--card2);color:var(--txt);
+  border-radius:11px;padding:10px 15px;font-size:14px;font-weight:500;cursor:pointer;letter-spacing:-.01em;
+  min-height:44px; transition:background .15s,border .15s,transform .06s,box-shadow .15s; touch-action:manipulation;
+}
+.btn:hover{background:var(--elev);border-color:color-mix(in srgb,var(--accent) 34%,var(--border))}
+.btn:active{transform:scale(.975)}
+.btn.primary{background:linear-gradient(180deg,#7fb2ff,var(--accent) 55%,#5b93ee);border-color:transparent;color:#08101f;font-weight:600;box-shadow:0 6px 18px -8px color-mix(in srgb,var(--accent) 70%,transparent),inset 0 1px 0 rgba(255,255,255,.3)}
+.btn.primary:hover{filter:brightness(1.05)}
+.btn.ghost{background:transparent}
+.btn.ghost:hover{background:var(--card2)}
+.btn.sm{padding:7px 13px;font-size:12.5px;min-height:36px;border-radius:9px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+/* steps (guided derivation + exercise) */
+.step{border:1px solid var(--border);border-radius:14px;padding:16px 17px;margin-bottom:12px;background:linear-gradient(180deg,color-mix(in srgb,var(--card2) 40%,var(--card)),var(--card));transition:border .15s}
+.step:hover{border-color:color-mix(in srgb,var(--accent) 22%,var(--border))}
+.step .qn{display:flex;gap:12px;align-items:flex-start}
+.step .badge{flex:none;width:28px;height:28px;border-radius:9px;background:color-mix(in srgb,var(--accent2) 14%,var(--card2));border:1px solid color-mix(in srgb,var(--accent2) 30%,var(--border));
+  display:grid;place-items:center;font-size:13px;font-weight:600;color:var(--accent2);font-family:var(--font-mono)}
+.step .prompt{font-weight:500;margin:3px 0 0}
+.hintbox{margin-top:11px}
+.hint{background:color-mix(in srgb,var(--warn) 7%,var(--card2));border:1px solid color-mix(in srgb,var(--warn) 28%,var(--border));border-radius:10px;padding:10px 13px;margin-top:8px;font-size:15px;color:var(--txt2)}
+.hint .lab{color:var(--warn);font-weight:500;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;display:block;margin-bottom:3px;font-family:var(--font-mono)}
+.reveal{margin-top:12px;border-top:1px solid var(--hair);padding-top:12px;display:none}
+.reveal.show{display:block;animation:fade .32s cubic-bezier(.2,.7,.2,1)}
+.reveal .ans{background:color-mix(in srgb,var(--ok) 11%, transparent);border:1px solid color-mix(in srgb,var(--ok) 34%, var(--border));border-radius:11px;padding:10px 12px;margin-bottom:8px}
+.reveal .exp{color:var(--muted);font-size:15px}
+@keyframes fade{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
+.finalans{margin-top:8px;background:linear-gradient(180deg,color-mix(in srgb,var(--accent2) 13%, transparent),color-mix(in srgb,var(--accent2) 6%,transparent));border:1px solid color-mix(in srgb,var(--accent2) 36%, var(--border));border-radius:12px;padding:13px 15px}
+.finalans .lab{color:var(--accent2);font-weight:500;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:4px;font-family:var(--font-mono)}
+/* quiz */
+.quiz{border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:13px;background:linear-gradient(180deg,color-mix(in srgb,var(--card2) 40%,var(--card)),var(--card))}
+.quiz .q{font-weight:500;margin:0 0 14px;font-size:15.5px}
+.opt{display:flex;gap:11px;align-items:flex-start;border:1px solid var(--border);border-radius:11px;padding:12px 14px;margin-bottom:9px;cursor:pointer;background:var(--card2);transition:border .16s,background .16s,transform .06s}
+.opt:hover{border-color:color-mix(in srgb,var(--accent) 55%,var(--border));background:var(--elev)}
+.opt:active{transform:scale(.995)}
+.opt .mk{flex:none;width:22px;height:22px;border-radius:50%;border:2px solid var(--faint);display:grid;place-items:center;font-size:12px;font-weight:700;margin-top:1px;transition:border .16s,background .16s}
+.opt.correct{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,transparent)}
+.opt.correct .mk{border-color:var(--ok);background:var(--ok);color:#04130c}
+.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,transparent)}
+.opt.wrong .mk{border-color:var(--bad);background:var(--bad);color:#1a0408}
+.opt.locked{cursor:default}
+.opt.locked:hover{background:var(--card2)}
+.opt.locked:not(.correct):not(.wrong){opacity:.55}
+.opt.correct.locked,.opt.wrong.locked{opacity:1}
+.fb{font-size:13.5px;color:var(--muted);margin:4px 0 0;display:none;line-height:1.5}
+.opt.show-fb .fb{display:block}
+.qexp{margin-top:8px;background:color-mix(in srgb,var(--accent) 6%,var(--card2));border:1px solid color-mix(in srgb,var(--accent) 22%,var(--border));border-radius:11px;padding:12px 14px;font-size:14.5px;display:none;color:var(--txt2)}
+.qexp.show{display:block;animation:fade .32s cubic-bezier(.2,.7,.2,1)}
+.qexp .lab{color:var(--accent);font-weight:500;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:4px;font-family:var(--font-mono)}
+/* takeaways */
+.takeaways{list-style:none;padding:0;margin:0}
+.takeaways li{position:relative;padding:13px 15px 13px 46px;background:linear-gradient(180deg,color-mix(in srgb,var(--card2) 40%,var(--card)),var(--card));border:1px solid var(--border);border-radius:12px;margin-bottom:9px;line-height:1.55;transition:border .15s}
+.takeaways li:hover{border-color:color-mix(in srgb,var(--accent3) 30%,var(--border))}
+.takeaways li::before{content:"";position:absolute;left:15px;top:16px;width:16px;height:16px;border-radius:5px;background:linear-gradient(145deg,var(--accent3),var(--accent));box-shadow:0 2px 8px -2px color-mix(in srgb,var(--accent3) 60%,transparent)}
+/* widget shell */
+.widget{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--border);border-radius:16px;padding:16px;margin:6px 0 4px;overflow:hidden;box-shadow:0 1px 0 var(--edge) inset,0 18px 40px -30px var(--shadow)}
+.widget .whead{display:flex;align-items:center;gap:9px;font-weight:600;font-size:14.5px;margin:0 2px 12px;letter-spacing:-.01em}
+.widget .whead::before{content:"";width:8px;height:8px;border-radius:3px;background:linear-gradient(var(--accent),var(--accent2));flex:none}
+.widget .whead .tag{margin-left:auto;font-size:10px;color:var(--faint);font-weight:500;letter-spacing:.08em;text-transform:uppercase;font-family:var(--font-mono);background:var(--card2);border:1px solid var(--border);padding:4px 9px;border-radius:99px}
+.wcanvas{display:block;width:100%;border-radius:12px;background:radial-gradient(120% 120% at 50% 0%,color-mix(in srgb,var(--accent) 5%,var(--bg2)),var(--bg2));border:1px solid var(--border);touch-action:none}
+.wctrls{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-top:13px}
+.seg{display:inline-flex;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--card2);padding:2px}
+.seg button{border:none;background:transparent;color:var(--muted);padding:8px 13px;font-size:13px;font-weight:500;cursor:pointer;min-height:38px;border-radius:8px;transition:background .15s,color .15s;font-family:var(--font-ui)}
+.seg button.on{background:var(--accent);color:#08101f;font-weight:600}
+.field{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--muted);flex-wrap:wrap;font-family:var(--font-mono);background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:6px 12px}
+.field input[type=range]{accent-color:var(--accent);height:28px}
+.field b{color:var(--accent2);font-weight:600}
+.readout{font-variant-numeric:tabular-nums;background:color-mix(in srgb,var(--accent) 4%,var(--card2));border:1px solid var(--border);border-radius:11px;padding:11px 14px;font-size:14px;line-height:1.5;margin-top:11px;color:var(--txt2)}
+.readout b{color:var(--accent2);font-weight:600}
+.readout .big{font-size:20px;font-weight:700;color:var(--txt)}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);background:var(--card2);border:1px solid var(--border);border-radius:99px;padding:5px 10px;font-family:var(--font-mono)}
+/* footer nav */
+.fnav{display:flex;gap:10px;margin-top:38px;padding-top:20px;border-top:1px solid var(--hair)}
+.fnav .btn{flex:1;justify-content:center;display:flex;align-items:center;gap:7px}
+.markdone{width:100%;margin-top:16px;min-height:48px;font-size:14.5px}
+.bignote{color:var(--faint);font-size:12.5px;text-align:center;margin-top:28px;line-height:1.6;padding:14px 10px;border-top:1px solid var(--hair)}
+.bignote a{cursor:pointer}
+@media (max-width:860px){
+  body{font-size:15.5px}
+  #menuBtn{display:flex}
+  #sidebar{
+    position:fixed; top:0; left:0; bottom:0; width:300px; max-width:86vw; z-index:36;
+    background:var(--surf); transform:translateX(-104%); transition:transform .28s cubic-bezier(.3,.7,.2,1);
+    padding-top:calc(20px + env(safe-area-inset-top)); max-height:none; box-shadow:0 0 60px var(--shadow);
+    border-right:1px solid var(--border);
+  }
+  #sidebar.open{transform:none}
+  #scrim.open{display:block}
+  #main{padding:20px 16px 120px;border-left:none}
+  .mhead h1{font-size:25px}
+  #brand .wm small,#brand small{display:none}
+  #progWrap{min-width:auto;padding:5px 10px}
+  #progTxt{display:none}
+}
+@media (max-width:420px){
+  .mhead h1{font-size:22px}
+  .card,.widget{border-radius:14px;padding:16px}
+  #topbar{padding-left:14px;padding-right:14px}
+}
+</style>
+</head>
+<body>
+<div id="topbar">
+  <button id="menuBtn" aria-label="Menú">☰</button>
+  <div id="brand">
+    <span class="logo">∫</span>
+    <span class="wm"><b>EDO · Control 1</b><small>Existencia y unicidad · autónomas · separables · lineales · exactas · sustituciones</small></span>
+  </div>
+  <div id="topRight">
+    <div id="progWrap" title="Progreso">
+      <div id="progBar"><div id="progFill"></div></div>
+      <span id="progTxt">0%</span>
+    </div>
+    <button id="themeBtn" aria-label="Tema">🌙</button>
+  </div>
+</div>
+<div id="scrim"></div>
+<div id="layout">
+  <aside id="sidebar">
+    <h3>Módulos</h3>
+    <div id="navList"></div>
+    <div class="bignote">Toca un módulo para empezar.<br>Tu progreso se guarda en este dispositivo.</div>
+  </aside>
+  <main id="main">
+    <div id="content"><!-- render --></div>
+  </main>
+</div>
+
+<script id="data">
+window.MODULES_DATA = [
+{
+  id: "apuntes", icon: "🎯", title: "Apuntes",
+  subtitle: "Todo el formulario del Control 1 en una pantalla",
+  widget: "none",
+  theory: [
+    { type: "para", content: "**1 · Vocabulario básico**" },
+    { type: "formula", content: "F\\left(x,\\;y(x),\\;y'(x),\\;\\dots,\\;y^{(n)}(x)\\right)=0", caption: "EDO de orden \\(n\\). El **orden** es la derivada más alta que aparece; el **grado** es el exponente de esa derivada más alta." },
+    { type: "formula", content: "\\begin{cases}\\dfrac{dy}{dx}=f(x,y)\\\\ y(x_0)=y_0\\end{cases}", caption: "Problema de valor inicial (PVI) de primer orden." },
+    { type: "para", content: "**2 · Existencia y unicidad**" },
+    { type: "formula", content: "f\\ \\text{y}\\ \\frac{\\partial f}{\\partial y}\\ \\text{continuas en}\\ R\\ \\Longrightarrow\\ \\exists!\\ y=\\phi(x)\\ \\text{en}\\ (x_0-\\delta,\\,x_0+\\delta)", caption: "\\(R=\\{(x,y): a\\le x\\le b,\\ c\\le y\\le d\\}\\) debe contener a \\((x_0,y_0)\\) en su **interior**. La conclusión es **local**." },
+    { type: "formula", content: "\\begin{array}{l|l}\\text{Solo }f\\text{ continua} & \\text{existe al menos una solución}\\\\\\hline f\\text{ y }f_y\\text{ continuas} & \\text{existe exactamente una}\\end{array}", caption: "Condiciones **suficientes**, no necesarias: puede haber unicidad aunque fallen." },
+    { type: "para", content: "**3 · EDO autónomas**" },
+    { type: "formula", content: "\\frac{dy}{dx}=f(y)", caption: "La variable independiente no aparece. \\(c\\) es **punto crítico** si \\(f(c)=0\\); entonces \\(y(x)=c\\) es **solución de equilibrio**." },
+    { type: "formula", content: "\\begin{array}{c|c}\\text{signo de }f(y) & \\text{comportamiento de }y(x)\\\\\\hline f(y)\\gt 0 & \\text{creciente}\\ (\\uparrow)\\\\ f(y)\\lt 0 & \\text{decreciente}\\ (\\downarrow)\\end{array}", caption: "El signo de \\(f\\) en cada banda entre puntos críticos genera la **línea de fase**." },
+    { type: "formula", content: "\\begin{array}{l|l}\\uparrow\\ c\\ \\downarrow & \\text{asintóticamente estable (atractor)}\\\\\\hline \\downarrow\\ c\\ \\uparrow & \\text{inestable (repulsor)}\\\\\\hline \\uparrow\\ c\\ \\uparrow\\ \\text{ o }\\ \\downarrow\\ c\\ \\downarrow & \\text{semiestable}\\end{array}", caption: "Las flechas indican hacia dónde se mueve \\(y\\) **por debajo** y **por encima** de \\(c\\)." },
+    { type: "para", content: "**4 · Variables separables**" },
+    { type: "formula", content: "g(y)\\,y'=f(x)\\ \\Longrightarrow\\ \\int g(y)\\,dy=\\int f(x)\\,dx+c", caption: "Se integra cada lado en su propia variable, usando \\(y'\\,dx=dy\\)." },
+    { type: "formula", content: "\\frac{dy}{dx}=f(x)h(y),\\qquad h(y_0)=0\\ \\Rightarrow\\ y(x)=y_0\\ \\text{es solución singular}", caption: "Las raíces de \\(h\\) se **pierden** al dividir: recupéralas siempre al final." },
+    { type: "para", content: "**5 · Lineales de primer orden**" },
+    { type: "formula", content: "a_1(x)y'+a_0(x)y=h(x)\\ \\xrightarrow{\\ \\div\\,a_1(x)\\ }\\ y'+p(x)y=q(x)", caption: "**Forma estándar**: el coeficiente de \\(y'\\) debe ser \\(1\\) antes de calcular nada." },
+    { type: "formula", content: "\\mu(x)=e^{\\int p(x)\\,dx}\\qquad\\Longrightarrow\\qquad \\frac{d}{dx}\\Big[\\mu(x)\\,y\\Big]=\\mu(x)\\,q(x)", caption: "Factor integrante: convierte el lado izquierdo en la derivada de un producto." },
+    { type: "formula", content: "y(x)=e^{-\\int p\\,dx}\\left[\\int e^{\\int p\\,dx}\\,q(x)\\,dx+c\\right],\\qquad c\\in\\mathbb{R}", caption: "Solución general. En \\(\\mu\\) **no** se agrega constante de integración." },
+    { type: "para", content: "**6 · Ecuaciones exactas**" },
+    { type: "formula", content: "M(x,y)\\,dx+N(x,y)\\,dy=0\\ \\text{ es exacta }\\iff\\ \\frac{\\partial M}{\\partial y}=\\frac{\\partial N}{\\partial x}", caption: "Sale de igualar las parciales mixtas de \\(f\\), donde \\(f_x=M\\) y \\(f_y=N\\)." },
+    { type: "formula", content: "f(x,y)=\\int M(x,y)\\,dx+\\int\\left[N-\\frac{\\partial}{\\partial y}\\int M(x,y)\\,dx\\right]dy", caption: "La solución general es \\(f(x,y)=c\\): las curvas de nivel de \\(f\\)." },
+    { type: "para", content: "**7 · Factor integrante**" },
+    { type: "formula", content: "\\frac{1}{\\mu}\\left(N\\frac{\\partial \\mu}{\\partial x}-M\\frac{\\partial \\mu}{\\partial y}\\right)=\\frac{\\partial M}{\\partial y}-\\frac{\\partial N}{\\partial x}", caption: "Condición general para que \\(\\mu M\\,dx+\\mu N\\,dy=0\\) sea exacta." },
+    { type: "formula", content: "\\mu(x)=\\exp\\left(\\int \\frac{\\partial M/\\partial y-\\partial N/\\partial x}{N}\\,dx\\right)", caption: "Sirve **solo si** ese cociente depende únicamente de \\(x\\). Se divide por \\(N\\)." },
+    { type: "formula", content: "\\mu(y)=\\exp\\left(\\int \\frac{\\partial N/\\partial x-\\partial M/\\partial y}{M}\\,dy\\right)", caption: "Sirve **solo si** ese cociente depende únicamente de \\(y\\). Ojo: numerador **invertido** y se divide por \\(M\\)." },
+    { type: "para", content: "**8 · Soluciones por sustitución**" },
+    { type: "formula", content: "\\begin{array}{l|l|l}\\text{Tipo} & \\text{Se reconoce por} & \\text{Sustitución}\\\\\\hline \\text{Homogénea} & M,N\\ \\text{homogéneas del mismo grado} & y=vx\\\\\\hline \\text{Bernoulli} & y'+p(x)y=q(x)\\,y^{n} & u=y^{1-n}\\\\\\hline \\text{Riccati} & y'=p(x)+q(x)y+r(x)y^{2} & y=y_1+\\dfrac{1}{z}\\\\\\hline \\text{Reducible} & y'=f(ax+by+c) & u=ax+by+c\\end{array}", caption: "Homogénea y reducible caen en **separables**; Bernoulli y Riccati caen en **lineales**." },
+    { type: "formula", content: "f(\\lambda x,\\lambda y)=\\lambda^{k}f(x,y)\\quad\\forall\\lambda\\in\\mathbb{R}-\\{0\\}", caption: "Función homogénea de grado \\(k\\)." },
+    { type: "formula", content: "\\frac{1}{x}\\,dx+\\frac{N(1,v)}{v\\,N(1,v)+M(1,v)}\\,dv=0", caption: "Forma separable a la que llega toda EDO homogénea con \\(y=vx\\)." },
+    { type: "formula", content: "\\frac{1}{1-n}\\frac{du}{dx}+p(x)\\,u=q(x)", caption: "Bernoulli tras \\(u=y^{1-n}\\). Si \\(n=0\\) o \\(n=1\\) la EDO ya era lineal." },
+    { type: "callout", content: "**Orden de ataque en el control:** ¿es separable? → ¿es lineal en \\(y\\)? → ¿es exacta? → ¿admite \\(\\mu(x)\\) o \\(\\mu(y)\\)? → ¿es homogénea, Bernoulli, Riccati o \\(f(ax+by+c)\\)? Reescribir la EDO en la forma \\(M\\,dx+N\\,dy=0\\) y también como \\(y'=\\dots\\) suele revelar el tipo de inmediato." }
+  ],
+  keyTakeaways: [
+    "**Antes de resolver, clasifica.** Casi todo el tiempo perdido en un control viene de aplicar el método equivocado a una EDO que era de otro tipo.",
+    "**Lineal:** normaliza a \\(y'+py=q\\), calcula \\(\\mu=e^{\\int p\\,dx}\\), integra \\((\\mu y)'=\\mu q\\).",
+    "**Exacta:** primero verifica \\(M_y=N_x\\). Si falla, prueba \\(\\dfrac{M_y-N_x}{N}\\) (debe quedar solo en \\(x\\)) o \\(\\dfrac{N_x-M_y}{M}\\) (solo en \\(y\\)).",
+    "**Autónomas:** no hace falta resolver; el signo de \\(f(y)\\) entre puntos críticos entrega la monotonía, la estabilidad y los límites.",
+    "**Unicidad:** \\(f\\) continua da existencia; se necesita además \\(\\partial f/\\partial y\\) continua para la unicidad."
+  ]
+},
+{
+  id: "fundamentos", icon: "📖", title: "Lenguaje básico y PVI",
+  subtitle: "Qué es una EDO, qué es una solución y qué es un problema de valor inicial",
+  widget: "campo-dir",
+  theory: [
+    { type: "para", content: "Una **ecuación diferencial** es cualquier ecuación en la que interviene una variable dependiente y sus derivadas respecto de una o más variables independientes. Muchas leyes de la naturaleza se expresan así de forma natural: la ley de Torricelli, por ejemplo, dice que la razón de cambio del volumen de agua en un tanque de drenado es proporcional a la raíz cuadrada de la profundidad." },
+    { type: "formula", content: "\\frac{dV}{dt}=-k\\sqrt{y}", caption: "Ley de Torricelli, con \\(k\\) constante. El modelo **no** entrega \\(V(t)\\): entrega una relación entre \\(V\\) y su derivada. Resolver la EDO es recuperar la función." },
+    { type: "para", content: "Se llama **ordinaria** (EDO) cuando se deriva respecto de **una sola** variable. Su forma general es una identidad que liga \\(x\\), la función incógnita \\(y\\) y sus derivadas:" },
+    { type: "formula", content: "F\\left(x,\\;y(x),\\;y'(x),\\;\\dots,\\;y^{(n)}(x)\\right)=0", caption: "\\(x\\) es la variable independiente, \\(y\\) la función incógnita." },
+    { type: "para", content: "Dos números clasifican la ecuación de inmediato. El **orden** es el mayor grado de derivación que aparece (el \\(n\\) de arriba). El **grado** es el exponente al que está elevada esa derivada de mayor orden. Son cosas distintas y se confunden con frecuencia." },
+    { type: "formula", content: "\\begin{array}{l|c|c}\\text{EDO} & \\text{orden} & \\text{grado}\\\\\\hline y'=\\operatorname{sen}x & 1 & 1\\\\ y''+5y'=e^{-x} & 2 & 1\\\\ (y'')^{3}-3y'=0 & 2 & 3\\end{array}", caption: "El orden mira **cuántas veces** se deriva; el grado mira **a qué potencia** está elevada esa derivada máxima." },
+    { type: "para", content: "¿Qué significa exactamente **resolver**? Una función \\(\\phi\\) definida en un intervalo \\(I\\), con \\(n\\) derivadas continuas en \\(I\\), es **solución** de la EDO de orden \\(n\\) si al sustituirla la identidad se cumple en todo punto:" },
+    { type: "formula", content: "F\\left(x,\\phi(x),\\phi'(x),\\dots,\\phi^{(n)}(x)\\right)=0\\qquad\\forall x\\in I", caption: "La curva \\(y=\\phi(x)\\), \\(x\\in I\\), se llama **curva solución**; el intervalo \\(I\\) es el **intervalo de definición** o de existencia." },
+    { type: "callout", content: "El intervalo es parte de la respuesta, no un detalle. Una misma fórmula puede ser solución en un intervalo y no serlo en otro, porque fuera de \\(I\\) puede dejar de ser derivable o de estar definida." },
+    { type: "para", content: "Verificar que algo es solución es fácil: se deriva y se reemplaza. Por ejemplo \\(\\phi_1(x)=e^{2x}\\) y \\(\\phi_2(x)=e^{3x}\\) son soluciones de \\(y''-5y'+6y=0\\) en \\((-\\infty,\\infty)\\), porque \\(4-10+6=0\\) y \\(9-15+6=0\\). Y más aún, cualquier combinación de ambas también lo es:" },
+    { type: "formula", content: "y(x)=c_1e^{2x}+c_2e^{3x}", caption: "Solución para toda elección de \\(c_1\\) y \\(c_2\\): aparecen **familias** de soluciones, no soluciones aisladas." },
+    { type: "para", content: "Con frecuencia la solución queda definida **implícitamente**, y a veces es difícil o imposible despejar \\(y\\). Eso no la hace menos válida: se verifica derivando implícitamente." },
+    { type: "formula", content: "xy=\\ln(y)+1\\ \\text{ es solución de }\\ \\frac{dy}{dx}=\\frac{y^{2}}{1-xy}", caption: "En el intervalo \\((-\\infty,1)\\). Derivando: \\(y+xy'=\\dfrac{y'}{y}\\), y despejando \\(y'\\) aparece la EDO." },
+    { type: "para", content: "El caso más simple de todos ya lo viste en cálculo integral: cuando el lado derecho no depende de \\(y\\), resolver es simplemente integrar." },
+    { type: "formula", content: "\\frac{dy}{dx}=f(x)\\quad\\Longrightarrow\\quad y(x)=\\int f(x)\\,dx+c,\\qquad c\\in\\mathbb{R}", caption: "Con \\(f\\) continua. La constante \\(c\\) es la que produce la familia de curvas solución." },
+    { type: "para", content: "Esa constante libre es justamente lo que fija un **problema de valor inicial**. Para una EDO de orden \\(n\\) se imponen \\(n\\) condiciones en un mismo punto \\(x_0\\in I\\):" },
+    { type: "formula", content: "y(x_0)=y_0,\\quad y'(x_0)=y_1,\\quad\\dots,\\quad y^{(n-1)}(x_0)=y_{n-1}", caption: "Todas las condiciones se evalúan en el **mismo** \\(x_0\\); eso distingue un PVI de un problema de valores en la frontera." },
+    { type: "formula", content: "\\begin{cases}\\dfrac{dy}{dx}=f(x,y)\\\\ y(x_0)=y_0\\end{cases}", caption: "PVI de primer orden: el que domina todo el Control 1. Una sola condición basta." },
+    { type: "para", content: "Geométricamente, \\(f(x,y)\\) es la **función pendiente**: a cada punto \\((x,y)\\) del plano le asigna la pendiente de la recta tangente a la curva solución que pasa por ahí. Si en cada punto dibujas un segmentito con esa pendiente obtienes un **elemento lineal**, y el conjunto de todos ellos es el **campo direccional**." },
+    { type: "callout", content: "El campo direccional muestra el “flujo de las soluciones” **sin resolver la EDO**. Resolver el PVI es soltar una partícula en \\((x_0,y_0)\\) y dejar que el campo la arrastre. Úsalo en el widget de abajo." }
+  ],
+  exercises: [
+    {
+      statement: "Resuelve el PVI \\(\\dfrac{dy}{dx}=\\dfrac{1}{1+x^{2}}\\) y determina la curva solución que pasa por \\(\\left(1,\\tfrac{5}{4}\\right)\\).",
+      steps: [
+        { prompt: "El lado derecho no depende de \\(y\\). ¿Cuál es la familia de soluciones?", hints: ["Es integración directa: \\(y=\\int f(x)\\,dx+c\\).", "\\(\\int\\dfrac{dx}{1+x^{2}}\\) es una primitiva que conoces de memoria."], revealLatex: "y(x)=\\arctan(x)+c", explanation: "Como \\(f\\) es continua en todo \\(\\mathbb{R}\\), la familia está definida en \\((-\\infty,\\infty)\\)." },
+        { prompt: "Impón la condición inicial \\(y(1)=\\tfrac54\\) para hallar \\(c\\).", hints: ["\\(\\arctan(1)=\\dfrac{\\pi}{4}\\)."], revealLatex: "\\frac54=\\frac{\\pi}{4}+c\\ \\Longrightarrow\\ c=\\frac54-\\frac{\\pi}{4}", explanation: "La condición inicial selecciona **una** curva dentro de la familia infinita." }
+      ],
+      finalAnswerLatex: "y(x)=\\arctan(x)+\\frac54-\\frac{\\pi}{4}"
+    },
+    {
+      statement: "Verifica que la relación implícita \\(xy=\\ln(y)+1\\) define una solución de \\(\\dfrac{dy}{dx}=\\dfrac{y^{2}}{1-xy}\\).",
+      steps: [
+        { prompt: "Deriva ambos lados respecto de \\(x\\), recordando que \\(y=y(x)\\).", hints: ["El lado izquierdo pide regla del producto.", "\\(\\dfrac{d}{dx}\\ln(y)=\\dfrac{y'}{y}\\) por regla de la cadena."], revealLatex: "y+x\\,y'=\\frac{y'}{y}", explanation: "Nunca se despeja \\(y\\): se deriva la relación tal como está." },
+        { prompt: "Agrupa los términos con \\(y'\\) y despeja.", hints: ["Pasa \\(x y'\\) al lado derecho: \\(y=y'\\left(\\dfrac1y-x\\right)\\).", "Escribe \\(\\dfrac1y-x=\\dfrac{1-xy}{y}\\)."], revealLatex: "y=y'\\cdot\\frac{1-xy}{y}\\ \\Longrightarrow\\ y'=\\frac{y^{2}}{1-xy}", explanation: "Se recupera exactamente la EDO, así que la relación implícita sí define soluciones." }
+      ],
+      finalAnswerLatex: "\\boxed{\\ \\frac{dy}{dx}=\\frac{y^{2}}{1-xy}\\ \\text{ se verifica en }(-\\infty,1)\\ }"
+    }
+  ],
+  conceptual: [
+    {
+      question: "¿Cuál es el orden y el grado de \\(\\left(y''\\right)^{3}-3y'=0\\)?",
+      options: [
+        { text: "Orden 2, grado 3", correct: true, feedback: "Correcto: la derivada más alta es \\(y''\\) (orden 2) y está elevada al cubo (grado 3)." },
+        { text: "Orden 3, grado 2", correct: false, feedback: "Al revés. El exponente \\(3\\) no sube el orden: el orden solo cuenta **cuántas veces** se deriva, y aquí son dos." },
+        { text: "Orden 3, grado 3", correct: false, feedback: "No aparece ninguna tercera derivada. El \\(3\\) es un exponente, no un orden de derivación." },
+        { text: "Orden 2, grado 1", correct: false, feedback: "El grado es el exponente de la derivada de mayor orden, y \\(y''\\) está al cubo, no a la primera." }
+      ],
+      explanation: "Orden = máximo número de derivaciones. Grado = exponente de esa derivada máxima. Son independientes."
+    },
+    {
+      question: "Se afirma: “\\(y=\\sqrt{1-x^{2}}\\) es solución de \\(x+yy'=0\\)”. ¿Qué falta para que la afirmación sea completa?",
+      options: [
+        { text: "Especificar el intervalo de definición, aquí \\((-1,1)\\).", correct: true, feedback: "Exacto: fuera de \\((-1,1)\\) la función no está definida, y en \\(x=\\pm1\\) no es derivable. Una solución siempre viene con su intervalo." },
+        { text: "Nada, la fórmula por sí sola basta.", correct: false, feedback: "La definición exige que \\(\\phi\\) tenga derivadas continuas **en un intervalo** \\(I\\) y que la identidad valga para todo \\(x\\in I\\)." },
+        { text: "Agregar una constante arbitraria \\(c\\).", correct: false, feedback: "Una solución particular no necesita constante; lo que falta es el intervalo donde vive." },
+        { text: "Escribirla en forma implícita.", correct: false, feedback: "La forma explícita es perfectamente válida. El problema es otro: no se dijo dónde." }
+      ],
+      explanation: "Una solución es el par **función + intervalo**. Omitir el intervalo es un error clásico de control."
+    },
+    {
+      question: "En el campo direccional de \\(\\dfrac{dy}{dx}=x^{2}-y\\), ¿qué representa el segmento dibujado en el punto \\((1,0)\\)?",
+      options: [
+        { text: "Una recta de pendiente \\(1\\), tangente a la curva solución que pasa por ahí.", correct: true, feedback: "Correcto: \\(f(1,0)=1^{2}-0=1\\), y \\(f\\) entrega la pendiente de la tangente en ese punto." },
+        { text: "El valor de \\(y\\) en ese punto.", correct: false, feedback: "El elemento lineal no codifica el valor de \\(y\\) (ese es la posición), sino la **pendiente** \\(f(x,y)\\)." },
+        { text: "Una recta de pendiente \\(0\\), porque \\(y=0\\).", correct: false, feedback: "Hay que evaluar \\(f(x,y)=x^{2}-y\\) completa: \\(f(1,0)=1\\), no \\(0\\). Confundir \\(y\\) con \\(f\\) es la trampa." },
+        { text: "Un trozo de la curva solución exacta.", correct: false, feedback: "Es solo la **tangente** en ese punto; la curva se aparta del segmento apenas te alejas." }
+      ],
+      explanation: "En cada punto, \\(f(x,y)\\) es la pendiente. El campo direccional dibuja esa pendiente sin resolver nada."
+    }
+  ],
+  keyTakeaways: [
+    "**Orden ≠ grado:** orden = cuántas veces se deriva; grado = exponente de la derivada de mayor orden.",
+    "Una **solución** es una función con derivadas continuas **en un intervalo** \\(I\\) que satisface la identidad en todo \\(I\\). El intervalo es parte de la respuesta.",
+    "Las soluciones implícitas se verifican **derivando implícitamente**, sin despejar \\(y\\).",
+    "Un **PVI** de orden \\(n\\) impone \\(n\\) condiciones en un mismo \\(x_0\\); en primer orden basta \\(y(x_0)=y_0\\) para fijar la constante.",
+    "\\(f(x,y)\\) es la **función pendiente**: el campo direccional muestra el flujo de las soluciones sin resolver la EDO."
+  ]
+},
+{
+  id: "existencia", icon: "🛡", title: "Existencia y unicidad",
+  subtitle: "Cuándo un PVI tiene solución, y cuándo esa solución es la única",
+  widget: "no-unicidad",
+  theory: [
+    { type: "para", content: "Antes de gastar media hoja resolviendo un PVI conviene preguntarse dos cosas: **¿tiene solución?** y, si la tiene, **¿es única?** No son preguntas retóricas. Hay PVI perfectamente inocentes con infinitas soluciones distintas." },
+    { type: "formula", content: "\\begin{cases}\\dfrac{dy}{dx}=x\\sqrt{y}\\\\ y(0)=0\\end{cases}", caption: "Este PVI tiene **al menos dos** soluciones: \\(\\phi_1(x)=0\\) y \\(\\phi_2(x)=\\dfrac{x^{4}}{16}\\). Verifícalo: \\(\\phi_2'=\\dfrac{x^{3}}{4}\\) y \\(x\\sqrt{\\phi_2}=x\\cdot\\dfrac{x^{2}}{4}=\\dfrac{x^{3}}{4}\\)." },
+    { type: "para", content: "Las dos pasan por el origen, las dos satisfacen la ecuación, y ninguna es “más correcta” que la otra. Si el modelo describe un fenómeno físico, eso es un desastre: el estado inicial ya no determina el futuro. El teorema siguiente da una condición que **excluye** esta patología." },
+    { type: "formula", content: "\\begin{cases}\\dfrac{dy}{dx}=f(x,y)\\\\ y(x_0)=y_0\\end{cases}", caption: "Punto de partida del teorema." },
+    { type: "para", content: "**Teorema (Existencia y unicidad).** Supongamos que \\(f\\) y \\(\\dfrac{\\partial f}{\\partial y}\\) son funciones continuas en el rectángulo" },
+    { type: "formula", content: "R=\\left\\{(x,y)\\in\\mathbb{R}^{2}\\ :\\ a\\le x\\le b,\\ \\ c\\le y\\le d\\right\\}", caption: "que contiene al punto \\((x_0,y_0)\\) **en su interior**." },
+    { type: "para", content: "Entonces el PVI tiene una **única** solución \\(y=\\phi(x)\\) definida en algún intervalo de la forma" },
+    { type: "formula", content: "(x_0-\\delta,\\ x_0+\\delta),\\qquad \\delta\\gt 0", caption: "El teorema garantiza un \\(\\delta\\) positivo, pero **no dice cuál**: la conclusión es puramente **local**." },
+    { type: "callout", content: "Trampa clásica: el teorema **no** promete que la solución exista en todo el rectángulo \\(R\\), ni en todo \\(\\mathbb{R}\\). Solo en un entorno de \\(x_0\\), posiblemente diminuto. Una solución puede explotar en tiempo finito aunque \\(f\\) sea impecable." },
+    { type: "para", content: "Las dos hipótesis cumplen papeles distintos, y esa separación es lo que más se pregunta:" },
+    { type: "formula", content: "\\begin{array}{l|l}\\text{Hipótesis} & \\text{Qué garantiza}\\\\\\hline f\\ \\text{continua cerca de }(x_0,y_0) & \\textbf{existencia}\\ \\text{de al menos una solución}\\\\\\hline \\text{además }\\dfrac{\\partial f}{\\partial y}\\ \\text{continua} & \\textbf{unicidad}\\end{array}", caption: "La continuidad de \\(f\\) sola es **insuficiente** para la unicidad, y el ejemplo \\(y'=x\\sqrt{y}\\) lo demuestra." },
+    { type: "para", content: "En efecto, en ese ejemplo \\(f(x,y)=x\\sqrt{y}\\) es continua cerca del origen, pero su derivada parcial no lo es:" },
+    { type: "formula", content: "\\frac{\\partial f}{\\partial y}=\\frac{x}{2\\sqrt{y}}\\ \\longrightarrow\\ \\text{no está definida en }y=0", caption: "Justo sobre el punto inicial \\((0,0)\\) falla la hipótesis de unicidad, y por eso brotan infinitas soluciones." },
+    { type: "para", content: "El segundo punto fino: las condiciones son **suficientes pero no necesarias**. Que fallen no permite concluir que haya varias soluciones; solo significa que el teorema **no se puede invocar**. Un PVI podría perfectamente tener solución única aunque \\(f\\) o \\(\\partial f/\\partial y\\) sean discontinuas en \\((x_0,y_0)\\)." },
+    { type: "callout", content: "Redacta siempre en esa dirección: si las hipótesis se cumplen, **afirma** unicidad. Si fallan, di **“el teorema no decide”** y, si te lo piden, analiza a mano. Escribir “como falla la hipótesis, hay varias soluciones” es un error lógico." },
+    { type: "para", content: "En la práctica, la pregunta “¿en qué región del plano hay solución única?” se responde con un procedimiento fijo: se despeja \\(y'=f(x,y)\\), se calcula \\(\\partial f/\\partial y\\), y se excluyen los puntos donde alguna de las dos no sea continua (típicamente, donde se anula un denominador)." }
+  ],
+  guidedDerivation: {
+    title: "Región de unicidad de \\((y^{2}-x)\\,y'=y+2x\\)",
+    intro: "El procedimiento estándar, paso a paso. Es literalmente el ejemplo 3 de la Clase 02.",
+    steps: [
+      { prompt: "Primero: lleva la EDO a la forma \\(y'=f(x,y)\\). ¿Quién es \\(f\\)?", hints: ["Divide por el coeficiente de \\(y'\\).", "Ese coeficiente es \\(y^{2}-x\\)."], revealLatex: "f(x,y)=\\frac{y+2x}{y^{2}-x}", explanation: "Sin despejar \\(y'\\) no puedes identificar \\(f\\), y todo el teorema habla de esa \\(f\\)." },
+      { prompt: "¿Dónde es continua \\(f\\)?", hints: ["Es un cociente de polinomios: solo falla donde el denominador se anula."], revealLatex: "y^{2}-x\\neq 0\\quad\\Longleftrightarrow\\quad x\\neq y^{2}", explanation: "La curva \\(x=y^{2}\\) es una parábola acostada, abierta hacia la derecha." },
+      { prompt: "Ahora calcula \\(\\dfrac{\\partial f}{\\partial y}\\) tratando \\(x\\) como constante.", hints: ["Usa la regla del cociente con numerador \\(y+2x\\) y denominador \\(y^{2}-x\\).", "La derivada del numerador respecto de \\(y\\) es \\(1\\); la del denominador es \\(2y\\)."], revealLatex: "\\frac{\\partial f}{\\partial y}=\\frac{(y^{2}-x)(1)-(y+2x)(2y)}{(y^{2}-x)^{2}}=\\frac{-y^{2}-x-4xy}{(y^{2}-x)^{2}}", explanation: "Desarrollando el numerador: \\(y^{2}-x-2y^{2}-4xy=-y^{2}-x-4xy\\)." },
+      { prompt: "¿Dónde es continua esta parcial, y cuál es entonces la región pedida?", hints: ["Otra vez es un cociente: mira el denominador \\((y^{2}-x)^{2}\\).", "Se anula exactamente donde se anulaba antes."], revealLatex: "R=\\left\\{(x,y)\\in\\mathbb{R}^{2}\\ :\\ x\\neq y^{2}\\right\\}", explanation: "Ambas condiciones coinciden. En todo punto fuera de la parábola \\(x=y^{2}\\) se puede encajar un rectángulo donde \\(f\\) y \\(f_y\\) son continuas, así que el PVI tiene solución única. Sobre la parábola el teorema no decide." }
+    ]
+  },
+  exercises: [
+    {
+      statement: "¿Tiene el PVI \\(\\dfrac{dy}{dx}=x^{2}-xy^{3}\\), \\(y(1)=6\\), una única solución?",
+      steps: [
+        { prompt: "Identifica \\(f\\) y estudia su continuidad.", hints: ["Mira qué tipo de función es."], revealLatex: "f(x,y)=x^{2}-xy^{3}\\ \\text{ es un polinomio en }x,y", explanation: "Todo polinomio es continuo en \\(\\mathbb{R}^{2}\\), sin excepciones." },
+        { prompt: "Calcula \\(\\partial f/\\partial y\\) y estudia su continuidad.", hints: ["Deriva respecto de \\(y\\) tratando \\(x\\) como constante."], revealLatex: "\\frac{\\partial f}{\\partial y}=-3xy^{2}", explanation: "También es un polinomio, luego continuo en todo \\(\\mathbb{R}^{2}\\)." },
+        { prompt: "Concluye aplicando el teorema en un rectángulo alrededor de \\((1,6)\\).", hints: ["Basta exhibir **algún** rectángulo con el punto en su interior."], revealLatex: "R=[0,2]\\times[5,7]\\ \\ni\\ (1,6)\\ \\text{en su interior}", explanation: "Como \\(f\\) y \\(f_y\\) son continuas en \\(R\\), el teorema entrega una única solución en un intervalo \\((1-\\delta,1+\\delta)\\)." }
+      ],
+      finalAnswerLatex: "\\boxed{\\ \\text{Sí: solución única en un entorno de }x_0=1\\ }"
+    },
+    {
+      statement: "Analiza el PVI \\(y^{2}\\dfrac{dy}{dx}=1\\), \\(y(x_0)=0\\). ¿Puede aplicarse el teorema?",
+      steps: [
+        { prompt: "Escribe la EDO en la forma \\(y'=f(x,y)\\) y evalúa la hipótesis sobre \\(f\\).", hints: ["Divide por \\(y^{2}\\).", "Fíjate en qué pasa exactamente en \\(y=0\\), que es el valor inicial."], revealLatex: "f(x,y)=\\frac{1}{y^{2}}\\ \\text{ no está definida en }y=0", explanation: "El propio punto inicial \\((x_0,0)\\) queda fuera del dominio de \\(f\\): ningún rectángulo con ese punto en su interior sirve." },
+        { prompt: "El teorema no aplica. Analiza a mano separando variables.", hints: ["\\(y^{2}\\,dy=dx\\).", "Integra ambos lados e impón \\(y(x_0)=0\\)."], revealLatex: "\\frac{y^{3}}{3}=x+c\\ \\xrightarrow{\\ y(x_0)=0\\ }\\ y^{3}=3(x-x_0)", explanation: "La relación implícita sí pasa por \\((x_0,0)\\)." },
+        { prompt: "Despeja y examina la derivada en \\(x=x_0\\). ¿Es una solución legítima ahí?", hints: ["\\(y=\\sqrt[3]{3(x-x_0)}\\). Deriva y evalúa en \\(x_0\\)."], revealLatex: "y'=\\frac{1}{\\sqrt[3]{9(x-x_0)^{2}}}\\ \\xrightarrow[x\\to x_0]{}\\ +\\infty", explanation: "La curva tiene tangente **vertical** en \\(x_0\\): allí \\(y'\\) no existe, así que no hay solución derivable en un entorno de \\(x_0\\). El teorema no se podía invocar, y en efecto el PVI falla." }
+      ],
+      finalAnswerLatex: "\\text{El teorema no aplica: }f=\\tfrac{1}{y^{2}}\\ \\text{es discontinua en }y=0"
+    }
+  ],
+  conceptual: [
+    {
+      question: "Para el PVI \\(y'=x\\sqrt{y}\\), \\(y(0)=0\\), la hipótesis que **falla** es:",
+      options: [
+        { text: "La continuidad de \\(\\partial f/\\partial y=\\dfrac{x}{2\\sqrt{y}}\\) en \\(y=0\\).", correct: true, feedback: "Exacto. Por eso se pierde la unicidad y aparecen \\(\\phi_1=0\\) y \\(\\phi_2=x^{4}/16\\), entre infinitas más." },
+        { text: "La continuidad de \\(f(x,y)=x\\sqrt{y}\\) cerca de \\((0,0)\\).", correct: false, feedback: "\\(f\\) sí es continua para \\(y\\ge 0\\). Justamente por eso **existe** solución; lo que se pierde es la unicidad." },
+        { text: "Que \\((0,0)\\) esté en el interior de algún rectángulo.", correct: false, feedback: "Eso siempre se puede lograr geométricamente. El problema es analítico: la parcial explota en \\(y=0\\)." },
+        { text: "Ninguna: el teorema aplica y da unicidad.", correct: false, feedback: "Imposible, porque hay dos soluciones explícitas distintas. Si el teorema aplicara, eso sería una contradicción." }
+      ],
+      explanation: "\\(f\\) continua ⇒ existencia. Hace falta \\(f_y\\) continua para la unicidad, y aquí \\(f_y\\) revienta en \\(y=0\\)."
+    },
+    {
+      question: "Un PVI no cumple las hipótesis del teorema en \\((x_0,y_0)\\). ¿Qué se concluye?",
+      options: [
+        { text: "Nada: el teorema no decide, hay que analizar a mano.", correct: true, feedback: "Correcto. Las condiciones son **suficientes, no necesarias**: puede haber solución única de todos modos." },
+        { text: "Que el PVI tiene más de una solución.", correct: false, feedback: "Error lógico muy penalizado. Que falle una condición suficiente no implica que falle la conclusión." },
+        { text: "Que el PVI no tiene ninguna solución.", correct: false, feedback: "Tampoco. El teorema solo da garantías cuando se cumple; su fallo no niega nada." },
+        { text: "Que la solución existe pero en un intervalo más pequeño.", correct: false, feedback: "El tamaño del intervalo no es lo que está en juego: sin hipótesis, el teorema simplemente no se pronuncia." }
+      ],
+      explanation: "“\\(H\\Rightarrow C\\)” no permite deducir nada desde \\(\\lnot H\\). Redacta “el teorema no decide”."
+    },
+    {
+      question: "El teorema garantiza una solución única en \\((x_0-\\delta,\\,x_0+\\delta)\\). Sobre \\(\\delta\\):",
+      options: [
+        { text: "Solo se sabe que es positivo; puede ser muy pequeño y el teorema no lo calcula.", correct: true, feedback: "Correcto: la conclusión es **local**. La solución puede dejar de existir mucho antes de salir del rectángulo \\(R\\)." },
+        { text: "Coincide con el ancho del rectángulo \\(R\\), es decir \\(\\delta=b-a\\).", correct: false, feedback: "Confusión frecuente. \\(R\\) es donde se verifican las hipótesis, no donde se garantiza la solución." },
+        { text: "La solución existe siempre en todo \\(\\mathbb{R}\\) si \\(f\\) es continua en \\(\\mathbb{R}^{2}\\).", correct: false, feedback: "Falso: \\(y'=y^{2}\\), \\(y(0)=1\\) tiene \\(f\\) polinomial y su solución \\(y=\\dfrac{1}{1-x}\\) explota en \\(x=1\\)." },
+        { text: "\\(\\delta\\) puede ser cero si el punto está en el borde de \\(R\\).", correct: false, feedback: "El teorema exige \\((x_0,y_0)\\) en el **interior** de \\(R\\) y afirma \\(\\delta\\gt 0\\)." }
+      ],
+      explanation: "Existencia y unicidad **locales**: hay un entorno, pero el teorema no cuantifica su tamaño."
+    }
+  ],
+  keyTakeaways: [
+    "**Receta:** despeja \\(y'=f(x,y)\\), calcula \\(\\partial f/\\partial y\\) y excluye los puntos donde alguna sea discontinua (casi siempre, denominadores nulos).",
+    "\\(f\\) continua ⇒ **existencia**. \\(f\\) y \\(f_y\\) continuas ⇒ **existencia y unicidad**.",
+    "Las hipótesis son **suficientes, no necesarias**: si fallan, escribe “el teorema no decide”, nunca “hay varias soluciones”.",
+    "La conclusión es **local**: se garantiza un \\(\\delta\\gt 0\\) sin decir cuál, y la solución puede explotar en tiempo finito.",
+    "Contraejemplo que hay que saber de memoria: \\(y'=x\\sqrt{y}\\), \\(y(0)=0\\), con \\(\\phi_1=0\\) y \\(\\phi_2=x^{4}/16\\)."
+  ]
+},
+{
+  id: "autonomas", icon: "⚖", title: "EDO autónomas",
+  subtitle: "Leer el comportamiento de las soluciones sin resolver nada",
+  widget: "linea-fase",
+  theory: [
+    { type: "para", content: "Una EDO de primer orden es **autónoma** cuando la variable independiente **no aparece** explícitamente en la ecuación:" },
+    { type: "formula", content: "\\frac{dy}{dx}=f(y)", caption: "La pendiente depende solo de la **altura** \\(y\\), no de dónde estés en \\(x\\)." },
+    { type: "para", content: "Así, \\(\\dfrac{dy}{dx}=1+y^{2}\\) es autónoma, mientras que \\(\\dfrac{dy}{dx}=x^{2}-y\\) **no** lo es. La consecuencia geométrica es importante: en una EDO autónoma el campo direccional es **idéntico en cada columna vertical**, porque la pendiente no cambia al desplazarse en \\(x\\). Por eso trasladar una solución horizontalmente produce otra solución." },
+    { type: "callout", content: "Toda EDO autónoma es automáticamente **separable** (\\(\\frac{dy}{f(y)}=dx\\)). Pero el objetivo de este tema es otro: extraer todo el comportamiento cualitativo **sin integrar**, que es mucho más rápido y es lo que se pregunta." },
+    { type: "para", content: "La herramienta central son los valores de \\(y\\) donde la pendiente se anula." },
+    { type: "formula", content: "c\\ \\text{es \\textbf{punto crítico} de }\\ \\frac{dy}{dx}=f(y)\\iff f(c)=0", caption: "También se les llama **puntos de equilibrio** o **puntos estacionarios**." },
+    { type: "para", content: "Si \\(c\\) es punto crítico, la función constante \\(y(x)=c\\) satisface la EDO (su derivada es \\(0\\) y \\(f(c)=0\\)), y se llama **solución de equilibrio**. Estas rectas horizontales son las primeras que hay que dibujar, y actúan como **barreras**: por unicidad, ninguna otra solución puede cruzarlas." },
+    { type: "formula", content: "f(c)=0\\ \\Longrightarrow\\ y(x)=c\\ \\text{ es solución de equilibrio}", caption: "Encontrar los equilibrios es simplemente resolver la ecuación algebraica \\(f(y)=0\\)." },
+    { type: "para", content: "Entre dos equilibrios consecutivos, \\(f(y)\\) no se anula, así que **conserva el signo**. Eso decide la monotonía de todas las soluciones que vivan en esa banda:" },
+    { type: "formula", content: "\\begin{array}{c|c}\\text{signo de }f(y)\\text{ en la banda} & y(x)\\\\\\hline f(y)\\gt 0 & \\text{creciente}\\ \\uparrow\\\\ f(y)\\lt 0 & \\text{decreciente}\\ \\downarrow\\end{array}", caption: "Basta evaluar \\(f\\) en **un** punto de prueba por banda." },
+    { type: "para", content: "Dibujando el eje \\(y\\) vertical, marcando los puntos críticos y poniendo una flecha por banda según el signo, se obtiene el **esquema de fase unidimensional** (o línea de fase). Extendiendo esas flechas a todo el plano se obtiene el **diagrama de fase**: el retrato completo de las curvas solución según la condición inicial \\(y(0)=y_0\\)." },
+    { type: "para", content: "Comparando las flechas a ambos lados de un punto crítico \\(c\\) se clasifica su estabilidad. Hay exactamente tres comportamientos posibles:" },
+    { type: "formula", content: "\\begin{array}{l|l|l}\\text{Flechas debajo / encima} & \\text{Clasificación} & \\text{Nombre}\\\\\\hline \\uparrow\\ \\ \\downarrow\\ \\ (\\text{ambas hacia }c) & \\text{asintóticamente estable} & \\text{atractor}\\\\\\hline \\downarrow\\ \\ \\uparrow\\ \\ (\\text{ambas alejándose}) & \\text{inestable} & \\text{repulsor}\\\\\\hline \\uparrow\\ \\ \\uparrow\\ \\ \\text{ o }\\ \\ \\downarrow\\ \\ \\downarrow & \\text{semiestable} & -\\end{array}", caption: "**Atractor**: las soluciones cercanas tienden a \\(c\\). **Repulsor**: se alejan. **Semiestable**: atrae por un lado y repele por el otro." },
+    { type: "para", content: "Veamos el ejemplo canónico, la ecuación logística \\(\\dfrac{dy}{dx}=y(1-y)\\). Como \\(f(y)=0\\iff y=0\\) o \\(y=1\\), las soluciones de equilibrio son \\(y(x)=0\\) e \\(y(x)=1\\). Ahora el signo por bandas:" },
+    { type: "formula", content: "\\begin{array}{c|c|c}\\text{banda} & f(y)=y(1-y) & y(x)\\\\\\hline (-\\infty,0) & \\lt 0 & \\text{decrece}\\\\ (0,1) & \\gt 0 & \\text{crece}\\\\ (1,\\infty) & \\lt 0 & \\text{decrece}\\end{array}", caption: "Con \\(y=-1\\): \\(f=-2\\lt0\\). Con \\(y=\\tfrac12\\): \\(f=\\tfrac14\\gt0\\). Con \\(y=2\\): \\(f=-2\\lt0\\)." },
+    { type: "para", content: "Leyendo las flechas: alrededor de \\(c=1\\) se acercan por ambos lados, luego \\(c=1\\) es **asintóticamente estable**. Alrededor de \\(c=0\\) se alejan por ambos lados, luego \\(c=0\\) es **inestable**." },
+    { type: "callout", content: "De aquí salen gratis los límites: si \\(y_0\\in(0,1)\\), la solución crece y está atrapada bajo la barrera \\(y=1\\), así que \\(\\lim_{x\\to\\infty}y(x)=1\\). **Monótona + acotada por un equilibrio ⇒ converge a ese equilibrio.** Ese es el razonamiento que piden en el control." },
+    { type: "para", content: "Un caso semiestable, para completar el cuadro: en \\(\\dfrac{dy}{dx}=y^{2}\\) el único punto crítico es \\(c=0\\), pero \\(f(y)=y^{2}\\gt0\\) a ambos lados, así que las soluciones suben en ambas bandas: \\(c=0\\) atrae por abajo y repele por arriba." }
+  ],
+  guidedDerivation: {
+    title: "Análisis completo de \\(\\dfrac{dy}{dx}=y(4-y^{2})\\)",
+    intro: "Puntos de equilibrio, línea de fase, clasificación y límites. Es el ejemplo final de la Clase 03.",
+    steps: [
+      { prompt: "Halla los puntos de equilibrio resolviendo \\(f(y)=0\\).", hints: ["Factoriza \\(4-y^{2}\\) como diferencia de cuadrados."], revealLatex: "y(4-y^{2})=y(2-y)(2+y)=0\\ \\Longrightarrow\\ y=-2,\\ y=0,\\ y=2", explanation: "Tres equilibrios, que parten el plano en cuatro bandas horizontales." },
+      { prompt: "Determina el signo de \\(f\\) en cada banda con un punto de prueba.", hints: ["Prueba \\(y=-3,\\ y=-1,\\ y=1,\\ y=3\\).", "Recuerda que el signo se mantiene dentro de cada banda."], revealLatex: "\\begin{array}{c|c|c}\\text{banda} & f(y) & y(x)\\\\\\hline (-\\infty,-2) & f(-3)=15\\gt0 & \\uparrow\\\\ (-2,0) & f(-1)=-3\\lt0 & \\downarrow\\\\ (0,2) & f(1)=3\\gt0 & \\uparrow\\\\ (2,\\infty) & f(3)=-15\\lt0 & \\downarrow\\end{array}", explanation: "Por ejemplo \\(f(-3)=(-3)(4-9)=(-3)(-5)=15\\gt0\\)." },
+      { prompt: "Clasifica cada punto crítico comparando las flechas de abajo y de arriba.", hints: ["Si ambas apuntan hacia \\(c\\): atractor. Si ambas se alejan: repulsor.", "Ordena las flechas de abajo hacia arriba: \\(\\uparrow\\ \\ -2\\ \\ \\downarrow\\ \\ 0\\ \\ \\uparrow\\ \\ 2\\ \\ \\downarrow\\)."], revealLatex: "\\begin{array}{c|l}c=-2 & \\text{asintóticamente estable (atractor)}\\\\ c=0 & \\text{inestable (repulsor)}\\\\ c=2 & \\text{asintóticamente estable (atractor)}\\end{array}", explanation: "En \\(c=-2\\) las flechas son \\(\\uparrow\\) abajo y \\(\\downarrow\\) arriba: convergen. En \\(c=0\\) son \\(\\downarrow\\) abajo y \\(\\uparrow\\) arriba: divergen." },
+      { prompt: "Si \\(y=y(x)\\) es la solución que pasa por \\((0,1)\\), calcula \\(\\lim_{x\\to\\infty}y(x)\\).", hints: ["¿En qué banda cae \\(y_0=1\\)?", "En esa banda la solución es creciente, y no puede cruzar la barrera de arriba."], revealLatex: "\\lim_{x\\to\\infty}y(x)=2", explanation: "\\(y_0=1\\in(0,2)\\), donde \\(f\\gt0\\): la solución crece. Por unicidad no puede cruzar \\(y=2\\), luego es creciente y acotada superiormente, y converge al equilibrio \\(y=2\\)." }
+    ]
+  },
+  exercises: [
+    {
+      statement: "Para \\(\\dfrac{dy}{dx}=y^{2}-1\\): determina los puntos críticos, clasifícalos y calcula \\(\\lim_{x\\to\\infty}y(x)\\) para la solución con \\(y(0)=0\\).",
+      steps: [
+        { prompt: "Puntos críticos.", hints: ["Resuelve \\(y^{2}-1=0\\)."], revealLatex: "y=-1\\quad\\text{y}\\quad y=1", explanation: "Soluciones de equilibrio \\(y(x)=-1\\) e \\(y(x)=1\\)." },
+        { prompt: "Signos por banda.", hints: ["Prueba \\(y=-2,\\ y=0,\\ y=2\\)."], revealLatex: "\\begin{array}{c|c|c}(-\\infty,-1) & f(-2)=3\\gt0 & \\uparrow\\\\ (-1,1) & f(0)=-1\\lt0 & \\downarrow\\\\ (1,\\infty) & f(2)=3\\gt0 & \\uparrow\\end{array}", explanation: "Ojo: \\(f(y)=y^{2}-1\\) es **positiva** fuera de \\([-1,1]\\) y negativa dentro." },
+        { prompt: "Clasifica y concluye el límite para \\(y(0)=0\\).", hints: ["\\(y_0=0\\) está en la banda \\((-1,1)\\), donde la solución decrece."], revealLatex: "c=-1:\\ \\text{atractor},\\qquad c=1:\\ \\text{repulsor},\\qquad \\lim_{x\\to\\infty}y(x)=-1", explanation: "En \\((-1,1)\\) la solución decrece y está acotada inferiormente por la barrera \\(y=-1\\), así que converge a \\(-1\\)." }
+      ],
+      finalAnswerLatex: "c=-1\\ \\text{atractor},\\quad c=1\\ \\text{repulsor},\\quad \\lim_{x\\to\\infty}y(x)=-1"
+    },
+    {
+      statement: "Clasifica el punto crítico de \\(\\dfrac{dy}{dx}=(y-3)^{2}\\).",
+      steps: [
+        { prompt: "Punto crítico y signo de \\(f\\) a cada lado.", hints: ["Un cuadrado nunca es negativo."], revealLatex: "c=3;\\qquad f(y)=(y-3)^{2}\\gt0\\ \\ \\text{si }y\\neq3", explanation: "Las dos bandas tienen el **mismo** signo, algo imposible cuando la raíz es simple." },
+        { prompt: "Traduce eso a flechas y clasifica.", hints: ["\\(f\\gt0\\) significa \\(\\uparrow\\) en ambas bandas."], revealLatex: "\\uparrow\\ \\ 3\\ \\ \\uparrow\\ \\Longrightarrow\\ \\text{semiestable}", explanation: "Por debajo las soluciones suben **hacia** \\(3\\); por encima suben **alejándose** de \\(3\\). Atrae por un lado y repele por el otro." }
+      ],
+      finalAnswerLatex: "c=3\\ \\text{es semiestable}"
+    }
+  ],
+  conceptual: [
+    {
+      question: "¿Cuál de estas EDO es autónoma?",
+      options: [
+        { text: "\\(\\dfrac{dy}{dx}=1+y^{2}\\)", correct: true, feedback: "Correcto: el lado derecho depende solo de \\(y\\)." },
+        { text: "\\(\\dfrac{dy}{dx}=x^{2}-y\\)", correct: false, feedback: "No: aparece \\(x\\) explícitamente, así que es **no autónoma**." },
+        { text: "\\(\\dfrac{dy}{dx}=x\\,y(1-y)\\)", correct: false, feedback: "El factor \\(x\\) la vuelve no autónoma, aunque el resto sí dependa solo de \\(y\\)." },
+        { text: "\\(\\dfrac{dy}{dx}=\\operatorname{sen}(x)\\)", correct: false, feedback: "Depende solo de \\(x\\): es integración directa, pero no es autónoma." }
+      ],
+      explanation: "Autónoma \\(\\iff\\) la variable independiente no aparece: \\(y'=f(y)\\)."
+    },
+    {
+      question: "Las flechas de la línea de fase alrededor de \\(c=2\\) son \\(\\downarrow\\) por debajo y \\(\\uparrow\\) por encima. Entonces \\(c=2\\) es:",
+      options: [
+        { text: "Inestable (repulsor).", correct: true, feedback: "Correcto: las soluciones vecinas se **alejan** de \\(2\\) por ambos lados." },
+        { text: "Asintóticamente estable (atractor).", correct: false, feedback: "Sería al revés: \\(\\uparrow\\) por debajo y \\(\\downarrow\\) por encima. Aquí las flechas apuntan hacia afuera." },
+        { text: "Semiestable.", correct: false, feedback: "Semiestable exige el **mismo** sentido de flecha a ambos lados (\\(\\uparrow\\uparrow\\) o \\(\\downarrow\\downarrow\\))." },
+        { text: "No es punto crítico.", correct: false, feedback: "Sí lo es: la línea de fase solo marca flechas alrededor de puntos donde \\(f\\) se anula." }
+      ],
+      explanation: "Lee las flechas **hacia** \\(c\\) (atractor) o **desde** \\(c\\) (repulsor); iguales a ambos lados, semiestable."
+    },
+    {
+      question: "\\(y(x)\\) resuelve \\(y'=y(1-y)\\) con \\(y(0)=0{,}5\\). ¿Puede alcanzar el valor \\(y=1{,}5\\) para algún \\(x\\)?",
+      options: [
+        { text: "No: tendría que cruzar la solución de equilibrio \\(y=1\\), lo que viola la unicidad.", correct: true, feedback: "Exacto. Los equilibrios funcionan como barreras infranqueables; por eso el límite es \\(1\\) y no más." },
+        { text: "Sí, si \\(x\\) es suficientemente grande, porque la solución es creciente.", correct: false, feedback: "Es creciente, pero **acotada** por la barrera \\(y=1\\): crece acercándose a \\(1\\) sin llegar a superarlo." },
+        { text: "Sí, porque \\(f(1{,}5)\\) está definido.", correct: false, feedback: "Que \\(f\\) esté definida ahí no significa que **esta** solución llegue: para llegar tendría que cruzar \\(y=1\\)." },
+        { text: "Solo si se cambia la condición inicial a \\(y(0)\\gt1\\).", correct: false, feedback: "Ahí sí se llega a valores mayores que \\(1\\), pero entonces la solución **decrece** hacia \\(1\\), y nunca proviene de la banda \\((0,1)\\)." }
+      ],
+      explanation: "Por unicidad, dos curvas solución no pueden tocarse: los equilibrios encierran a las demás soluciones dentro de su banda."
+    }
+  ],
+  keyTakeaways: [
+    "**Receta:** resuelve \\(f(y)=0\\) → marca los equilibrios → un punto de prueba por banda → flechas → clasificación.",
+    "\\(f(y)\\gt0\\) ⇒ la solución **crece**; \\(f(y)\\lt0\\) ⇒ **decrece**. El signo es constante dentro de cada banda.",
+    "**Atractor** (flechas hacia \\(c\\)), **repulsor** (flechas desde \\(c\\)), **semiestable** (mismo sentido a ambos lados, típico de raíces dobles).",
+    "Los equilibrios son **barreras**: por unicidad ninguna solución los cruza, así que cada solución queda atrapada en su banda.",
+    "**Monótona + atrapada por un equilibrio ⇒ el límite cuando \\(x\\to\\infty\\) es ese equilibrio.** Así se calculan los límites sin resolver."
+  ]
+},
+{
+  id: "separables", icon: "✂", title: "Variables separables",
+  subtitle: "Cada variable a su lado, e integrar",
+  widget: "familia-sep",
+  theory: [
+    { type: "para", content: "Si mediante manipulaciones algebraicas una EDO de primer orden puede escribirse con **cada variable de un lado**, se llama **separable**:" },
+    { type: "formula", content: "g(y)\\,y'=f(x)", caption: "Toda la dependencia en \\(y\\) queda a la izquierda (multiplicando a \\(y'\\)) y toda la dependencia en \\(x\\) a la derecha." },
+    { type: "para", content: "El truco para resolverla es integrar ambos lados **respecto de \\(x\\)**, y luego cambiar la variable de integración en el lado izquierdo. Como \\(y'\\,dx=dy\\), la integral izquierda se convierte en una integral en \\(y\\):" },
+    { type: "formula", content: "\\int g(y)\\,y'\\,dx=\\int f(x)\\,dx+c\\quad\\Longrightarrow\\quad \\int g(y)\\,dy=\\int f(x)\\,dx+c", caption: "Si \\(f\\) y \\(g\\) son continuas ambas integrales existen, y al evaluarlas se obtiene la **solución general**." },
+    { type: "para", content: "Ese es todo el método. En la práctica se escribe la EDO en la forma \\(\\dfrac{dy}{dx}=f(x)h(y)\\), se pasan los \\(dy\\) y \\(dx\\) como si fueran factores, y se integra:" },
+    { type: "formula", content: "\\frac{dy}{dx}=f(x)h(y)\\ \\Longrightarrow\\ \\frac{dy}{h(y)}=f(x)\\,dx\\ \\Longrightarrow\\ \\int\\frac{dy}{h(y)}=\\int f(x)\\,dx+c", caption: "El resultado suele quedar en forma **implícita**, y muchas veces conviene dejarlo así." },
+    { type: "callout", content: "**Una sola constante.** No pongas \\(c_1\\) a la izquierda y \\(c_2\\) a la derecha: se funden en una sola \\(c=c_2-c_1\\). Y no olvides ponerla: sin \\(c\\) obtienes una solución particular al azar, no la general." },
+    { type: "para", content: "Hay un detalle que cuesta puntos: al escribir \\(\\dfrac{dy}{h(y)}\\) estás **dividiendo por \\(h(y)\\)**, lo que exige \\(h(y)\\neq0\\). Los valores donde \\(h\\) se anula quedan excluidos del cálculo, pero son soluciones perfectamente válidas:" },
+    { type: "formula", content: "h(y_0)=0\\ \\Longrightarrow\\ y(x)=y_0\\ \\text{ es solución (constante) de la EDO}", caption: "Se llaman **soluciones singulares**: normalmente **no** se recuperan dando valores a \\(c\\) en la solución general." },
+    { type: "para", content: "Nota que estas soluciones constantes son exactamente los equilibrios del módulo anterior cuando la EDO es autónoma. Aquí aparecen igual, aunque haya un factor en \\(x\\)." },
+    { type: "para", content: "Veamos el método completo en el ejemplo \\(\\dfrac{dy}{dx}=(x+1)e^{-x}y^{2}\\). Separando, \\(\\dfrac{dy}{y^{2}}=(x+1)e^{-x}dx\\), e integrando por partes a la derecha:" },
+    { type: "formula", content: "\\int(x+1)e^{-x}dx=-(x+2)e^{-x}", caption: "Comprueba derivando: \\(-e^{-x}+(x+2)e^{-x}=(x+1)e^{-x}\\). ✓" },
+    { type: "formula", content: "-\\frac{1}{y}=-(x+2)e^{-x}+c\\ \\Longrightarrow\\ y=\\frac{1}{(x+2)e^{-x}+C}", caption: "Con \\(C=-c\\). Y aparte, \\(y(x)=0\\) es **solución singular**, ya que \\(h(y)=y^{2}\\) se anula en \\(y=0\\) y no se obtiene con ningún \\(C\\) finito." },
+    { type: "para", content: "Cuando hay condición inicial hay dos caminos igual de válidos: hallar la solución general y luego imponer \\(y(x_0)=y_0\\), o integrar directamente entre límites. El segundo evita la constante y suele ser más limpio:" },
+    { type: "formula", content: "\\int_{y_0}^{y}\\frac{ds}{h(s)}=\\int_{x_0}^{x}f(t)\\,dt", caption: "Integración definida: la condición inicial queda incorporada desde el principio." },
+    { type: "callout", content: "Al separar \\(\\dfrac{dy}{y}\\) aparece \\(\\ln|y|\\) con **valor absoluto**. Al exponenciar, \\(|y|=e^{c}e^{F(x)}\\) se escribe \\(y=Ae^{F(x)}\\) con \\(A=\\pm e^{c}\\neq0\\); admitir además \\(A=0\\) es justamente lo que reincorpora la solución singular \\(y=0\\)." }
+  ],
+  guidedDerivation: {
+    title: "PVI separable: \\(\\dfrac{dy}{dx}=-2xy\\), \\(y(0)=1{,}8\\)",
+    intro: "El caso más típico de todos: exponencial gaussiana. Vale la pena hacerlo con todos los pasos escritos.",
+    steps: [
+      { prompt: "Separa las variables. ¿Qué queda a cada lado?", hints: ["Divide por \\(y\\) y multiplica por \\(dx\\).", "Anota mentalmente que estás suponiendo \\(y\\neq0\\)."], revealLatex: "\\frac{dy}{y}=-2x\\,dx", explanation: "Aquí \\(f(x)=-2x\\) y \\(h(y)=y\\). Al dividir por \\(y\\) apartamos el caso \\(y=0\\)." },
+      { prompt: "Integra ambos lados, con una sola constante.", hints: ["\\(\\int\\dfrac{dy}{y}=\\ln|y|\\).", "\\(\\int-2x\\,dx=-x^{2}\\)."], revealLatex: "\\ln|y|=-x^{2}+c", explanation: "El valor absoluto es obligatorio mientras no sepamos el signo de \\(y\\)." },
+      { prompt: "Despeja \\(y\\) exponenciando.", hints: ["\\(|y|=e^{-x^{2}+c}=e^{c}e^{-x^{2}}\\).", "Absorbe \\(\\pm e^{c}\\) en una constante \\(A\\)."], revealLatex: "y=A\\,e^{-x^{2}},\\qquad A\\in\\mathbb{R}", explanation: "Permitiendo \\(A=0\\) queda incluida la solución singular \\(y=0\\), que se había perdido al dividir." },
+      { prompt: "Impón la condición inicial \\(y(0)=1{,}8\\).", hints: ["Evalúa en \\(x=0\\), donde \\(e^{0}=1\\)."], revealLatex: "1{,}8=A\\,e^{0}=A\\ \\Longrightarrow\\ A=1{,}8", explanation: "La curva queda determinada: es la campana de Gauss de altura \\(1{,}8\\)." },
+      { prompt: "Escribe la solución del PVI y su intervalo de definición.", hints: ["¿Dónde está definida y es derivable \\(e^{-x^{2}}\\)?"], revealLatex: "y(x)=1{,}8\\,e^{-x^{2}},\\qquad x\\in(-\\infty,\\infty)", explanation: "No hay singularidades: la solución es global, algo que no siempre ocurre." }
+    ]
+  },
+  exercises: [
+    {
+      statement: "Determina la solución general de \\(\\dfrac{dy}{dx}=(x+1)e^{-x}y^{2}\\), incluyendo soluciones singulares.",
+      steps: [
+        { prompt: "Separa variables.", hints: ["Divide por \\(y^{2}\\)."], revealLatex: "y^{-2}\\,dy=(x+1)e^{-x}\\,dx", explanation: "Se supone \\(y\\neq0\\); anota ese caso aparte." },
+        { prompt: "Integra el lado derecho por partes.", hints: ["Toma \\(u=x+1\\), \\(dv=e^{-x}dx\\).", "\\(\\int e^{-x}dx=-e^{-x}\\)."], revealLatex: "\\int(x+1)e^{-x}dx=-(x+1)e^{-x}-e^{-x}=-(x+2)e^{-x}", explanation: "Por partes: \\(-(x+1)e^{-x}+\\int e^{-x}dx=-(x+1)e^{-x}-e^{-x}\\)." },
+        { prompt: "Iguala, despeja \\(y\\) y recupera la solución singular.", hints: ["\\(\\int y^{-2}dy=-\\dfrac{1}{y}\\).", "\\(h(y)=y^{2}\\) se anula en \\(y=0\\)."], revealLatex: "-\\frac1y=-(x+2)e^{-x}+c\\ \\Longrightarrow\\ y=\\frac{1}{(x+2)e^{-x}+C}", explanation: "Con \\(C=-c\\). Además \\(y(x)=0\\) es solución singular, no contenida en la familia." }
+      ],
+      finalAnswerLatex: "y=\\frac{1}{(x+2)e^{-x}+C}\\qquad\\text{y además}\\qquad y(x)=0"
+    },
+    {
+      statement: "Resuelve el PVI \\(\\dfrac{dy}{dx}=\\dfrac{1}{x\\left(1+\\ln x\\right)}\\), \\(y(1)=0\\).",
+      steps: [
+        { prompt: "El lado derecho solo depende de \\(x\\): es integración directa. ¿Qué sustitución conviene?", hints: ["Fíjate en que \\(\\dfrac{dx}{x}\\) es la derivada de \\(\\ln x\\).", "Prueba \\(u=1+\\ln x\\)."], revealLatex: "u=1+\\ln x\\ \\Longrightarrow\\ du=\\frac{dx}{x}", explanation: "La integral se vuelve inmediata." },
+        { prompt: "Integra.", hints: ["\\(\\int\\dfrac{du}{u}=\\ln|u|\\)."], revealLatex: "y=\\ln\\left|1+\\ln x\\right|+c", explanation: "El valor absoluto importa: \\(1+\\ln x\\) es negativo para \\(x\\lt e^{-1}\\)." },
+        { prompt: "Impón \\(y(1)=0\\).", hints: ["\\(\\ln 1=0\\), así que \\(1+\\ln 1=1\\)."], revealLatex: "0=\\ln|1|+c=0+c\\ \\Longrightarrow\\ c=0", explanation: "La constante se anula." }
+      ],
+      finalAnswerLatex: "y(x)=\\ln\\left|1+\\ln x\\right|"
+    },
+    {
+      statement: "Realiza el cambio de variable \\(y=vx\\), con \\(v=v(x)\\), para resolver \\(2xy\\,y'=y^{2}-x^{2}\\).",
+      steps: [
+        { prompt: "Sustituye \\(y=vx\\). ¿Cuánto vale \\(y'\\)?", hints: ["Regla del producto: \\(v\\) también depende de \\(x\\)."], revealLatex: "y'=v+x\\,v'", explanation: "Olvidar el término \\(x v'\\) es el error número uno de este cambio de variable." },
+        { prompt: "Reemplaza en la EDO y simplifica los \\(x^{2}\\).", hints: ["\\(2x(vx)(v+xv')=v^{2}x^{2}-x^{2}\\).", "Divide todo por \\(x^{2}\\)."], revealLatex: "2v\\left(v+xv'\\right)=v^{2}-1", explanation: "Toda la dependencia explícita en \\(x\\) se cancela: esa es la gracia de la sustitución." },
+        { prompt: "Despeja y separa variables en \\(v\\) y \\(x\\).", hints: ["\\(2v^{2}+2vxv'=v^{2}-1\\), luego \\(2vxv'=-(v^{2}+1)\\).", "Pasa \\(x\\) a un lado y \\(v\\) al otro."], revealLatex: "\\frac{2v}{v^{2}+1}\\,dv=-\\frac{dx}{x}", explanation: "Quedó separable, que era el objetivo del cambio de variable." },
+        { prompt: "Integra y vuelve a la variable \\(y\\) con \\(v=y/x\\).", hints: ["\\(\\int\\dfrac{2v\\,dv}{v^{2}+1}=\\ln(v^{2}+1)\\).", "Al final multiplica por \\(x\\) para limpiar denominadores."], revealLatex: "\\ln(v^{2}+1)=-\\ln|x|+c\\ \\Longrightarrow\\ \\left(\\frac{y^{2}}{x^{2}}+1\\right)x=C", explanation: "Y multiplicando por \\(x\\): \\(\\dfrac{y^{2}+x^{2}}{x}=C\\), es decir \\(x^{2}+y^{2}=Cx\\): una familia de circunferencias que pasan por el origen." }
+      ],
+      finalAnswerLatex: "x^{2}+y^{2}=Cx"
+    }
+  ],
+  conceptual: [
+    {
+      question: "Al resolver \\(\\dfrac{dy}{dx}=x\\,y(y-2)\\) se obtiene una familia implícita. ¿Qué soluciones **no** están en esa familia?",
+      options: [
+        { text: "Las constantes \\(y(x)=0\\) e \\(y(x)=2\\).", correct: true, feedback: "Correcto: son las raíces de \\(h(y)=y(y-2)\\), y se pierden al dividir por \\(h(y)\\). Son soluciones singulares." },
+        { text: "Ninguna: la familia general las contiene todas.", correct: false, feedback: "Casi nunca. Las constantes que anulan \\(h\\) suelen requerir \\(c\\to\\pm\\infty\\), así que quedan fuera." },
+        { text: "La solución con \\(y(0)=1\\).", correct: false, feedback: "Esa sí está en la familia: se obtiene con un valor concreto de \\(c\\)." },
+        { text: "Las soluciones definidas para \\(x\\lt0\\).", correct: false, feedback: "El intervalo no tiene que ver con esto. Lo que se pierde son las **raíces de \\(h\\)**." }
+      ],
+      explanation: "Siempre que dividas por \\(h(y)\\), vuelve al final y revisa las raíces de \\(h\\): son soluciones singulares."
+    },
+    {
+      question: "¿Cuál de estas EDO **no** es separable tal como está escrita?",
+      options: [
+        { text: "\\(\\dfrac{dy}{dx}=x+y\\)", correct: true, feedback: "Correcto: una **suma** \\(x+y\\) no se factoriza como \\(f(x)h(y)\\). Es lineal, y se resuelve con factor integrante." },
+        { text: "\\(\\dfrac{dy}{dx}=xy+x\\)", correct: false, feedback: "Sí es separable: \\(xy+x=x(y+1)\\), producto de algo en \\(x\\) por algo en \\(y\\)." },
+        { text: "\\(\\dfrac{dy}{dx}=\\dfrac{e^{x}}{y^{2}}\\)", correct: false, feedback: "Separable: \\(y^{2}dy=e^{x}dx\\)." },
+        { text: "\\(\\dfrac{dy}{dx}=y\\,\\operatorname{sen}(x)\\)", correct: false, feedback: "Separable de manual: \\(\\dfrac{dy}{y}=\\operatorname{sen}(x)\\,dx\\)." }
+      ],
+      explanation: "Separable significa que el lado derecho **se factoriza** como \\(f(x)\\,h(y)\\). Sumas del tipo \\(x+y\\) no lo hacen."
+    },
+    {
+      question: "Al integrar \\(\\dfrac{dy}{y}=k\\,dx\\) un estudiante escribe \\(\\ln|y|+c_1=kx+c_2\\). ¿Qué conviene hacer?",
+      options: [
+        { text: "Fundir ambas en una sola constante: \\(\\ln|y|=kx+c\\).", correct: true, feedback: "Correcto: \\(c=c_2-c_1\\) es una única constante arbitraria. Basta una para una EDO de primer orden." },
+        { text: "Conservar las dos, porque cada integral aporta la suya.", correct: false, feedback: "Redundante: una EDO de primer orden tiene **una** constante libre; dos no aportan generalidad extra." },
+        { text: "Eliminar ambas, porque se cancelan.", correct: false, feedback: "No se cancelan: su diferencia es una constante arbitraria que sí importa." },
+        { text: "Escribir \\(c_1=c_2\\) para simplificar.", correct: false, feedback: "Eso pierde generalidad: fijarías una única solución en vez de la familia completa." }
+      ],
+      explanation: "Una EDO de orden \\(n\\) tiene \\(n\\) constantes esenciales. En primer orden, exactamente una."
+    }
+  ],
+  keyTakeaways: [
+    "**Receta:** escribe \\(\\dfrac{dy}{dx}=f(x)h(y)\\) → separa \\(\\dfrac{dy}{h(y)}=f(x)dx\\) → integra con **una** constante.",
+    "Las raíces de \\(h(y)\\) dan **soluciones singulares** \\(y=y_0\\) que se pierden al dividir: recupéralas siempre.",
+    "El resultado puede quedar **implícito**; solo despeja \\(y\\) si sale limpio o si el problema lo exige.",
+    "Con condición inicial puedes usar integrales **definidas** entre \\((x_0,y_0)\\) y \\((x,y)\\) y ahorrarte la constante.",
+    "Con \\(\\ln|y|\\), al exponenciar escribe \\(y=Ae^{F(x)}\\) con \\(A\\in\\mathbb{R}\\): así \\(A=0\\) reincorpora la solución singular."
+  ]
+},
+{
+  id: "lineales", icon: "📈", title: "Lineales de primer orden",
+  subtitle: "Forma estándar, factor integrante y fórmula general",
+  widget: "lineal-familia",
+  theory: [
+    { type: "para", content: "Sea \\(I\\) un intervalo. Una EDO de primer orden es **lineal** en \\(I\\) si puede escribirse de la forma" },
+    { type: "formula", content: "a_1(x)\\,y'+a_0(x)\\,y=h(x)", caption: "con \\(a_1,a_0,h\\) continuas en \\(I\\) y \\(a_1(x)\\neq0\\). Lineal significa: \\(y\\) e \\(y'\\) aparecen **a la primera potencia**, sin productos entre ellas ni dentro de funciones." },
+    { type: "callout", content: "“Lineal” se refiere solo a cómo aparecen \\(y\\) e \\(y'\\). Los coeficientes pueden ser tan feos como quieran: \\(y'+e^{x^{2}}y=\\operatorname{sen}(x^{3})\\) es lineal. En cambio \\(y'+y^{2}=x\\) o \\(y'+\\operatorname{sen}(y)=x\\) **no** lo son." },
+    { type: "para", content: "El primer paso es siempre **normalizar**: dividir por \\(a_1(x)\\) para que el coeficiente de \\(y'\\) sea \\(1\\). Eso da la **forma estándar**, y es imprescindible porque las fórmulas que siguen suponen ese \\(1\\)." },
+    { type: "formula", content: "y'+p(x)\\,y=q(x)", caption: "Forma estándar, con \\(p=\\dfrac{a_0}{a_1}\\) y \\(q=\\dfrac{h}{a_1}\\)." },
+    { type: "para", content: "La idea del método es hermosa: el lado izquierdo casi parece la derivada de un producto, pero no lo es. La pregunta es si se puede multiplicar toda la ecuación por una función \\(\\mu(x)\\) que lo convierta exactamente en una derivada. Esa función es el **factor integrante**:" },
+    { type: "formula", content: "\\mu(x)=e^{\\int p(x)\\,dx}", caption: "Aquí **no** se agrega constante de integración: cualquier constante multiplicativa se cancela más adelante." },
+    { type: "para", content: "Multiplicando la forma estándar por \\(\\mu\\) y observando que \\(\\mu'=p\\,\\mu\\), el lado izquierdo colapsa en la derivada de un producto:" },
+    { type: "formula", content: "\\mu\\,y'+\\mu\\,p\\,y=\\mu\\,q\\quad\\Longleftrightarrow\\quad \\frac{d}{dx}\\Big[\\mu(x)\\,y\\Big]=\\mu(x)\\,q(x)", caption: "Este es todo el truco: se pasó de una EDO a una **integración directa**." },
+    { type: "para", content: "A partir de aquí se integra respecto de \\(x\\) y se despeja \\(y\\) dividiendo por \\(\\mu\\), lo que entrega la fórmula de la solución general:" },
+    { type: "formula", content: "y(x)=e^{-\\int p(x)\\,dx}\\left[\\int e^{\\int p(x)\\,dx}\\,q(x)\\,dx+c\\right],\\qquad c\\in\\mathbb{R}", caption: "Fórmula cerrada: toda EDO lineal de primer orden se resuelve con ella, sin excepciones." },
+    { type: "para", content: "Vale la pena mirar la estructura del resultado. Distribuyendo, la solución general es siempre una suma de dos piezas:" },
+    { type: "formula", content: "y(x)=\\underbrace{\\frac{1}{\\mu(x)}\\int \\mu(x)q(x)\\,dx}_{\\text{solución particular}}+\\underbrace{\\frac{c}{\\mu(x)}}_{\\text{solución de la homogénea}}", caption: "El segundo término es la solución general de \\(y'+py=0\\). Por eso **todas** las soluciones difieren entre sí en un múltiplo de \\(e^{-\\int p\\,dx}\\)." },
+    { type: "callout", content: "Consecuencia práctica y muy preguntable: si \\(\\int p\\,dx\\to+\\infty\\) (por ejemplo \\(p\\) constante positiva), el término \\(c/\\mu\\) se apaga y **todas** las soluciones se juntan sobre la misma curva cuando \\(x\\to\\infty\\). Es el comportamiento transitorio frente al estacionario." },
+    { type: "para", content: "Sobre los detalles de cálculo: al integrar \\(p=\\dfrac{k}{x}\\) aparece \\(\\ln|x|\\), pero como se trabaja dentro de un intervalo donde \\(a_1\\neq0\\), se toma el signo que corresponda y se escribe \\(\\mu=x^{k}\\) sin valores absolutos. Y si aparece \\(\\mu=e^{\\ln g(x)}\\), simplifica de inmediato a \\(g(x)\\): dejarlo sin simplificar hace la integral siguiente imposible." },
+    { type: "callout", content: "Si \\(q(x)\\) es **definida por tramos**, resuelve tramo por tramo y luego pega las piezas exigiendo **continuidad** de \\(y\\) en el punto de empalme. La derivada sí puede saltar; la función no." }
+  ],
+  guidedDerivation: {
+    title: "De dónde sale \\(\\mu(x)=e^{\\int p\\,dx}\\)",
+    intro: "No hay que memorizar la fórmula: se deduce en cuatro líneas exigiendo que el lado izquierdo sea la derivada de un producto.",
+    steps: [
+      { prompt: "Multiplica \\(y'+p(x)y=q(x)\\) por una función incógnita \\(\\mu(x)\\). ¿Qué queda?", hints: ["Simplemente distribuye \\(\\mu\\)."], revealLatex: "\\mu(x)\\,y'+\\mu(x)\\,p(x)\\,y=\\mu(x)\\,q(x)", explanation: "Todavía no hemos ganado nada: \\(\\mu\\) es libre." },
+      { prompt: "Queremos que el lado izquierdo sea exactamente \\(\\dfrac{d}{dx}[\\mu y]\\). Desarrolla esa derivada y compara.", hints: ["Regla del producto: \\(\\dfrac{d}{dx}[\\mu y]=\\mu y'+\\mu' y\\).", "Compara el coeficiente de \\(y\\) en ambas expresiones."], revealLatex: "\\mu\\,y'+\\mu'\\,y\\ \\equiv\\ \\mu\\,y'+\\mu\\,p\\,y\\ \\Longrightarrow\\ \\mu'=p\\,\\mu", explanation: "La condición sobre \\(\\mu\\) es una EDO separable, mucho más fácil que la original." },
+      { prompt: "Resuelve \\(\\mu'=p\\,\\mu\\) separando variables.", hints: ["\\(\\dfrac{d\\mu}{\\mu}=p\\,dx\\).", "Integra y exponencia; basta **una** solución, así que toma la constante igual a \\(1\\)."], revealLatex: "\\mu(x)=e^{\\int p(x)\\,dx}", explanation: "No hace falta constante: si \\(\\mu\\) funciona, \\(k\\mu\\) también, y el \\(k\\) se cancelaría al dividir." },
+      { prompt: "Con ese \\(\\mu\\), integra \\(\\dfrac{d}{dx}[\\mu y]=\\mu q\\) y despeja \\(y\\).", hints: ["Integra ambos lados respecto de \\(x\\), sin olvidar la constante \\(c\\).", "Luego divide por \\(\\mu\\)."], revealLatex: "\\mu(x)\\,y=\\int\\mu(x)q(x)\\,dx+c\\ \\Longrightarrow\\ y=e^{-\\int p\\,dx}\\left[\\int e^{\\int p\\,dx}q\\,dx+c\\right]", explanation: "Aquí sí es esencial la constante \\(c\\): es la que genera la familia completa de soluciones." }
+    ]
+  },
+  exercises: [
+    {
+      statement: "Determina la solución general de \\(\\left(x^{4}+2y\\right)dx=x\\,dy\\).",
+      steps: [
+        { prompt: "Lleva la ecuación a la forma estándar \\(y'+p(x)y=q(x)\\).", hints: ["Divide por \\(dx\\) para obtener \\(x\\dfrac{dy}{dx}=x^{4}+2y\\).", "Luego divide todo por \\(x\\) y pasa el término en \\(y\\) a la izquierda."], revealLatex: "y'-\\frac{2}{x}\\,y=x^{3}", explanation: "Aquí \\(p(x)=-\\dfrac{2}{x}\\) y \\(q(x)=x^{3}\\). Nota el signo negativo: viene de pasar \\(2y/x\\) a la izquierda." },
+        { prompt: "Calcula el factor integrante.", hints: ["\\(\\int p\\,dx=-2\\int\\dfrac{dx}{x}=-2\\ln|x|\\).", "Recuerda \\(e^{-2\\ln|x|}=|x|^{-2}\\)."], revealLatex: "\\mu(x)=e^{-2\\ln|x|}=x^{-2}", explanation: "Trabajamos en un intervalo que no contiene \\(x=0\\), así que se puede escribir sin valor absoluto." },
+        { prompt: "Escribe la ecuación como derivada de un producto e integra.", hints: ["\\(\\dfrac{d}{dx}\\left[x^{-2}y\\right]=x^{-2}\\cdot x^{3}\\).", "Simplifica el lado derecho antes de integrar."], revealLatex: "\\frac{d}{dx}\\left[x^{-2}y\\right]=x\\ \\Longrightarrow\\ x^{-2}y=\\frac{x^{2}}{2}+c", explanation: "Toda la dificultad se redujo a integrar \\(x\\)." },
+        { prompt: "Despeja \\(y\\).", hints: ["Multiplica por \\(x^{2}\\)."], revealLatex: "y=\\frac{x^{4}}{2}+c\\,x^{2}", explanation: "Se ve la estructura: \\(\\dfrac{x^{4}}{2}\\) es una solución particular y \\(cx^{2}\\) es la solución de la homogénea." }
+      ],
+      finalAnswerLatex: "y=\\frac{x^{4}}{2}+c\\,x^{2}"
+    },
+    {
+      statement: "Determina la solución general de \\(y'-2\\tan(x)\\,y=1\\).",
+      steps: [
+        { prompt: "Ya está en forma estándar. Calcula \\(\\int p\\,dx\\) con \\(p(x)=-2\\tan x\\).", hints: ["\\(\\int\\tan x\\,dx=-\\ln|\\cos x|\\)."], revealLatex: "\\int p\\,dx=-2\\int\\tan x\\,dx=2\\ln|\\cos x|", explanation: "Cuidado con el doble signo: \\(-2\\cdot(-\\ln|\\cos x|)=+2\\ln|\\cos x|\\)." },
+        { prompt: "Obtén \\(\\mu\\) simplificando la exponencial del logaritmo.", hints: ["\\(e^{2\\ln|\\cos x|}=\\left(e^{\\ln|\\cos x|}\\right)^{2}\\)."], revealLatex: "\\mu(x)=\\cos^{2}(x)", explanation: "Si no simplificas aquí, la integral siguiente es intratable." },
+        { prompt: "Integra \\(\\dfrac{d}{dx}\\left[y\\cos^{2}x\\right]=\\cos^{2}x\\).", hints: ["Usa la identidad \\(\\cos^{2}x=\\dfrac{1+\\cos(2x)}{2}\\)."], revealLatex: "y\\cos^{2}(x)=\\frac{x}{2}+\\frac{\\operatorname{sen}(2x)}{4}+c", explanation: "\\(\\int\\dfrac{1+\\cos 2x}{2}dx=\\dfrac{x}{2}+\\dfrac{\\operatorname{sen}2x}{4}\\)." },
+        { prompt: "Despeja \\(y\\) y simplifica el término del seno.", hints: ["Divide por \\(\\cos^{2}x\\), es decir multiplica por \\(\\sec^{2}x\\).", "\\(\\dfrac{\\operatorname{sen}(2x)}{4\\cos^{2}x}=\\dfrac{2\\operatorname{sen}x\\cos x}{4\\cos^{2}x}=\\dfrac{\\tan x}{2}\\)."], revealLatex: "y=\\frac{x}{2}\\sec^{2}(x)+\\frac{\\tan(x)}{2}+c\\,\\sec^{2}(x)", explanation: "Válida en cualquier intervalo donde \\(\\cos x\\neq0\\), por ejemplo \\(\\left(-\\tfrac{\\pi}{2},\\tfrac{\\pi}{2}\\right)\\)." }
+      ],
+      finalAnswerLatex: "y=\\sec^{2}(x)\\left[\\frac{x}{2}+\\frac{\\operatorname{sen}(2x)}{4}+c\\right]"
+    },
+    {
+      statement: "Resuelve el PVI \\(\\dfrac{dy}{dx}+2xy=f(x)\\), \\(y(0)=2\\), donde \\(f(x)=x\\) si \\(0\\le x\\lt1\\) y \\(f(x)=0\\) si \\(x\\ge1\\).",
+      steps: [
+        { prompt: "Calcula el factor integrante, que es el mismo en ambos tramos.", hints: ["\\(p(x)=2x\\), así que \\(\\int p\\,dx=x^{2}\\)."], revealLatex: "\\mu(x)=e^{x^{2}}", explanation: "\\(p\\) no cambia con el tramo: solo cambia \\(q=f\\)." },
+        { prompt: "Resuelve en \\(0\\le x\\lt1\\), donde \\(q(x)=x\\), e impón \\(y(0)=2\\).", hints: ["\\(\\dfrac{d}{dx}\\left[ye^{x^{2}}\\right]=xe^{x^{2}}\\), cuya integral es \\(\\tfrac12e^{x^{2}}\\).", "Despeja y evalúa en \\(x=0\\)."], revealLatex: "y=\\frac12+c_1e^{-x^{2}};\\quad y(0)=2\\Rightarrow c_1=\\frac32", explanation: "En este tramo \\(y=\\dfrac12+\\dfrac32e^{-x^{2}}\\)." },
+        { prompt: "Resuelve en \\(x\\ge1\\), donde \\(q(x)=0\\).", hints: ["Con \\(q=0\\) la ecuación es homogénea: \\(\\dfrac{d}{dx}\\left[ye^{x^{2}}\\right]=0\\)."], revealLatex: "y=c_2\\,e^{-x^{2}}", explanation: "Falta determinar \\(c_2\\), y para eso se usa el empalme." },
+        { prompt: "Pega los tramos exigiendo continuidad en \\(x=1\\).", hints: ["Iguala el valor por la izquierda con el valor por la derecha en \\(x=1\\).", "Por la izquierda: \\(\\dfrac12+\\dfrac32e^{-1}\\). Por la derecha: \\(c_2e^{-1}\\)."], revealLatex: "c_2e^{-1}=\\frac12+\\frac32e^{-1}\\ \\Longrightarrow\\ c_2=\\frac{e}{2}+\\frac32=\\frac{e+3}{2}", explanation: "Se exige continuidad de \\(y\\), no de \\(y'\\): la derivada sí salta porque \\(f\\) salta." }
+      ],
+      finalAnswerLatex: "y(x)=\\begin{cases}\\dfrac12+\\dfrac32e^{-x^{2}}, & 0\\le x\\lt 1\\\\ \\dfrac{e+3}{2}\\,e^{-x^{2}}, & x\\ge 1\\end{cases}"
+    }
+  ],
+  conceptual: [
+    {
+      question: "Para resolver \\(3y'+6xy=12x\\), el factor integrante correcto es:",
+      options: [
+        { text: "\\(\\mu=e^{x^{2}}\\), tras normalizar a \\(y'+2xy=4x\\).", correct: true, feedback: "Correcto: primero se divide por \\(3\\), luego \\(p=2x\\) y \\(\\int p\\,dx=x^{2}\\)." },
+        { text: "\\(\\mu=e^{3x^{2}}\\), usando \\(p=6x\\) directamente.", correct: false, feedback: "Trampa clásica: se olvidó **normalizar**. Con el \\(3\\) delante de \\(y'\\), \\(6x\\) no es \\(p\\)." },
+        { text: "\\(\\mu=e^{6x}\\).", correct: false, feedback: "Doble error: no se normalizó y además \\(\\int 6x\\,dx=3x^{2}\\), no \\(6x\\)." },
+        { text: "\\(\\mu=e^{x^{2}+c}\\), con la constante de integración.", correct: false, feedback: "En \\(\\mu\\) la constante es innecesaria: el factor \\(e^{c}\\) se cancela al dividir por \\(\\mu\\) al final." }
+      ],
+      explanation: "Regla de oro: **normaliza primero** (coeficiente de \\(y'\\) igual a \\(1\\)), luego \\(\\mu=e^{\\int p\\,dx}\\) sin constante."
+    },
+    {
+      question: "¿Cuál de estas EDO **no** es lineal de primer orden en \\(y\\)?",
+      options: [
+        { text: "\\(y'+x\\,y^{2}=e^{x}\\)", correct: true, feedback: "Correcto: \\(y^{2}\\) rompe la linealidad. Es de tipo **Bernoulli** con \\(n=2\\)." },
+        { text: "\\(y'+e^{x^{2}}y=\\operatorname{sen}(x^{3})\\)", correct: false, feedback: "Sí es lineal: los coeficientes pueden ser tan complicados como sea, lo que importa es que \\(y\\) esté a la primera." },
+        { text: "\\(x^{2}y'-y=\\ln x\\)", correct: false, feedback: "Lineal: basta normalizar dividiendo por \\(x^{2}\\)." },
+        { text: "\\(y'=\\dfrac{y}{x}+x\\)", correct: false, feedback: "Lineal: se reescribe como \\(y'-\\dfrac1x y=x\\)." }
+      ],
+      explanation: "Lineal \\(\\iff\\) \\(y\\) e \\(y'\\) aparecen a la **primera potencia** y sin multiplicarse entre sí."
+    },
+    {
+      question: "Dos soluciones distintas de una misma EDO lineal \\(y'+p(x)y=q(x)\\) siempre difieren en:",
+      options: [
+        { text: "Un múltiplo de \\(e^{-\\int p\\,dx}\\), es decir una solución de la homogénea.", correct: true, feedback: "Correcto: al restarlas, el término \\(q\\) se cancela y queda \\(z'+pz=0\\), cuya solución es \\(z=c\\,e^{-\\int p\\,dx}\\)." },
+        { text: "Una constante aditiva.", correct: false, feedback: "Solo si \\(p\\equiv0\\). En general la diferencia es una **función**, no una constante." },
+        { text: "Un múltiplo de \\(q(x)\\).", correct: false, feedback: "\\(q\\) se cancela justamente al restar; no aparece en la diferencia." },
+        { text: "Nada: dos soluciones distintas no pueden existir.", correct: false, feedback: "Existen infinitas, una por cada valor de \\(c\\); lo que no pueden es **cruzarse**." }
+      ],
+      explanation: "\\(y_{\\text{gen}}=y_{\\text{part}}+c\\,e^{-\\int p\\,dx}\\): la parte homogénea es lo único que distingue una solución de otra."
+    }
+  ],
+  keyTakeaways: [
+    "**Receta:** normaliza a \\(y'+py=q\\) → \\(\\mu=e^{\\int p\\,dx}\\) (sin constante) → \\((\\mu y)'=\\mu q\\) → integra → divide por \\(\\mu\\).",
+    "El error más caro es **no normalizar**: si el coeficiente de \\(y'\\) no es \\(1\\), \\(p\\) está mal y todo lo demás también.",
+    "Simplifica siempre \\(e^{k\\ln g(x)}=g(x)^{k}\\) antes de integrar \\(\\mu q\\).",
+    "La solución general es \\(y=y_{\\text{part}}+\\dfrac{c}{\\mu(x)}\\); el término \\(c/\\mu\\) es el transitorio que suele apagarse.",
+    "Con \\(q\\) definida **por tramos**: resuelve cada tramo y empalma exigiendo **continuidad** de \\(y\\)."
+  ]
+},
+{
+  id: "exactas", icon: "🧩", title: "Exactas y factor integrante",
+  subtitle: "Reconstruir la función potencial, y rescatar las que no son exactas",
+  widget: "contorno-exacta",
+  theory: [
+    { type: "para", content: "Partamos al revés de lo habitual. Toma una familia de curvas \\(f(x,y)=c\\). Su ecuación diferencial asociada se obtiene simplemente imponiendo \\(df=0\\):" },
+    { type: "formula", content: "df=\\frac{\\partial f}{\\partial x}\\,dx+\\frac{\\partial f}{\\partial y}\\,dy=0", caption: "Por ejemplo, la familia \\(xy=c\\) tiene asociada \\(y\\,dx+x\\,dy=0\\)." },
+    { type: "para", content: "Ahora demos vuelta la situación: nos entregan una EDO escrita en forma diferencial y queremos saber si proviene de una familia así." },
+    { type: "formula", content: "M(x,y)\\,dx+N(x,y)\\,dy=0", caption: "Forma diferencial. Cualquier EDO de primer orden se puede escribir así." },
+    { type: "para", content: "Si existe alguna función \\(f\\) cuyas parciales sean precisamente \\(M\\) y \\(N\\), la EDO es literalmente \\(df=0\\), y entonces resolver es trivial: la solución general son las curvas de nivel de \\(f\\)." },
+    { type: "formula", content: "\\frac{\\partial f}{\\partial x}=M\\quad\\text{y}\\quad\\frac{\\partial f}{\\partial y}=N\\ \\Longrightarrow\\ df=0\\ \\Longrightarrow\\ f(x,y)=c", caption: "En ese caso \\(M\\,dx+N\\,dy\\) se llama **diferencial exacta** y la EDO se llama **ecuación diferencial exacta**." },
+    { type: "para", content: "¿Cómo saber si esa \\(f\\) existe, sin buscarla? Aquí entra un resultado de cálculo multivariable: las parciales mixtas de una función suficientemente regular son iguales. Como \\(f_x=M\\) y \\(f_y=N\\), derivando cruzado se obtiene la condición:" },
+    { type: "formula", content: "\\frac{\\partial^{2}f}{\\partial y\\,\\partial x}=\\frac{\\partial^{2}f}{\\partial x\\,\\partial y}\\quad\\Longrightarrow\\quad \\frac{\\partial M}{\\partial y}=\\frac{\\partial N}{\\partial x}", caption: "**Criterio de exactitud**. Es lo primero que hay que verificar, siempre, antes de calcular nada más." },
+    { type: "callout", content: "Cuidado con el orden al derivar: \\(M\\) se deriva respecto de \\(y\\) (es el que acompaña a \\(dx\\)) y \\(N\\) respecto de \\(x\\). Es **cruzado**, no directo. Y si la EDO viene como \\(y'=\\dots\\), primero escríbela como \\(M\\,dx+N\\,dy=0\\)." },
+    { type: "para", content: "Verificada la exactitud, se reconstruye \\(f\\). Se integra \\(f_x=M\\) respecto de \\(x\\), pero la “constante de integración” ya no es una constante: es una función arbitraria de \\(y\\), porque cualquier función de \\(y\\) sola desaparece al derivar respecto de \\(x\\)." },
+    { type: "formula", content: "f(x,y)=\\int M(x,y)\\,dx+g(y)", caption: "Ese \\(g(y)\\) es el corazón del método: olvidarlo es el error más frecuente del tema." },
+    { type: "para", content: "Para determinar \\(g\\), se deriva esta expresión respecto de \\(y\\) y se iguala a \\(N\\):" },
+    { type: "formula", content: "g'(y)=N-\\frac{\\partial}{\\partial y}\\int M(x,y)\\,dx", caption: "Si la EDO era exacta, el lado derecho **debe** quedar libre de \\(x\\). Si aparece una \\(x\\), hay un error de cálculo o la ecuación no era exacta." },
+    { type: "formula", content: "f(x,y)=\\int M(x,y)\\,dx+\\int\\left[N-\\frac{\\partial}{\\partial y}\\int M(x,y)\\,dx\\right]dy=c", caption: "Fórmula completa. En la práctica conviene hacer los pasos por separado en vez de aplicarla de memoria." },
+    { type: "para", content: "**¿Y si la ecuación no es exacta?** Considera \\(y\\,dx+(x^{2}y-x)\\,dy=0\\). Aquí \\(M_y=1\\) y \\(N_x=2xy-1\\): claramente no es exacta. Pero si multiplicamos toda la ecuación por \\(1/x^{2}\\):" },
+    { type: "formula", content: "\\frac{y}{x^{2}}\\,dx+\\left(y-\\frac{1}{x}\\right)dy=0", caption: "Ahora \\(\\widetilde{M}_y=\\dfrac{1}{x^{2}}=\\widetilde{N}_x\\): **sí es exacta**. Multiplicar por una función bien elegida arregló el problema." },
+    { type: "para", content: "Cualquier función \\(\\mu(x,y)\\) que convierta \\(\\mu M\\,dx+\\mu N\\,dy=0\\) en exacta se llama **factor integrante**. Imponiendo el criterio de exactitud a la ecuación multiplicada se obtiene la condición general que debe cumplir \\(\\mu\\):" },
+    { type: "formula", content: "\\frac{\\partial(\\mu M)}{\\partial y}=\\frac{\\partial(\\mu N)}{\\partial x}\\ \\Longrightarrow\\ \\frac{1}{\\mu}\\left(N\\frac{\\partial\\mu}{\\partial x}-M\\frac{\\partial\\mu}{\\partial y}\\right)=\\frac{\\partial M}{\\partial y}-\\frac{\\partial N}{\\partial x}", caption: "Es una EDP, en general **más difícil** que la EDO original. Por eso solo se atacan dos casos particulares." },
+    { type: "para", content: "**Caso 1: \\(\\mu\\) depende solo de \\(x\\).** Entonces \\(\\partial\\mu/\\partial y=0\\) y la condición colapsa en una EDO separable para \\(\\mu\\), cuya solución es:" },
+    { type: "formula", content: "\\mu(x)=\\exp\\left(\\int\\frac{\\partial M/\\partial y-\\partial N/\\partial x}{N}\\,dx\\right)", caption: "Solo sirve si ese cociente resulta ser función **únicamente de \\(x\\)**. Si aparece alguna \\(y\\), este caso no aplica." },
+    { type: "para", content: "**Caso 2: \\(\\mu\\) depende solo de \\(y\\).** Análogamente:" },
+    { type: "formula", content: "\\mu(y)=\\exp\\left(\\int\\frac{\\partial N/\\partial x-\\partial M/\\partial y}{M}\\,dy\\right)", caption: "Fíjate en los dos cambios respecto del caso anterior: el numerador va **invertido** y se divide por \\(M\\), no por \\(N\\)." },
+    { type: "callout", content: "Truco de memoria: “con \\(x\\) va con \\(N\\); con \\(y\\) va con \\(M\\), y se da vuelta el numerador”. Un tercer caso que también aparece en controles es proponer \\(\\mu=x^{p}y^{q}\\) y determinar \\(p,q\\) igualando coeficientes tras imponer la exactitud." },
+    { type: "para", content: "Ejemplo del caso 1: para \\(\\left(x^{2}+y^{2}+2x+1\\right)dx+y(x+1)\\,dy=0\\) se tiene \\(M_y=2y\\) y \\(N_x=y\\), luego \\(\\dfrac{M_y-N_x}{N}=\\dfrac{y}{y(x+1)}=\\dfrac{1}{x+1}\\), que depende solo de \\(x\\). Así \\(\\mu=e^{\\int dx/(x+1)}=x+1\\), y multiplicando y aplicando el método se llega a:" },
+    { type: "formula", content: "\\frac{(x+1)^{4}}{4}+\\frac{y^{2}(x+1)^{2}}{2}=c", caption: "Se usó \\(x^{2}+2x+1=(x+1)^{2}\\) para simplificar antes de integrar." },
+    { type: "callout", content: "Al multiplicar por \\(\\mu\\) puedes **introducir o perder** soluciones donde \\(\\mu=0\\) o donde \\(\\mu\\) no está definida (por ejemplo \\(y=0\\) si \\(\\mu=y^{-2}\\)). Revísalas por separado al final." }
+  ],
+  guidedDerivation: {
+    title: "Método completo en \\(\\left(6xy-y^{3}\\right)dx+\\left(4y+3x^{2}-3xy^{2}\\right)dy=0\\)",
+    intro: "El ejemplo central de la Clase 05. Sigue el orden: verificar, integrar, ajustar \\(g(y)\\).",
+    steps: [
+      { prompt: "Identifica \\(M\\) y \\(N\\), y verifica la exactitud.", hints: ["\\(M\\) acompaña a \\(dx\\); \\(N\\) acompaña a \\(dy\\).", "Deriva \\(M\\) respecto de \\(y\\) y \\(N\\) respecto de \\(x\\)."], revealLatex: "\\frac{\\partial M}{\\partial y}=6x-3y^{2}=\\frac{\\partial N}{\\partial x}\\quad\\checkmark", explanation: "Coinciden, así que existe \\(f\\) con \\(f_x=M\\), \\(f_y=N\\)." },
+      { prompt: "Integra \\(f_x=M\\) respecto de \\(x\\), sin olvidar la función arbitraria.", hints: ["Trata \\(y\\) como constante.", "La constante de integración es \\(g(y)\\), no un número."], revealLatex: "f(x,y)=\\int\\left(6xy-y^{3}\\right)dx=3x^{2}y-xy^{3}+g(y)", explanation: "\\(\\int 6xy\\,dx=3x^{2}y\\) y \\(\\int -y^{3}dx=-xy^{3}\\), con \\(y\\) fija." },
+      { prompt: "Deriva esa expresión respecto de \\(y\\) e iguala a \\(N\\).", hints: ["Ahora \\(x\\) es la constante.", "\\(\\dfrac{\\partial}{\\partial y}\\left(3x^{2}y-xy^{3}\\right)=3x^{2}-3xy^{2}\\)."], revealLatex: "3x^{2}-3xy^{2}+g'(y)=4y+3x^{2}-3xy^{2}", explanation: "Todos los términos con \\(x\\) se cancelan, como debe ocurrir si la ecuación era exacta." },
+      { prompt: "Despeja \\(g'(y)\\) e intégrala.", hints: ["Cancela los términos comunes a ambos lados."], revealLatex: "g'(y)=4y\\ \\Longrightarrow\\ g(y)=2y^{2}", explanation: "Aquí la constante sí es un número, y se absorbe en el \\(c\\) final." },
+      { prompt: "Escribe la solución general.", hints: ["La solución es \\(f(x,y)=c\\)."], revealLatex: "3x^{2}y-xy^{3}+2y^{2}=c", explanation: "Queda en forma implícita: son las curvas de nivel de \\(f\\), que es exactamente lo que dibuja el widget de arriba." }
+    ]
+  },
+  exercises: [
+    {
+      statement: "Determina el valor o valores de \\(k\\) para que \\(\\left[2x-y\\operatorname{sen}(xy)+ky^{4}\\right]dx-\\left[20k^{2}xy^{3}+x\\operatorname{sen}(xy)\\right]dy=0\\) sea exacta, y resuelve para \\(k=-\\tfrac15\\).",
+      steps: [
+        { prompt: "Calcula \\(\\partial M/\\partial y\\). Cuidado con la regla de la cadena en \\(\\operatorname{sen}(xy)\\).", hints: ["\\(\\dfrac{\\partial}{\\partial y}\\left[y\\operatorname{sen}(xy)\\right]\\) pide regla del producto **y** cadena.", "\\(\\dfrac{\\partial}{\\partial y}\\operatorname{sen}(xy)=x\\cos(xy)\\)."], revealLatex: "\\frac{\\partial M}{\\partial y}=-\\operatorname{sen}(xy)-xy\\cos(xy)+4ky^{3}", explanation: "Del producto: \\(-\\left[\\operatorname{sen}(xy)+y\\cdot x\\cos(xy)\\right]\\), más \\(4ky^{3}\\)." },
+        { prompt: "Calcula \\(\\partial N/\\partial x\\), recordando que \\(N\\) lleva el signo menos.", hints: ["\\(N=-20k^{2}xy^{3}-x\\operatorname{sen}(xy)\\).", "\\(\\dfrac{\\partial}{\\partial x}\\left[x\\operatorname{sen}(xy)\\right]=\\operatorname{sen}(xy)+xy\\cos(xy)\\)."], revealLatex: "\\frac{\\partial N}{\\partial x}=-20k^{2}y^{3}-\\operatorname{sen}(xy)-xy\\cos(xy)", explanation: "Los términos trigonométricos son idénticos a los de \\(M_y\\): se cancelarán al igualar." },
+        { prompt: "Iguala ambas y despeja \\(k\\).", hints: ["Solo sobreviven los términos en \\(y^{3}\\).", "Resuelve \\(4k=-20k^{2}\\) factorizando."], revealLatex: "4k=-20k^{2}\\ \\Longrightarrow\\ 4k(1+5k)=0\\ \\Longrightarrow\\ k=0\\ \\ \\text{o}\\ \\ k=-\\frac15", explanation: "Dos valores válidos. Cualquiera de los dos hace exacta la ecuación." },
+        { prompt: "Con \\(k=-\\tfrac15\\), integra \\(f_x=M\\) respecto de \\(x\\).", hints: ["\\(\\int -y\\operatorname{sen}(xy)\\,dx=\\cos(xy)\\), porque \\(\\int\\operatorname{sen}(xy)dx=-\\dfrac{\\cos(xy)}{y}\\).", "Con \\(k=-\\tfrac15\\), el término \\(ky^{4}\\) es \\(-\\dfrac{y^{4}}{5}\\)."], revealLatex: "f(x,y)=x^{2}+\\cos(xy)-\\frac{xy^{4}}{5}+g(y)", explanation: "Cada término se integró respecto de \\(x\\) con \\(y\\) constante." },
+        { prompt: "Deriva respecto de \\(y\\), iguala a \\(N\\) y determina \\(g\\).", hints: ["Con \\(k=-\\tfrac15\\): \\(20k^{2}=20\\cdot\\dfrac{1}{25}=\\dfrac45\\), luego \\(N=-\\dfrac45xy^{3}-x\\operatorname{sen}(xy)\\)."], revealLatex: "-x\\operatorname{sen}(xy)-\\frac{4xy^{3}}{5}+g'(y)=-\\frac{4}{5}xy^{3}-x\\operatorname{sen}(xy)\\ \\Rightarrow\\ g'(y)=0", explanation: "\\(g\\) es constante y se absorbe en el \\(c\\) final." }
+      ],
+      finalAnswerLatex: "k=0\\ \\text{ o }\\ k=-\\frac15;\\qquad \\text{para }k=-\\tfrac15:\\quad x^{2}+\\cos(xy)-\\frac{xy^{4}}{5}=c"
+    },
+    {
+      statement: "Halla la solución de \\(\\left(y+xy^{2}\\right)dx-x\\,dy=0\\).",
+      steps: [
+        { prompt: "Verifica si es exacta.", hints: ["\\(M=y+xy^{2}\\), \\(N=-x\\)."], revealLatex: "\\frac{\\partial M}{\\partial y}=1+2xy\\ \\neq\\ -1=\\frac{\\partial N}{\\partial x}", explanation: "No es exacta: hay que buscar un factor integrante." },
+        { prompt: "Prueba primero \\(\\mu(x)\\). ¿Funciona?", hints: ["Calcula \\(\\dfrac{M_y-N_x}{N}\\) y mira si sobrevive alguna \\(y\\)."], revealLatex: "\\frac{M_y-N_x}{N}=\\frac{2+2xy}{-x}\\ \\text{ depende de }y\\ \\Rightarrow\\ \\text{no sirve}", explanation: "Descartado el caso 1, se prueba el caso 2." },
+        { prompt: "Prueba \\(\\mu(y)\\) con el numerador invertido y dividiendo por \\(M\\).", hints: ["\\(\\dfrac{N_x-M_y}{M}=\\dfrac{-1-(1+2xy)}{y+xy^{2}}\\).", "Factoriza numerador y denominador: \\(-2(1+xy)\\) y \\(y(1+xy)\\)."], revealLatex: "\\frac{N_x-M_y}{M}=\\frac{-2(1+xy)}{y(1+xy)}=-\\frac{2}{y}", explanation: "Depende solo de \\(y\\): el caso 2 sí aplica." },
+        { prompt: "Calcula \\(\\mu(y)\\) y multiplica la ecuación.", hints: ["\\(\\exp\\left(\\int-\\dfrac{2}{y}dy\\right)=e^{-2\\ln|y|}\\)."], revealLatex: "\\mu(y)=y^{-2};\\qquad \\left(\\frac{1}{y}+x\\right)dx-\\frac{x}{y^{2}}\\,dy=0", explanation: "Verifica: \\(\\widetilde M_y=-\\dfrac{1}{y^{2}}=\\widetilde N_x\\). ✓ Ya es exacta." },
+        { prompt: "Aplica el método a la ecuación exacta.", hints: ["\\(f=\\int\\left(\\dfrac1y+x\\right)dx\\).", "Luego deriva respecto de \\(y\\) e iguala a \\(-x/y^{2}\\)."], revealLatex: "f=\\frac{x}{y}+\\frac{x^{2}}{2}+g(y);\\quad f_y=-\\frac{x}{y^{2}}+g'(y)=-\\frac{x}{y^{2}}\\ \\Rightarrow\\ g'=0", explanation: "Como \\(\\mu=y^{-2}\\) no está definida en \\(y=0\\), conviene notar aparte que \\(y(x)=0\\) también satisface la ecuación original." }
+      ],
+      finalAnswerLatex: "\\frac{x}{y}+\\frac{x^{2}}{2}=c\\qquad\\text{(más la solución }y=0\\text{)}"
+    },
+    {
+      statement: "Halla \\(p\\) y \\(q\\) tales que \\(\\mu(x,y)=x^{p}y^{q}\\) sea factor integrante de \\(\\left(2y^{2}+4x^{2}y\\right)dx+\\left(4xy+3x^{3}\\right)dy=0\\).",
+      steps: [
+        { prompt: "Multiplica \\(M\\) y \\(N\\) por \\(x^{p}y^{q}\\) y escribe los cuatro términos.", hints: ["Suma los exponentes de cada variable."], revealLatex: "\\mu M=2x^{p}y^{q+2}+4x^{p+2}y^{q+1},\\qquad \\mu N=4x^{p+1}y^{q+1}+3x^{p+3}y^{q}", explanation: "Todo queda en monomios, que es lo que hace manejable el método." },
+        { prompt: "Calcula \\(\\partial(\\mu M)/\\partial y\\) y \\(\\partial(\\mu N)/\\partial x\\).", hints: ["Derivar un monomio baja el exponente y lo deja como factor."], revealLatex: "\\begin{aligned}\\partial_y(\\mu M)&=2(q+2)x^{p}y^{q+1}+4(q+1)x^{p+2}y^{q}\\\\ \\partial_x(\\mu N)&=4(p+1)x^{p}y^{q+1}+3(p+3)x^{p+2}y^{q}\\end{aligned}", explanation: "Aparecen exactamente los mismos dos tipos de monomio en ambos lados." },
+        { prompt: "Iguala los coeficientes de cada monomio y arma el sistema.", hints: ["Compara el término \\(x^{p}y^{q+1}\\) y luego el término \\(x^{p+2}y^{q}\\)."], revealLatex: "\\begin{cases}2(q+2)=4(p+1)\\\\ 4(q+1)=3(p+3)\\end{cases}", explanation: "La exactitud debe valer identicamente en \\((x,y)\\), así que los coeficientes deben coincidir uno a uno." },
+        { prompt: "Resuelve el sistema.", hints: ["De la primera: \\(2q+4=4p+4\\), luego \\(q=2p\\).", "Sustituye en la segunda: \\(4(2p)+4=3p+9\\)."], revealLatex: "q=2p;\\quad 8p+4=3p+9\\ \\Longrightarrow\\ p=1,\\ q=2", explanation: "Verifica: con \\(\\mu=xy^{2}\\), \\(\\partial_y(\\mu M)=8xy^{3}+12x^{3}y^{2}=\\partial_x(\\mu N)\\). ✓" },
+        { prompt: "Resuelve la ecuación exacta resultante.", hints: ["\\(f=\\int\\left(2xy^{4}+4x^{3}y^{3}\\right)dx\\)."], revealLatex: "f=x^{2}y^{4}+x^{4}y^{3}+g(y);\\quad f_y=4x^{2}y^{3}+3x^{4}y^{2}=\\mu N\\ \\Rightarrow\\ g'=0", explanation: "El \\(g'(y)\\) sale cero, lo que confirma que \\(p=1,q=2\\) eran correctos." }
+      ],
+      finalAnswerLatex: "\\mu(x,y)=x\\,y^{2};\\qquad x^{2}y^{4}+x^{4}y^{3}=c"
+    }
+  ],
+  conceptual: [
+    {
+      question: "Para \\(M\\,dx+N\\,dy=0\\), el criterio de exactitud es:",
+      options: [
+        { text: "\\(\\dfrac{\\partial M}{\\partial y}=\\dfrac{\\partial N}{\\partial x}\\)", correct: true, feedback: "Correcto: derivadas **cruzadas**. Sale de igualar las parciales mixtas de \\(f\\)." },
+        { text: "\\(\\dfrac{\\partial M}{\\partial x}=\\dfrac{\\partial N}{\\partial y}\\)", correct: false, feedback: "Trampa muy común: están sin cruzar. \\(M\\) se deriva respecto de la variable del **otro** diferencial." },
+        { text: "\\(M=N\\)", correct: false, feedback: "Demasiado fuerte y falso: \\(y\\,dx+x\\,dy=0\\) es exacta con \\(M\\neq N\\)." },
+        { text: "\\(\\dfrac{\\partial M}{\\partial y}+\\dfrac{\\partial N}{\\partial x}=0\\)", correct: false, feedback: "Esa es otra condición (relacionada con campos solenoidales), no el criterio de exactitud." }
+      ],
+      explanation: "Con \\(f_x=M\\) y \\(f_y=N\\): \\(f_{xy}=M_y\\) y \\(f_{yx}=N_x\\). Igualdad de mixtas ⇒ \\(M_y=N_x\\)."
+    },
+    {
+      question: "Tras integrar \\(f_x=M\\) respecto de \\(x\\), ¿qué se agrega?",
+      options: [
+        { text: "Una función arbitraria \\(g(y)\\).", correct: true, feedback: "Correcto: cualquier función que dependa solo de \\(y\\) desaparece al derivar respecto de \\(x\\), así que hay que dejarla indeterminada." },
+        { text: "Una constante \\(c\\).", correct: false, feedback: "Insuficiente: una constante es un caso particular de \\(g(y)\\), y te perderías todos los términos que dependen solo de \\(y\\), como el \\(2y^{2}\\) del ejemplo." },
+        { text: "Una función arbitraria \\(g(x)\\).", correct: false, feedback: "No: una función de \\(x\\) **sí** sobrevive al derivar respecto de \\(x\\), luego ya está capturada por la integral." },
+        { text: "Nada, la integral es completa.", correct: false, feedback: "Es el error más frecuente del tema: te quedarías sin los términos puros en \\(y\\)." }
+      ],
+      explanation: "Al integrar parcialmente en \\(x\\), la “constante” es constante **respecto de \\(x\\)**: es decir, una función libre de \\(y\\)."
+    },
+    {
+      question: "Una EDO no es exacta y \\(\\dfrac{N_x-M_y}{M}=-\\dfrac{3}{y}\\). El factor integrante es:",
+      options: [
+        { text: "\\(\\mu(y)=y^{-3}\\)", correct: true, feedback: "Correcto: \\(\\mu=\\exp\\left(\\int-\\dfrac{3}{y}dy\\right)=e^{-3\\ln|y|}=y^{-3}\\)." },
+        { text: "\\(\\mu(y)=y^{3}\\)", correct: false, feedback: "Se perdió el signo: el exponente es \\(-3\\ln|y|\\), no \\(+3\\ln|y|\\)." },
+        { text: "\\(\\mu(x)=x^{-3}\\)", correct: false, feedback: "El cociente depende de \\(y\\) y se dividió por \\(M\\): eso corresponde al caso \\(\\mu=\\mu(y)\\), no \\(\\mu(x)\\)." },
+        { text: "\\(\\mu(y)=e^{-3y}\\)", correct: false, feedback: "Se integró mal: \\(\\int\\dfrac{dy}{y}=\\ln|y|\\), no \\(y\\)." }
+      ],
+      explanation: "Numerador \\(N_x-M_y\\) dividido por \\(M\\) y función solo de \\(y\\) ⇒ caso \\(\\mu(y)\\), con \\(\\mu=\\exp\\int(\\cdot)\\,dy\\)."
+    },
+    {
+      question: "Al multiplicar por \\(\\mu(y)=y^{-2}\\) para volver exacta una EDO, ¿qué precaución hay que tomar?",
+      options: [
+        { text: "Revisar aparte \\(y=0\\), donde \\(\\mu\\) no está definida.", correct: true, feedback: "Correcto: multiplicar por \\(\\mu\\) puede perder soluciones donde \\(\\mu\\) se anula o explota. \\(y=0\\) hay que verificarla en la ecuación **original**." },
+        { text: "Ninguna: multiplicar por \\(\\mu\\) es una operación reversible siempre.", correct: false, feedback: "Solo es reversible donde \\(\\mu\\neq0\\) y está definida; fuera de ahí el conjunto de soluciones puede cambiar." },
+        { text: "Agregar una constante de integración a \\(\\mu\\).", correct: false, feedback: "No hace falta: cualquier múltiplo de un factor integrante también lo es." },
+        { text: "Volver a verificar que \\(M_y\\neq N_x\\).", correct: false, feedback: "Al contrario: tras multiplicar hay que verificar que **ahora sí** \\(\\widetilde M_y=\\widetilde N_x\\)." }
+      ],
+      explanation: "El factor integrante puede añadir o quitar soluciones en sus ceros y singularidades: siempre revísalas en la ecuación original."
+    }
+  ],
+  keyTakeaways: [
+    "**Primero verifica** \\(M_y=N_x\\) (derivadas **cruzadas**) antes de hacer cualquier otro cálculo.",
+    "**Método:** \\(f=\\int M\\,dx+g(y)\\) → deriva en \\(y\\) → iguala a \\(N\\) → despeja \\(g'(y)\\) → integra. La solución es \\(f(x,y)=c\\).",
+    "El \\(g(y)\\) es obligatorio: al integrar en \\(x\\), la constante es una **función de \\(y\\)**. Si al despejar \\(g'(y)\\) queda alguna \\(x\\), hay un error.",
+    "Si no es exacta: \\(\\dfrac{M_y-N_x}{N}\\) solo en \\(x\\) ⇒ \\(\\mu(x)\\); \\(\\dfrac{N_x-M_y}{M}\\) solo en \\(y\\) ⇒ \\(\\mu(y)\\). También puede proponerse \\(\\mu=x^{p}y^{q}\\).",
+    "Tras multiplicar por \\(\\mu\\), revisa las soluciones perdidas en los ceros y singularidades de \\(\\mu\\)."
+  ]
+},
+{
+  id: "sustitucion", icon: "🔄", title: "Soluciones por sustitución",
+  subtitle: "Homogéneas, Bernoulli, Riccati y \\(f(ax+by+c)\\)",
+  widget: "rayos-homog",
+  theory: [
+    { type: "para", content: "Las cuatro familias de este módulo comparten una misma estrategia: la EDO **no** es de ningún tipo conocido, pero un cambio de variable bien elegido la convierte en **separable** o en **lineal**, que sí sabemos resolver. Lo difícil no es el cálculo, sino **reconocer** cuál sustitución toca." },
+    { type: "para", content: "**1 · Ecuaciones homogéneas.** Primero, el concepto de función homogénea. Se dice que \\(f\\) es homogénea de grado \\(k\\) si al escalar ambas variables la función escala como una potencia:" },
+    { type: "formula", content: "f(\\lambda x,\\lambda y)=\\lambda^{k}f(x,y)\\qquad\\forall\\lambda\\in\\mathbb{R}-\\{0\\}", caption: "Test rápido: reemplaza \\(x\\to\\lambda x\\), \\(y\\to\\lambda y\\) y mira qué potencia de \\(\\lambda\\) sale factorizada." },
+    { type: "formula", content: "\\begin{array}{l|c}\\text{Función} & \\text{Grado}\\\\\\hline f(x,y)=\\sqrt[3]{x^{3}+y^{3}} & 1\\\\ g(x,y)=xy-x^{2} & 2\\\\ h(x,y)=e^{x/y} & 0\\end{array}", caption: "En \\(h\\) el cociente \\(x/y\\) no cambia al escalar, luego \\(h(\\lambda x,\\lambda y)=h(x,y)=\\lambda^{0}h\\)." },
+    { type: "para", content: "Una **EDO homogénea** es entonces \\(M(x,y)\\,dx+N(x,y)\\,dy=0\\) donde \\(M\\) y \\(N\\) son homogéneas del **mismo** grado. La sustitución que la desarma es:" },
+    { type: "formula", content: "y=vx,\\qquad v=v(x)\\qquad\\Longrightarrow\\qquad dy=v\\,dx+x\\,dv", caption: "Equivalentemente \\(y'=v+x\\,v'\\). **Olvidar el término \\(x\\,v'\\)** es el error más caro de este tema." },
+    { type: "para", content: "Al sustituir, la homogeneidad hace que \\(x^{k}\\) se factorice y se cancele por completo, dejando una ecuación separable en \\(v\\) y \\(x\\):" },
+    { type: "formula", content: "\\frac{1}{x}\\,dx+\\frac{N(1,v)}{v\\,N(1,v)+M(1,v)}\\,dv=0", caption: "Aquí \\(M(1,v)\\) significa evaluar \\(M\\) en \\(x=1,\\,y=v\\). Se integra, y al final se devuelve \\(v=y/x\\)." },
+    { type: "callout", content: "Geométricamente: en una EDO homogénea la pendiente \\(y'\\) depende solo del cociente \\(v=y/x\\), es decir **es constante a lo largo de cada recta que pasa por el origen**. Justamente eso muestra el widget de arriba, y es la razón de que \\(v\\) sea la variable natural." },
+    { type: "para", content: "Por ejemplo, en \\(\\left(x^{2}-xy+y^{2}\\right)dx-xy\\,dy=0\\) ambos coeficientes son de grado \\(2\\). Con \\(M(1,v)=1-v+v^{2}\\) y \\(N(1,v)=-v\\), el denominador se simplifica a \\(1-v\\), y tras integrar y volver a \\(y\\):" },
+    { type: "formula", content: "\\ln\\left|x-y\\right|+\\frac{y}{x}=c", caption: "También se escribe \\(\\left(x-y\\right)e^{y/x}=C\\)." },
+    { type: "para", content: "**2 · Ecuación de Bernoulli.** Es una lineal “estropeada” por una potencia de \\(y\\) en el lado derecho:" },
+    { type: "formula", content: "\\frac{dy}{dx}+p(x)\\,y=q(x)\\,y^{n}", caption: "con \\(p,q\\) continuas en \\((a,b)\\) y \\(n\\in\\mathbb{R}\\). Si \\(n=0\\) o \\(n=1\\) la ecuación **ya es lineal** y no hay nada que sustituir." },
+    { type: "para", content: "Para \\(n\\neq0,1\\), la sustitución \\(u=y^{1-n}\\) la convierte exactamente en lineal:" },
+    { type: "formula", content: "u=y^{1-n}\\qquad\\Longrightarrow\\qquad \\frac{1}{1-n}\\frac{du}{dx}+p(x)\\,u=q(x)", caption: "Recuerda multiplicar por \\((1-n)\\) para normalizar antes de calcular el factor integrante." },
+    { type: "callout", content: "El exponente es \\(1-n\\), no \\(n-1\\). Con \\(n=3\\) queda \\(u=y^{-2}\\), y al terminar debes **volver a \\(y\\)**: la respuesta no puede quedar en \\(u\\)." },
+    { type: "para", content: "**3 · Ecuación de Riccati.** Es una cuadrática en \\(y\\) con coeficientes variables:" },
+    { type: "formula", content: "\\frac{dy}{dx}=p(x)+q(x)\\,y+r(x)\\,y^{2}", caption: "con \\(p,q,r\\) continuas en \\((a,b)\\). No se puede resolver en general **sin conocer una solución particular**." },
+    { type: "para", content: "Si el enunciado te entrega (o te permite adivinar) una solución particular \\(y_1(x)\\), la sustitución siguiente reduce la EDO a una **lineal de primer orden**:" },
+    { type: "formula", content: "y=y_1(x)+\\frac{1}{z(x)}", caption: "Al sustituir, todos los términos que solo involucran \\(y_1\\) se cancelan (porque \\(y_1\\) ya resuelve la EDO) y sobrevive una lineal en \\(z\\)." },
+    { type: "para", content: "Un caso especialmente amable es el de **coeficientes constantes**, porque ahí la solución particular se encuentra sola:" },
+    { type: "formula", content: "\\frac{dy}{dx}=c+b\\,y+a\\,y^{2}\\ \\Longrightarrow\\ \\text{las raíces de }\\ a y^{2}+b y+c=0\\ \\text{ son soluciones}", caption: "Son las soluciones **constantes**: si \\(y\\equiv r\\) con \\(ar^{2}+br+c=0\\), entonces \\(y'=0\\) coincide con el lado derecho." },
+    { type: "para", content: "**4 · Ecuaciones de la forma \\(y'=f(ax+by+c)\\).** Cuando el lado derecho depende de \\(x\\) e \\(y\\) **solo a través** de una combinación lineal, esa combinación es la variable natural:" },
+    { type: "formula", content: "\\frac{dy}{dx}=f(ax+by+c)\\quad\\xrightarrow{\\ u=ax+by+c\\ }\\quad \\frac{du}{dx}=a+b\\,f(u)", caption: "Con \\(b\\neq0\\). El resultado es **siempre separable**: \\(\\dfrac{du}{a+b\\,f(u)}=dx\\)." },
+    { type: "callout", content: "Cómo elegir rápido en el control: ¿el lado derecho depende solo de \\(y/x\\)? → **homogénea**, \\(y=vx\\). ¿Es lineal salvo por un \\(y^{n}\\) suelto? → **Bernoulli**, \\(u=y^{1-n}\\). ¿Es cuadrática en \\(y\\) y te dan una solución? → **Riccati**, \\(y=y_1+1/z\\). ¿Depende solo de \\(ax+by+c\\)? → \\(u=ax+by+c\\)." }
+  ],
+  guidedDerivation: {
+    title: "Por qué \\(u=y^{1-n}\\) lineariza la ecuación de Bernoulli",
+    intro: "Deducir la sustitución vale más que memorizarla: en el control te permite reconstruirla si la olvidas.",
+    steps: [
+      { prompt: "Parte de \\(y'+p(x)y=q(x)y^{n}\\) y divide toda la ecuación por \\(y^{n}\\). ¿Qué queda?", hints: ["Divide término a término.", "\\(\\dfrac{y}{y^{n}}=y^{1-n}\\)."], revealLatex: "y^{-n}y'+p(x)\\,y^{1-n}=q(x)", explanation: "Aparece \\(y^{1-n}\\) en el término del medio: esa es la pista de qué debe ser \\(u\\)." },
+      { prompt: "Define \\(u=y^{1-n}\\) y calcula \\(\\dfrac{du}{dx}\\) por regla de la cadena.", hints: ["Deriva la potencia: el exponente baja como factor.", "El exponente resultante es \\((1-n)-1=-n\\)."], revealLatex: "\\frac{du}{dx}=(1-n)\\,y^{-n}\\,\\frac{dy}{dx}", explanation: "Y por lo tanto \\(y^{-n}y'=\\dfrac{1}{1-n}\\dfrac{du}{dx}\\), que es justo el primer término de arriba." },
+      { prompt: "Reemplaza ambas cosas en la ecuación dividida.", hints: ["Sustituye \\(y^{-n}y'\\) y \\(y^{1-n}\\) por sus expresiones en \\(u\\)."], revealLatex: "\\frac{1}{1-n}\\frac{du}{dx}+p(x)\\,u=q(x)", explanation: "Es exactamente la fórmula del formulario: una EDO **lineal** en \\(u\\)." },
+      { prompt: "Normalízala para poder aplicar el factor integrante.", hints: ["Multiplica todo por \\((1-n)\\).", "El coeficiente de \\(u'\\) debe quedar en \\(1\\)."], revealLatex: "\\frac{du}{dx}+(1-n)p(x)\\,u=(1-n)q(x)", explanation: "Ahora \\(\\mu=e^{(1-n)\\int p\\,dx}\\). Al terminar, deshaz el cambio con \\(y=u^{1/(1-n)}\\)." }
+    ]
+  },
+  exercises: [
+    {
+      statement: "Resuelve la EDO homogénea \\(\\left(x^{2}+y^{2}\\right)dx-2xy\\,dy=0\\).",
+      steps: [
+        { prompt: "Verifica que sea homogénea e identifica \\(M(1,v)\\) y \\(N(1,v)\\).", hints: ["Ambos coeficientes deben tener el mismo grado.", "Evalúa en \\(x=1,\\ y=v\\)."], revealLatex: "\\text{grado }2;\\qquad M(1,v)=1+v^{2},\\qquad N(1,v)=-2v", explanation: "\\(x^{2}+y^{2}\\) y \\(-2xy\\) son ambos de grado \\(2\\), así que la sustitución \\(y=vx\\) funcionará." },
+        { prompt: "Arma la forma separable con la fórmula del formulario.", hints: ["\\(\\dfrac{dx}{x}+\\dfrac{N(1,v)}{vN(1,v)+M(1,v)}dv=0\\).", "El denominador es \\(v(-2v)+(1+v^{2})=1-v^{2}\\)."], revealLatex: "\\frac{dx}{x}-\\frac{2v}{1-v^{2}}\\,dv=0", explanation: "Nota cómo el denominador se simplificó: siempre ocurre en las homogéneas." },
+        { prompt: "Integra ambos términos.", hints: ["\\(\\int\\dfrac{2v}{1-v^{2}}dv=-\\ln\\left|1-v^{2}\\right|\\), porque el numerador es menos la derivada del denominador."], revealLatex: "\\ln|x|+\\ln\\left|1-v^{2}\\right|=c\\ \\Longrightarrow\\ x\\left(1-v^{2}\\right)=C", explanation: "Al exponenciar, la suma de logaritmos se vuelve producto." },
+        { prompt: "Deshaz el cambio con \\(v=y/x\\).", hints: ["Sustituye y simplifica el denominador \\(x^{2}\\)."], revealLatex: "x\\left(1-\\frac{y^{2}}{x^{2}}\\right)=\\frac{x^{2}-y^{2}}{x}=C", explanation: "Multiplicando por \\(x\\) queda una familia de hipérbolas." }
+      ],
+      finalAnswerLatex: "x^{2}-y^{2}=C\\,x"
+    },
+    {
+      statement: "Resuelve la ecuación de Bernoulli \\(\\dfrac{dy}{dx}-5y=-\\dfrac52\\,x\\,y^{3}\\).",
+      steps: [
+        { prompt: "Identifica \\(p\\), \\(q\\), \\(n\\) y la sustitución.", hints: ["Compara con \\(y'+p(x)y=q(x)y^{n}\\)."], revealLatex: "p(x)=-5,\\quad q(x)=-\\tfrac52x,\\quad n=3\\ \\Longrightarrow\\ u=y^{1-3}=y^{-2}", explanation: "Con \\(n=3\\) el exponente de la sustitución es \\(1-n=-2\\)." },
+        { prompt: "Escribe la ecuación lineal en \\(u\\) y normalízala.", hints: ["\\(\\dfrac{1}{1-n}u'+pu=q\\), con \\(1-n=-2\\).", "Multiplica por \\(-2\\)."], revealLatex: "-\\tfrac12u'-5u=-\\tfrac52x\\ \\Longrightarrow\\ u'+10u=5x", explanation: "Al multiplicar por \\(-2\\) todos los signos se invierten. Ya está en forma estándar." },
+        { prompt: "Resuelve la lineal con factor integrante.", hints: ["\\(\\mu=e^{10x}\\).", "\\(\\int 5xe^{10x}dx\\) sale por partes."], revealLatex: "u\\,e^{10x}=\\frac{x}{2}e^{10x}-\\frac{1}{20}e^{10x}+c", explanation: "Por partes: \\(5\\left[\\dfrac{xe^{10x}}{10}-\\dfrac{e^{10x}}{100}\\right]\\)." },
+        { prompt: "Despeja \\(u\\) y vuelve a \\(y\\).", hints: ["Divide por \\(e^{10x}\\).", "Recuerda \\(u=y^{-2}\\), o sea \\(y^{2}=1/u\\)."], revealLatex: "u=\\frac{x}{2}-\\frac{1}{20}+c\\,e^{-10x}\\ \\Longrightarrow\\ y^{-2}=\\frac{x}{2}-\\frac{1}{20}+c\\,e^{-10x}", explanation: "Dejar la respuesta en \\(u\\) es un error: siempre hay que deshacer la sustitución." }
+      ],
+      finalAnswerLatex: "y^{2}=\\frac{1}{\\dfrac{x}{2}-\\dfrac{1}{20}+c\\,e^{-10x}}"
+    },
+    {
+      statement: "Determina la solución general de la ecuación de Riccati \\(\\dfrac{dy}{dx}=-12+y+y^{2}\\).",
+      steps: [
+        { prompt: "Es de coeficientes constantes. Encuentra una solución particular.", hints: ["Busca soluciones **constantes**: si \\(y\\equiv r\\) entonces \\(y'=0\\).", "Resuelve \\(r^{2}+r-12=0\\)."], revealLatex: "r^{2}+r-12=(r+4)(r-3)=0\\ \\Longrightarrow\\ y_1=3\\ \\text{ (o }y_1=-4)", explanation: "Cualquiera de las dos sirve; tomamos \\(y_1=3\\)." },
+        { prompt: "Sustituye \\(y=3+\\dfrac1z\\) y desarrolla el lado derecho.", hints: ["\\(y'=-\\dfrac{z'}{z^{2}}\\).", "Expande \\((3+1/z)^{2}=9+6/z+1/z^{2}\\)."], revealLatex: "-\\frac{z'}{z^{2}}=-12+3+\\frac1z+9+\\frac6z+\\frac{1}{z^{2}}=\\frac{7}{z}+\\frac{1}{z^{2}}", explanation: "Los términos constantes \\(-12+3+9\\) se cancelan: eso siempre pasa porque \\(y_1\\) resuelve la EDO." },
+        { prompt: "Multiplica por \\(-z^{2}\\) para obtener la lineal en \\(z\\).", hints: ["Cuidado con los signos al multiplicar por un negativo."], revealLatex: "z'=-7z-1\\ \\Longrightarrow\\ z'+7z=-1", explanation: "Ya es lineal de primer orden en \\(z\\), con \\(p=7\\) y \\(q=-1\\)." },
+        { prompt: "Resuelve la lineal y vuelve a \\(y\\).", hints: ["\\(\\mu=e^{7x}\\), \\(\\int-e^{7x}dx=-\\dfrac{e^{7x}}{7}\\).", "Luego \\(y=3+1/z\\)."], revealLatex: "z=-\\frac17+c\\,e^{-7x}\\ \\Longrightarrow\\ y=3+\\frac{1}{c\\,e^{-7x}-\\dfrac17}", explanation: "Comprobación cualitativa: cuando \\(x\\to\\infty\\), \\(z\\to-\\tfrac17\\) y \\(y\\to3-7=-4\\), que es la otra solución constante. Consistente." }
+      ],
+      finalAnswerLatex: "y=3+\\frac{1}{c\\,e^{-7x}-\\dfrac17}"
+    },
+    {
+      statement: "Determina la solución general de \\(\\dfrac{dy}{dx}=\\dfrac{1-x-y}{x+y}\\).",
+      steps: [
+        { prompt: "Observa la estructura: ¿de qué depende realmente el lado derecho?", hints: ["Reescribe \\(1-x-y=1-(x+y)\\).", "Todo se expresa mediante \\(x+y\\)."], revealLatex: "\\frac{dy}{dx}=\\frac{1-(x+y)}{x+y}=f(u)\\ \\text{ con }\\ u=x+y", explanation: "Es del tipo \\(f(ax+by+c)\\) con \\(a=b=1\\), \\(c=0\\)." },
+        { prompt: "Deriva \\(u=x+y\\) respecto de \\(x\\) y sustituye.", hints: ["\\(u'=1+y'\\).", "Reemplaza \\(y'=\\dfrac{1-u}{u}\\)."], revealLatex: "\\frac{du}{dx}=1+\\frac{1-u}{u}=\\frac{u+1-u}{u}=\\frac{1}{u}", explanation: "Quedó una EDO separable notablemente simple." },
+        { prompt: "Separa e integra.", hints: ["\\(u\\,du=dx\\)."], revealLatex: "\\frac{u^{2}}{2}=x+c", explanation: "Integración inmediata a ambos lados." },
+        { prompt: "Vuelve a las variables originales.", hints: ["\\(u=x+y\\); multiplica por \\(2\\) y renombra la constante."], revealLatex: "(x+y)^{2}=2x+C", explanation: "Verificación: derivando, \\(2(x+y)(1+y')=2\\), luego \\(1+y'=\\dfrac{1}{x+y}\\) y \\(y'=\\dfrac{1-x-y}{x+y}\\). ✓" }
+      ],
+      finalAnswerLatex: "(x+y)^{2}=2x+C"
+    }
+  ],
+  conceptual: [
+    {
+      question: "En una EDO homogénea se sustituye \\(y=vx\\). ¿Cuánto vale \\(y'\\)?",
+      options: [
+        { text: "\\(y'=v+x\\,v'\\)", correct: true, feedback: "Correcto: regla del producto, porque \\(v\\) también depende de \\(x\\)." },
+        { text: "\\(y'=v'\\)", correct: false, feedback: "Se olvidó que \\(y=vx\\) es un **producto** de dos funciones de \\(x\\). Este es el error más frecuente del tema." },
+        { text: "\\(y'=v\\)", correct: false, feedback: "Eso valdría solo si \\(v\\) fuera constante, y entonces \\(y=vx\\) sería una recta." },
+        { text: "\\(y'=x\\,v'\\)", correct: false, feedback: "Falta el término \\(v\\): la regla del producto tiene **dos** sumandos." }
+      ],
+      explanation: "\\(\\dfrac{d}{dx}(vx)=v'x+v\\). Sin ese \\(v\\), los \\(x\\) no se cancelan y la ecuación no se vuelve separable."
+    },
+    {
+      question: "Para \\(y'+\\dfrac{1}{x}y=x\\,y^{2}\\), la sustitución correcta es:",
+      options: [
+        { text: "\\(u=y^{-1}\\)", correct: true, feedback: "Correcto: es Bernoulli con \\(n=2\\), luego \\(u=y^{1-n}=y^{-1}\\)." },
+        { text: "\\(u=y^{2}\\)", correct: false, feedback: "Se copió el exponente \\(n\\) en vez de calcular \\(1-n\\). Con \\(n=2\\), \\(1-n=-1\\)." },
+        { text: "\\(u=y^{1}\\)", correct: false, feedback: "Eso no es sustitución alguna, y la ecuación seguiría siendo no lineal." },
+        { text: "\\(y=vx\\)", correct: false, feedback: "Esa es la sustitución de las **homogéneas**. Aquí el lado derecho no depende solo de \\(y/x\\)." }
+      ],
+      explanation: "Bernoulli: \\(y'+py=qy^{n}\\) con \\(n\\neq0,1\\) ⇒ \\(u=y^{1-n}\\)."
+    },
+    {
+      question: "¿Por qué una ecuación de Riccati requiere conocer una solución particular \\(y_1\\)?",
+      options: [
+        { text: "Porque sin ella no hay método general; con \\(y_1\\), la sustitución \\(y=y_1+1/z\\) cancela los términos que impiden linealizar.", correct: true, feedback: "Correcto: al sustituir, la parte que solo involucra \\(y_1\\) se anula (porque \\(y_1\\) ya resuelve la EDO) y sobrevive una lineal en \\(z\\)." },
+        { text: "Porque \\(y_1\\) fija la constante de integración.", correct: false, feedback: "No: la constante aparece después, al resolver la lineal en \\(z\\). \\(y_1\\) es estructural, no una condición inicial." },
+        { text: "Porque las Riccati no tienen solución general.", correct: false, feedback: "Sí la tienen; lo que no existe es un método general para hallarla **sin** una solución particular de partida." },
+        { text: "Porque \\(y_1\\) debe ser siempre constante.", correct: false, feedback: "Solo lo es en el caso de coeficientes constantes. En general \\(y_1\\) es una función, como \\(y_1=2/x\\)." }
+      ],
+      explanation: "La sustitución \\(y=y_1+1/z\\) explota el hecho de que \\(y_1\\) satisface la ecuación: eso mata los términos problemáticos."
+    },
+    {
+      question: "En \\(\\dfrac{dy}{dx}=(x+y+3)^{2}\\), ¿cuál es la vía más directa?",
+      options: [
+        { text: "Sustituir \\(u=x+y+3\\), obteniendo \\(u'=1+u^{2}\\), que es separable.", correct: true, feedback: "Correcto: el lado derecho depende solo de la combinación \\(x+y+3\\), y \\(u'=a+bf(u)=1+u^{2}\\)." },
+        { text: "Es lineal: aplicar factor integrante.", correct: false, feedback: "No es lineal: al expandir aparece \\(y^{2}\\), y además productos \\(xy\\)." },
+        { text: "Es homogénea: sustituir \\(y=vx\\).", correct: false, feedback: "El \\(+3\\) rompe la homogeneidad, y aunque no estuviera, \\((x+y)^{2}\\) es de grado \\(2\\) mientras el lado izquierdo es de grado \\(0\\)." },
+        { text: "Separar variables directamente.", correct: false, feedback: "\\((x+y+3)^{2}\\) no se factoriza como \\(f(x)h(y)\\): la suma dentro del cuadrado lo impide." }
+      ],
+      explanation: "Si el lado derecho depende de \\(x,y\\) **solo** vía \\(ax+by+c\\), usa \\(u=ax+by+c\\) y obtén \\(u'=a+b\\,f(u)\\), siempre separable."
+    }
+  ],
+  keyTakeaways: [
+    "**Homogénea** (\\(M,N\\) del mismo grado, o \\(y'\\) función de \\(y/x\\)): usa \\(y=vx\\) con \\(y'=v+xv'\\) y llega a separable.",
+    "**Bernoulli** \\(y'+py=qy^{n}\\), \\(n\\neq0,1\\): usa \\(u=y^{1-n}\\) y llega a lineal. Recuerda **volver a \\(y\\)** al final.",
+    "**Riccati** \\(y'=p+qy+ry^{2}\\): con \\(y_1\\) conocida, \\(y=y_1+\\dfrac1z\\) da una lineal en \\(z\\). Si los coeficientes son constantes, \\(y_1\\) sale de \\(ay^{2}+by+c=0\\).",
+    "**\\(y'=f(ax+by+c)\\)**: usa \\(u=ax+by+c\\), obtén \\(u'=a+b\\,f(u)\\) y separa.",
+    "La sustitución solo cambia el disfraz: después vuelves a **separables** o a **lineales**, así que domina primero esos dos métodos."
+  ]
+},
+{
+  id: "simulacro", icon: "🏁", title: "Simulacro",
+  subtitle: "Mini-control que cruza los seis temas",
+  widget: "none",
+  theory: [
+    { type: "para", content: "Cinco preguntas de clasificación y trampas, más tres desarrollos completos. Hazlo **sin mirar los apuntes** y cronometrado: apunta a unos 50 minutos. Lo que falles aquí es exactamente lo que hay que repasar." },
+    { type: "callout", content: "Antes de cada desarrollo, dedica 20 segundos a **clasificar** la ecuación. Escribe en el margen: separable / lineal / exacta / factor integrante / homogénea / Bernoulli / Riccati / reducible. Elegir bien el método es la mitad del puntaje." }
+  ],
+  exercises: [
+    {
+      statement: "**(1)** Resuelve \\(\\dfrac{dy}{dx}=\\dfrac{y}{x}+\\dfrac{x^{2}}{y}\\).",
+      steps: [
+        { prompt: "Clasifica: ¿de qué tipo es? Reescríbela en una forma reconocible.", hints: ["No es separable ni exacta de entrada. Pasa el término en \\(y\\) a la izquierda.", "Fíjate en la potencia de \\(y\\) que queda a la derecha."], revealLatex: "y'-\\frac{1}{x}\\,y=x^{2}\\,y^{-1}\\ \\Longrightarrow\\ \\text{Bernoulli con }n=-1", explanation: "Es lineal salvo por el \\(y^{-1}\\) del lado derecho: eso la delata como Bernoulli." },
+        { prompt: "Aplica la sustitución de Bernoulli.", hints: ["\\(u=y^{1-n}\\) con \\(n=-1\\)."], revealLatex: "u=y^{1-(-1)}=y^{2},\\qquad u'=2y\\,y'", explanation: "Equivalentemente, multiplica la EDO por \\(y\\): \\(yy'-\\dfrac{y^{2}}{x}=x^{2}\\), y reconoce \\(yy'=\\dfrac{u'}{2}\\)." },
+        { prompt: "Escribe la lineal en \\(u\\) y normalízala.", hints: ["\\(\\dfrac{u'}{2}-\\dfrac{u}{x}=x^{2}\\); multiplica por \\(2\\)."], revealLatex: "u'-\\frac{2}{x}\\,u=2x^{2}", explanation: "Forma estándar con \\(p=-\\dfrac2x\\) y \\(q=2x^{2}\\)." },
+        { prompt: "Resuelve con factor integrante y deshaz el cambio.", hints: ["\\(\\mu=e^{-2\\ln|x|}=x^{-2}\\).", "\\(\\dfrac{d}{dx}\\left[x^{-2}u\\right]=2\\)."], revealLatex: "x^{-2}u=2x+c\\ \\Longrightarrow\\ u=2x^{3}+c\\,x^{2}\\ \\Longrightarrow\\ y^{2}=2x^{3}+c\\,x^{2}", explanation: "Verificación rápida: derivando implícitamente \\(2yy'=6x^{2}+2cx\\) y usando \\(c=\\dfrac{y^{2}-2x^{3}}{x^{2}}\\) se recupera la EDO original." }
+      ],
+      finalAnswerLatex: "y^{2}=2x^{3}+c\\,x^{2}"
+    },
+    {
+      statement: "**(2)** Considera el PVI \\(\\dfrac{dy}{dx}=3y^{2/3}\\), \\(y(0)=0\\). ¿Aplica el teorema de existencia y unicidad? Encuentra al menos dos soluciones.",
+      steps: [
+        { prompt: "Estudia las hipótesis del teorema en \\((0,0)\\).", hints: ["\\(f(x,y)=3y^{2/3}\\) es continua en todo \\(\\mathbb{R}^{2}\\).", "Calcula \\(\\partial f/\\partial y\\) y evalúa en \\(y=0\\)."], revealLatex: "\\frac{\\partial f}{\\partial y}=2y^{-1/3}\\ \\text{ no está definida en }y=0", explanation: "\\(f\\) continua ⇒ hay **existencia**. Pero la parcial explota justo en el valor inicial, así que el teorema **no garantiza unicidad**." },
+        { prompt: "Halla la solución no trivial separando variables.", hints: ["\\(y^{-2/3}dy=3\\,dx\\).", "\\(\\int y^{-2/3}dy=3y^{1/3}\\)."], revealLatex: "3y^{1/3}=3x+c\\ \\xrightarrow{\\ y(0)=0\\ }\\ c=0\\ \\Longrightarrow\\ y=x^{3}", explanation: "Comprobación: \\(y'=3x^{2}\\) y \\(3y^{2/3}=3\\left(x^{3}\\right)^{2/3}=3x^{2}\\). ✓" },
+        { prompt: "Identifica la solución que se perdió al dividir.", hints: ["Al escribir \\(y^{-2/3}dy\\) se dividió por \\(y^{2/3}\\).", "¿Qué constante anula el lado derecho?"], revealLatex: "y(x)=0\\ \\text{ (solución singular)}", explanation: "También cumple \\(y(0)=0\\), así que el PVI tiene **al menos dos** soluciones distintas: la unicidad efectivamente falla." }
+      ],
+      finalAnswerLatex: "\\text{No hay unicidad: }\\ y(x)=x^{3}\\ \\text{ y }\\ y(x)=0"
+    },
+    {
+      statement: "**(3)** Resuelve \\(\\left(3x^{2}y+2xy+y^{3}\\right)dx+\\left(x^{2}+y^{2}\\right)dy=0\\).",
+      steps: [
+        { prompt: "Verifica la exactitud.", hints: ["\\(M=3x^{2}y+2xy+y^{3}\\), \\(N=x^{2}+y^{2}\\)."], revealLatex: "M_y=3x^{2}+2x+3y^{2},\\qquad N_x=2x\\ \\Longrightarrow\\ M_y\\neq N_x", explanation: "No es exacta: hay que buscar un factor integrante." },
+        { prompt: "Prueba el caso \\(\\mu(x)\\).", hints: ["Calcula \\(\\dfrac{M_y-N_x}{N}\\) y simplifica.", "El \\(2x\\) se cancela en el numerador."], revealLatex: "\\frac{M_y-N_x}{N}=\\frac{3x^{2}+3y^{2}}{x^{2}+y^{2}}=3", explanation: "Es constante, o sea función solo de \\(x\\): el caso 1 aplica." },
+        { prompt: "Calcula \\(\\mu\\) y multiplica la ecuación.", hints: ["\\(\\mu=\\exp\\left(\\int 3\\,dx\\right)\\)."], revealLatex: "\\mu(x)=e^{3x};\\qquad e^{3x}\\left(3x^{2}y+2xy+y^{3}\\right)dx+e^{3x}\\left(x^{2}+y^{2}\\right)dy=0", explanation: "Conviene integrar por el lado de \\(N\\), que es mucho más simple." },
+        { prompt: "Integra \\(f_y=\\widetilde N\\) respecto de \\(y\\) (esta vez la “constante” es \\(h(x)\\)).", hints: ["\\(\\int e^{3x}\\left(x^{2}+y^{2}\\right)dy\\) con \\(x\\) constante."], revealLatex: "f(x,y)=e^{3x}\\left(x^{2}y+\\frac{y^{3}}{3}\\right)+h(x)", explanation: "Se puede empezar por \\(M\\) o por \\(N\\): elige siempre el que se integre más fácil." },
+        { prompt: "Deriva respecto de \\(x\\), iguala a \\(\\widetilde M\\) y determina \\(h\\).", hints: ["Regla del producto: deriva \\(e^{3x}\\) y el paréntesis.", "\\(3e^{3x}\\left(x^{2}y+\\dfrac{y^{3}}{3}\\right)+e^{3x}(2xy)+h'(x)\\)."], revealLatex: "e^{3x}\\left(3x^{2}y+y^{3}+2xy\\right)+h'(x)=e^{3x}\\left(3x^{2}y+2xy+y^{3}\\right)\\ \\Rightarrow\\ h'=0", explanation: "Coinciden exactamente, lo que confirma que \\(\\mu=e^{3x}\\) era correcto." }
+      ],
+      finalAnswerLatex: "e^{3x}\\left(x^{2}y+\\frac{y^{3}}{3}\\right)=c"
+    }
+  ],
+  conceptual: [
+    {
+      question: "**(4)** ¿Cuál es el método más directo para \\(\\left(2xy+1\\right)dx+\\left(x^{2}+3y^{2}\\right)dy=0\\)?",
+      options: [
+        { text: "Es exacta: \\(M_y=N_x=2x\\), y la solución es \\(x^{2}y+x+y^{3}=c\\).", correct: true, feedback: "Correcto. \\(f=\\int(2xy+1)dx=x^{2}y+x+g(y)\\); luego \\(f_y=x^{2}+g'(y)=x^{2}+3y^{2}\\), así que \\(g=y^{3}\\)." },
+        { text: "Es separable: agrupar los términos en \\(x\\) y en \\(y\\).", correct: false, feedback: "No se puede: \\(2xy\\) mezcla ambas variables de forma que no se factoriza como \\(f(x)h(y)\\)." },
+        { text: "Es homogénea: sustituir \\(y=vx\\).", correct: false, feedback: "No lo es: \\(2xy\\) es de grado \\(2\\) pero el \\(+1\\) es de grado \\(0\\), así que \\(M\\) no es homogénea." },
+        { text: "Es lineal en \\(y\\): usar factor integrante \\(\\mu=e^{\\int p\\,dx}\\).", correct: false, feedback: "No es lineal: aparece \\(y^{3}\\) en el coeficiente \\(N\\)." }
+      ],
+      explanation: "Ante una EDO en forma \\(M\\,dx+N\\,dy=0\\), el primer reflejo debe ser **verificar \\(M_y=N_x\\)**: cuesta 10 segundos y resuelve el problema."
+    },
+    {
+      question: "**(5)** ¿En qué región garantiza el teorema solución única para \\(\\dfrac{dy}{dx}=\\dfrac{y}{x-2}\\)?",
+      options: [
+        { text: "En cualquier rectángulo que no toque la recta \\(x=2\\).", correct: true, feedback: "Correcto: \\(f=\\dfrac{y}{x-2}\\) y \\(f_y=\\dfrac{1}{x-2}\\) son continuas exactamente donde \\(x\\neq2\\)." },
+        { text: "En todo \\(\\mathbb{R}^{2}\\), porque \\(f\\) es un cociente de polinomios.", correct: false, feedback: "Los cocientes fallan donde se anula el denominador. Aquí \\(x=2\\) queda excluida." },
+        { text: "En cualquier rectángulo que no toque el eje \\(y=0\\).", correct: false, feedback: "Se confundió la variable: el denominador es \\(x-2\\), no \\(y\\). En \\(y=0\\) no hay ningún problema." },
+        { text: "Solo en el semiplano \\(x\\gt2\\).", correct: false, feedback: "También sirve \\(x\\lt2\\): la condición es \\(x\\neq2\\), sin preferencia por un lado." }
+      ],
+      explanation: "Receta: calcula \\(f\\) y \\(f_y\\), y excluye donde alguna sea discontinua. Aquí ambas fallan solo en \\(x=2\\)."
+    },
+    {
+      question: "**(6)** Para \\(\\dfrac{dy}{dx}=(y-1)(y+3)^{2}\\), el punto crítico \\(c=-3\\) es:",
+      options: [
+        { text: "Semiestable.", correct: true, feedback: "Correcto: \\((y+3)^{2}\\ge0\\) siempre, así que el signo lo fija \\((y-1)\\), que es negativo a ambos lados de \\(-3\\). Flechas \\(\\downarrow\\ \\downarrow\\): semiestable." },
+        { text: "Asintóticamente estable (atractor).", correct: false, feedback: "Sería atractor si las flechas apuntaran hacia \\(-3\\) por ambos lados. Aquí ambas apuntan **hacia abajo**: atrae por arriba, repele por abajo." },
+        { text: "Inestable (repulsor).", correct: false, feedback: "Repulsor exige flechas divergentes (\\(\\downarrow\\) abajo, \\(\\uparrow\\) arriba). Aquí ambas son \\(\\downarrow\\)." },
+        { text: "No es punto crítico.", correct: false, feedback: "Sí lo es: \\(f(-3)=(-4)(0)^{2}=0\\)." }
+      ],
+      explanation: "Las raíces de multiplicidad **par** no cambian el signo de \\(f\\) al cruzarlas, y por eso producen puntos semiestables."
+    },
+    {
+      question: "**(7)** Para \\(x\\,y'+2y=x^{3}\\), el factor integrante es:",
+      options: [
+        { text: "\\(\\mu=x^{2}\\)", correct: true, feedback: "Correcto: normalizando queda \\(y'+\\dfrac2x y=x^{2}\\), luego \\(\\int p\\,dx=2\\ln|x|\\) y \\(\\mu=x^{2}\\)." },
+        { text: "\\(\\mu=e^{2x}\\)", correct: false, feedback: "Se usó \\(p=2\\) constante, olvidando dividir por \\(x\\). Tras normalizar, \\(p=\\dfrac2x\\)." },
+        { text: "\\(\\mu=x^{-2}\\)", correct: false, feedback: "Signo invertido: \\(e^{+2\\ln|x|}=x^{2}\\). El \\(x^{-2}\\) saldría si \\(p=-\\dfrac2x\\)." },
+        { text: "\\(\\mu=e^{x^{3}}\\)", correct: false, feedback: "Se confundió \\(q\\) con \\(p\\): el factor integrante solo depende del coeficiente de \\(y\\), nunca del lado derecho." }
+      ],
+      explanation: "Normaliza siempre primero. Aquí la solución es \\(x^{2}y=\\dfrac{x^{5}}{5}+c\\), es decir \\(y=\\dfrac{x^{3}}{5}+\\dfrac{c}{x^{2}}\\)."
+    },
+    {
+      question: "**(8)** ¿Cuál de estas afirmaciones es **FALSA**?",
+      options: [
+        { text: "Si \\(f\\) es continua en un entorno de \\((x_0,y_0)\\), el PVI tiene solución **única**.", correct: true, feedback: "Correcto, esta es la falsa: la continuidad de \\(f\\) da **existencia**, no unicidad. Para unicidad hace falta además \\(\\partial f/\\partial y\\) continua." },
+        { text: "Toda EDO autónoma \\(y'=f(y)\\) es separable.", correct: false, feedback: "Verdadera: se escribe \\(\\dfrac{dy}{f(y)}=dx\\). Otra cosa es que convenga integrarla en vez de hacer análisis cualitativo." },
+        { text: "Una ecuación de Bernoulli con \\(n=0\\) ya es lineal.", correct: false, feedback: "Verdadera: con \\(n=0\\) queda \\(y'+py=q\\), que es exactamente la forma estándar lineal." },
+        { text: "Si \\(M_y=N_x\\), entonces \\(M\\,dx+N\\,dy=0\\) es exacta.", correct: false, feedback: "Verdadera según el criterio del curso: esa igualdad es la condición de exactitud." }
+      ],
+      explanation: "La separación existencia / unicidad es la pregunta conceptual más frecuente: \\(f\\) continua ⇒ existencia; \\(f\\) y \\(f_y\\) continuas ⇒ existencia **y** unicidad."
+    }
+  ],
+  keyTakeaways: [
+    "**Clasifica antes de calcular.** Separable → lineal → exacta → factor integrante → sustitución. Ese orden resuelve casi todo el control.",
+    "En forma \\(M\\,dx+N\\,dy=0\\), verifica \\(M_y=N_x\\) de inmediato: son 10 segundos que pueden ahorrarte media hoja.",
+    "En toda EDO lineal, **normaliza primero**; si no, el factor integrante saldrá mal y con él toda la respuesta.",
+    "Tras dividir por algo (al separar, o al aplicar \\(\\mu\\)), vuelve y revisa las **soluciones perdidas**.",
+    "En conceptuales de unicidad: si las hipótesis fallan, la respuesta correcta es “el teorema no decide”, no “hay varias soluciones”."
+  ]
+}
+];
+
+</script>
+<script>
+"use strict";
+/* ============================================================ helpers */
+const $ = (s,r)=> (r||document).querySelector(s);
+const el = (t,c,txt)=>{const e=document.createElement(t); if(c)e.className=c; if(txt!=null)e.textContent=txt; return e;};
+function escapeHTML(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function md(s){ // tiny markdown-lite over already math-delimited text
+  let h = escapeHTML(s);
+  h = h.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+  h = h.replace(/`([^`]+?)`/g,'<code>$1</code>');
+  return h;
+}
+function typeset(node){
+  if(window.MathJax && MathJax.typesetPromise){
+    try{ if(MathJax.typesetClear) MathJax.typesetClear([node]); }catch(e){}
+    return MathJax.typesetPromise([node]).catch(()=>{});
+  }
+  return Promise.resolve();
+}
+function dispLatex(latex){ // display formula node
+  const d = el('div','formula');
+  const span = el('span'); span.textContent = '\\[' + (latex||'') + '\\]';
+  d.appendChild(span);
+  return d;
+}
+
+/* ============================================================ state */
+const MODULES = (window.MODULES_DATA && window.MODULES_DATA.length) ? window.MODULES_DATA : [];
+const APP_ID='edo-control1';
+const LS_PROG='estudio_'+APP_ID+'_prog', LS_THEME='estudio_'+APP_ID+'_theme', LS_LAST='estudio_'+APP_ID+'_last';
+let progress = new Set();
+try{ progress = new Set(JSON.parse(localStorage.getItem(LS_PROG)||'[]')); }catch(e){}
+let current = 0;
+try{ const l=parseInt(localStorage.getItem(LS_LAST)); if(!isNaN(l)) current=l; }catch(e){}
+function saveProg(){ try{localStorage.setItem(LS_PROG, JSON.stringify([...progress]));}catch(e){} }
+
+const contentEl = $('#content'), navList = $('#navList');
+window.__retypeset = ()=> typeset(contentEl);
+
+/* ============================================================ nav */
+function renderNav(){
+  navList.innerHTML='';
+  MODULES.forEach((m,i)=>{
+    const it = el('div','navItem'+(i===current?' active':'')+(progress.has(m.id)?' done':''));
+    it.innerHTML = `<span class="ic">${m.icon||'•'}</span><span class="nm">${escapeHTML(m.title)}<small>${escapeHTML(m.subtitle||'')}</small></span><span class="chk">✓</span>`;
+    it.onclick=()=>{ go(i); closeDrawer(); };
+    navList.appendChild(it);
+  });
+  const pct = MODULES.length? Math.round(100*progress.size/MODULES.length):0;
+  $('#progFill').style.width=pct+'%'; $('#progTxt').textContent=pct+'%';
+}
+
+/* ============================================================ render module */
+function go(i){ current=Math.max(0,Math.min(MODULES.length-1,i)); try{localStorage.setItem(LS_LAST,current);}catch(e){} renderModule(); renderNav(); window.scrollTo({top:0,behavior:'smooth'}); }
+
+function sectionWrap(titleHTML){
+  const s=el('section','section'); const t=el('div','stitle'); t.innerHTML='<span class="sdot"></span>'+titleHTML; s.appendChild(t); return s;
+}
+
+function renderModule(){
+  const m=MODULES[current]; if(!m){ contentEl.innerHTML='<p style="color:var(--muted)">Cargando contenido…</p>'; return; }
+  contentEl.innerHTML='';
+  // head
+  const head=el('div','mhead');
+  head.innerHTML=`<div class="kick">Módulo ${current+1} de ${MODULES.length}</div>
+    <h1><span class="e">${m.icon||''}</span>${escapeHTML(m.title)}</h1><p>${escapeHTML(m.subtitle||'')}</p>`;
+  contentEl.appendChild(head);
+
+  // theory
+  if(m.theory && m.theory.length){
+    const s=sectionWrap('Teoría'); const card=el('div','card');
+    m.theory.forEach(b=>{
+      if(b.type==='formula'){ card.appendChild(dispLatex(b.content)); if(b.caption){const c=el('span','cap');c.innerHTML=md(b.caption);card.lastChild.appendChild(c);} }
+      else if(b.type==='callout'){ const c=el('div','callout'); c.innerHTML=md(b.content); card.appendChild(c); }
+      else { const p=el('div','para'); p.innerHTML=md(b.content); card.appendChild(p); }
+    });
+    s.appendChild(card); contentEl.appendChild(s);
+  }
+
+  // widget
+  if(m.widget && m.widget!=='none' && WIDGETS[m.widget]){
+    const s=sectionWrap('Explora'); const w=el('div','widget');
+    s.appendChild(w); contentEl.appendChild(s);
+    try{ WIDGETS[m.widget](w); }catch(e){ w.innerHTML='<p style="color:var(--muted)">Widget no disponible.</p>'; console.error(e); }
+  }
+
+  // guided derivation
+  if(m.guidedDerivation){
+    const gd=m.guidedDerivation;
+    const s=sectionWrap(escapeHTML(gd.title||'Deducción guiada'));
+    if(gd.intro){ const p=el('div','card'); p.innerHTML=md(gd.intro); s.appendChild(p); }
+    (gd.steps||[]).forEach((st,idx)=> s.appendChild(stepCard(st,idx,'deriv')) );
+    contentEl.appendChild(s);
+  }
+
+  // exercises
+  if(m.exercises && m.exercises.length){
+    const s=sectionWrap('Ejercicios paso a paso');
+    m.exercises.forEach((ex,ei)=>{
+      const card=el('div','card');
+      const stm=el('div','para'); stm.innerHTML='<strong>Ejercicio '+(ei+1)+'.</strong> '+md(ex.statement); card.appendChild(stm);
+      (ex.steps||[]).forEach((st,si)=> card.appendChild(stepCard(st,si,'ex')) );
+      if(ex.finalAnswerLatex){
+        const fa=el('div','finalans'); fa.innerHTML='<span class="lab">✅ Resultado</span>';
+        fa.appendChild(dispLatex(ex.finalAnswerLatex)); card.appendChild(fa);
+      }
+      s.appendChild(card);
+    });
+    contentEl.appendChild(s);
+  }
+
+  // conceptual
+  if(m.conceptual && m.conceptual.length){
+    const s=sectionWrap('Preguntas conceptuales');
+    m.conceptual.forEach((q,qi)=> s.appendChild(quizCard(q,qi)) );
+    contentEl.appendChild(s);
+  }
+
+  // takeaways
+  if(m.keyTakeaways && m.keyTakeaways.length){
+    const s=sectionWrap('Ideas clave'); const ul=el('ul','takeaways');
+    m.keyTakeaways.forEach(t=>{ const li=el('li'); li.innerHTML=md(t); ul.appendChild(li); });
+    s.appendChild(ul); contentEl.appendChild(s);
+  }
+
+  // mark done + footer nav
+  const done=progress.has(m.id);
+  const mk=el('button','btn primary markdone', done?'✓ Repasado — ¡bien!':'Marcar este módulo como repasado');
+  mk.onclick=()=>{ if(progress.has(m.id))progress.delete(m.id); else progress.add(m.id); saveProg(); renderNav(); renderModule(); window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}); };
+  contentEl.appendChild(mk);
+
+  const fn=el('div','fnav');
+  const prev=el('button','btn ghost','← Anterior'); prev.disabled=current===0; prev.onclick=()=>go(current-1);
+  const next=el('button','btn','Siguiente →'); next.disabled=current===MODULES.length-1; next.onclick=()=>go(current+1);
+  fn.appendChild(prev); fn.appendChild(next); contentEl.appendChild(fn);
+
+  typeset(contentEl);
+}
+
+/* ---- step card (guided + exercise) with progressive hints + reveal ---- */
+function stepCard(st,idx,kind){
+  const c=el('div','step');
+  const qn=el('div','qn');
+  qn.appendChild(el('div','badge', String(idx+1)));
+  const pr=el('div'); pr.className='prompt'; pr.innerHTML=md(st.prompt); qn.appendChild(pr);
+  c.appendChild(qn);
+
+  const hints=st.hints||[]; let shown=0;
+  const hb=el('div','hintbox');
+  const ctrls=el('div','row'); ctrls.style.marginTop='10px';
+  const hintBtn=el('button','btn sm ghost', hints.length?'💡 Pista':'');
+  const revBtn=el('button','btn sm', kind==='ex'?'Ver solución del paso':'Ver paso');
+  if(hints.length) ctrls.appendChild(hintBtn); ctrls.appendChild(revBtn);
+  c.appendChild(ctrls); c.appendChild(hb);
+
+  hintBtn.onclick=()=>{
+    if(shown>=hints.length) return;
+    const h=el('div','hint'); h.innerHTML='<span class="lab">Pista '+(shown+1)+'</span>'+md(hints[shown]); hb.appendChild(h); typeset(h);
+    shown++;
+    if(shown>=hints.length){ hintBtn.textContent='No hay más pistas'; hintBtn.disabled=true; }
+  };
+
+  const rev=el('div','reveal');
+  const ans=el('div','ans'); ans.appendChild(dispLatex(st.revealLatex!=null?st.revealLatex:st.answerLatex||''));
+  rev.appendChild(ans);
+  if(st.explanation){ const ex=el('div','exp'); ex.innerHTML=md(st.explanation); rev.appendChild(ex); }
+  c.appendChild(rev);
+  revBtn.onclick=()=>{ const open=rev.classList.toggle('show'); revBtn.textContent= open?'Ocultar':(kind==='ex'?'Ver solución del paso':'Ver paso'); if(open) typeset(rev); };
+  return c;
+}
+
+/* ---- quiz card ---- */
+function quizCard(q,qi){
+  const c=el('div','quiz');
+  const qq=el('div','q'); qq.innerHTML='<strong>'+(qi+1)+'.</strong> '+md(q.question); c.appendChild(qq);
+  const exp=el('div','qexp'); exp.innerHTML='<span class="lab">Explicación</span>'+md(q.explanation||'');
+  let answered=false;
+  (q.options||[]).forEach(o=>{
+    const op=el('div','opt');
+    op.innerHTML='<span class="mk"></span><div><div class="otext"></div><div class="fb"></div></div>';
+    $('.otext',op).innerHTML=md(o.text); $('.fb',op).innerHTML=md(o.feedback||'');
+    op.onclick=()=>{
+      if(answered && o.correct===false) { return; }
+      // allow exploring: lock only the act of marking; we lock after first pick
+      if(answered) return;
+      answered=true;
+      [...c.querySelectorAll('.opt')].forEach(x=>x.classList.add('locked'));
+      // mark all correct ones
+      (q.options||[]).forEach((oo,k)=>{ const node=c.querySelectorAll('.opt')[k];
+        if(oo.correct){ node.classList.add('correct'); node.querySelector('.mk').textContent='✓'; }
+      });
+      if(!o.correct){ op.classList.add('wrong'); op.querySelector('.mk').textContent='✕'; }
+      op.classList.add('show-fb');
+      // also show feedback of the correct one
+      (q.options||[]).forEach((oo,k)=>{ if(oo.correct){ c.querySelectorAll('.opt')[k].classList.add('show-fb'); }});
+      exp.classList.add('show'); typeset(c);
+    };
+    c.appendChild(op);
+  });
+  c.appendChild(exp);
+  return c;
+}
+
+/* ============================================================ canvas util */
+function setupCanvas(host,height){
+  const cv=el('canvas','wcanvas'); cv.style.height=height+'px'; host.appendChild(cv);
+  const ctx=cv.getContext('2d');
+  function size(){ const dpr=window.devicePixelRatio||1; const w=cv.clientWidth||300, h=cv.clientHeight||height;
+    cv.width=Math.round(w*dpr); cv.height=Math.round(h*dpr); ctx.setTransform(dpr,0,0,dpr,0,0); return {w,h,ctx}; }
+  return {cv,ctx,size};
+}
+function cssVar(n){ return getComputedStyle(document.documentElement).getPropertyValue(n).trim()||'#888'; }
+function whead(host,title,tag){ const h=el('div','whead'); h.innerHTML=`<span>${title}</span>`+(tag?`<span class="tag">${tag}</span>`:''); host.appendChild(h); }
+function ctrlRow(host){ const r=el('div','wctrls'); host.appendChild(r); return r; }
+function rangeField(label, min,max,val,step,oninput){
+  const f=el('label','field'); const sp=el('span'); sp.textContent=label;
+  const inp=el('input'); inp.type='range'; inp.min=min;inp.max=max;inp.value=val;inp.step=step;
+  const out=el('b'); out.textContent=(+val).toFixed(step<1?2:0);
+  inp.oninput=()=>{ out.textContent=(+inp.value).toFixed(step<1?2:0); oninput(+inp.value); };
+  f.appendChild(sp); f.appendChild(inp); f.appendChild(out); return {f,inp,out};
+}
+function segmented(host,opts,initial,onpick){
+  const s=el('div','seg'); opts.forEach((o,i)=>{ const b=el('button',i===initial?'on':'',o.label);
+    b.onclick=()=>{ [...s.children].forEach(c=>c.classList.remove('on')); b.classList.add('on'); onpick(o.value,i); };
+    s.appendChild(b); }); host.appendChild(s); return s;
+}
+
+/* ============================================================ WIDGETS */
+const WIDGETS={};
+/* ============================================================
+   COMO ANADIR UN WIDGET (visualizacion interactiva):
+   1) En el modulo pon  "widget": "mi-clave"  (en MODULES_DATA).
+   2) Registra aqui:    WIDGETS['mi-clave'] = function(host){ ... };
+   Si el modulo no necesita widget, usa  "widget": "none".
+
+   Helpers disponibles (definidos arriba, NO los borres):
+     setupCanvas(host, altoPx) -> {cv, ctx, size};  size() -> {w,h}  (maneja DPR)
+     cssVar('--accent') -> color del tema (se adapta a claro/oscuro). Colores:
+        --accent --accent2 --accent3 --ok --bad --warn --muted --border --bg2 --txt
+     whead(host, titulo, etiqueta)              cabecera del widget
+     ctrlRow(host) -> fila para controles
+     rangeField(label,min,max,val,step,oninput) -> {f,inp,out}   (deslizador)
+     segmented(host, [{label,value}], idxInicial, (value,i)=>{}) (toggle)
+     el(tag,clase,texto)   $('selector')   typeset(nodo)  (re-render de MathJax)
+   Para dibujo tactil: usa pointerdown/pointermove/pointerup sobre cv y
+   cv.getBoundingClientRect(). Llama draw() en cada cambio y en 'resize'.
+   Los widgets de abajo usan los helpers de dibujo comunes (mkView, frame,
+   traceSol, contour, slopeField) definidos justo despues de este bloque.
+   ============================================================ */
+/* ============================================================
+   Utilidades comunes de dibujo para los widgets de EDO
+   ============================================================ */
+function mkView(px0,py0,pw,ph,x0,x1,y0,y1){
+  return { x0:x0,x1:x1,y0:y0,y1:y1,px0:px0,py0:py0,pw:pw,ph:ph,
+    X:function(x){ return px0+(x-x0)/(x1-x0)*pw; },
+    Y:function(y){ return py0+ph-(y-y0)/(y1-y0)*ph; },
+    ix:function(px){ return x0+(px-px0)/pw*(x1-x0); },
+    iy:function(py){ return y0+(py0+ph-py)/ph*(y1-y0); } };
+}
+function frame(ctx,V,stepX,stepY){
+  ctx.save();
+  ctx.beginPath(); ctx.rect(V.px0,V.py0,V.pw,V.ph); ctx.clip();
+  ctx.lineWidth=1; ctx.strokeStyle=cssVar('--border'); ctx.globalAlpha=.45;
+  ctx.beginPath();
+  for(var gx=Math.ceil(V.x0/stepX)*stepX; gx<=V.x1; gx+=stepX){ ctx.moveTo(V.X(gx),V.py0); ctx.lineTo(V.X(gx),V.py0+V.ph); }
+  for(var gy=Math.ceil(V.y0/stepY)*stepY; gy<=V.y1; gy+=stepY){ ctx.moveTo(V.px0,V.Y(gy)); ctx.lineTo(V.px0+V.pw,V.Y(gy)); }
+  ctx.stroke();
+  ctx.globalAlpha=1; ctx.strokeStyle=cssVar('--muted'); ctx.lineWidth=1.2;
+  ctx.beginPath();
+  if(V.y0<0&&V.y1>0){ ctx.moveTo(V.px0,V.Y(0)); ctx.lineTo(V.px0+V.pw,V.Y(0)); }
+  if(V.x0<0&&V.x1>0){ ctx.moveTo(V.X(0),V.py0); ctx.lineTo(V.X(0),V.py0+V.ph); }
+  ctx.stroke();
+  ctx.restore();
+}
+function clipBox(ctx,V){ ctx.save(); ctx.beginPath(); ctx.rect(V.px0,V.py0,V.pw,V.ph); ctx.clip(); }
+function rk4(f,x,y,h){
+  var k1=f(x,y), k2=f(x+h/2,y+h*k1/2), k3=f(x+h/2,y+h*k2/2), k4=f(x+h,y+h*k3);
+  return y+h*(k1+2*k2+2*k3+k4)/6;
+}
+/* traza la curva solucion de y'=f(x,y) desde (x0,y0) en ambos sentidos */
+function traceSol(ctx,V,f,x0,y0,color,width){
+  ctx.strokeStyle=color; ctx.lineWidth=width||2.4;
+  [1,-1].forEach(function(dir){
+    var h=dir*(V.x1-V.x0)/900, x=x0, y=y0, first=true;
+    ctx.beginPath();
+    for(var i=0;i<900;i++){
+      if(first){ ctx.moveTo(V.X(x),V.Y(y)); first=false; }
+      var ny=rk4(f,x,y,h);
+      if(!isFinite(ny)||Math.abs(ny)>1e4) break;
+      x+=h; y=ny;
+      if(x<V.x0-0.1||x>V.x1+0.1) break;
+      if(y<V.y0-(V.y1-V.y0)||y>V.y1+(V.y1-V.y0)) { ctx.lineTo(V.X(x),V.Y(y)); break; }
+      ctx.lineTo(V.X(x),V.Y(y));
+    }
+    ctx.stroke();
+  });
+}
+function dot(ctx,V,x,y,color,r){
+  ctx.fillStyle=color; ctx.beginPath(); ctx.arc(V.X(x),V.Y(y),r||4.5,0,6.284); ctx.fill();
+}
+function lbl(ctx,text,px,py,color,align){
+  ctx.fillStyle=color; ctx.font='500 11px ui-monospace, monospace';
+  ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(text,px,py);
+  ctx.textAlign='left';
+}
+/* curvas de nivel de F(x,y)=level por marching squares */
+function contour(ctx,V,F,level,color,width,N){
+  N=N||100;
+  var dx=(V.x1-V.x0)/N, dy=(V.y1-V.y0)/N;
+  ctx.strokeStyle=color; ctx.lineWidth=width; ctx.beginPath();
+  for(var i=0;i<N;i++) for(var j=0;j<N;j++){
+    var x=V.x0+i*dx, y=V.y0+j*dy;
+    var P=[[x,y],[x+dx,y],[x+dx,y+dy],[x,y+dy]], val=[], k;
+    for(k=0;k<4;k++) val.push(F(P[k][0],P[k][1])-level);
+    var pts=[];
+    for(k=0;k<4;k++){
+      var a=val[k], b=val[(k+1)%4];
+      if(!isFinite(a)||!isFinite(b)) continue;
+      if((a>0)!==(b>0)){
+        var t=a/(a-b), A=P[k], B=P[(k+1)%4];
+        pts.push([A[0]+t*(B[0]-A[0]), A[1]+t*(B[1]-A[1])]);
+      }
+    }
+    if(pts.length>=2){ ctx.moveTo(V.X(pts[0][0]),V.Y(pts[0][1])); ctx.lineTo(V.X(pts[1][0]),V.Y(pts[1][1])); }
+    if(pts.length===4){ ctx.moveTo(V.X(pts[2][0]),V.Y(pts[2][1])); ctx.lineTo(V.X(pts[3][0]),V.Y(pts[3][1])); }
+  }
+  ctx.stroke();
+}
+/* campo de pendientes: segmentos de largo fijo con pendiente f(x,y) */
+function slopeField(ctx,V,f,nx,ny,color,alpha){
+  ctx.save(); ctx.strokeStyle=color; ctx.globalAlpha=alpha||.75; ctx.lineWidth=1.5;
+  var L=Math.min(V.pw/nx,V.ph/ny)*0.42;
+  ctx.beginPath();
+  for(var i=0;i<=nx;i++) for(var j=0;j<=ny;j++){
+    var x=V.x0+(V.x1-V.x0)*i/nx, y=V.y0+(V.y1-V.y0)*j/ny, m=f(x,y);
+    if(!isFinite(m)) continue;
+    var sx=V.X(x), sy=V.Y(y);
+    var scaleX=V.pw/(V.x1-V.x0), scaleY=V.ph/(V.y1-V.y0);
+    var vx=1, vy=-m*scaleY/scaleX;
+    var n=Math.hypot(vx,vy); vx=vx/n*L; vy=vy/n*L;
+    ctx.moveTo(sx-vx,sy-vy); ctx.lineTo(sx+vx,sy+vy);
+  }
+  ctx.stroke(); ctx.restore();
+}
+
+/* ============================================================ WIDGETS */
+
+/* 1) Campo direccional + curva solucion (toca el grafico) */
+WIDGETS['campo-dir']=function(host){
+  whead(host,'Campo direccional','toca el gráfico para soltar una solución');
+  var S=setupCanvas(host,320);
+  var cv=S.cv, ctx=S.ctx, size=S.size;
+  var readout=el('div','readout'); host.appendChild(readout);
+  var ctr=ctrlRow(host);
+  var PRE=[
+    {label:'x²−y', tex:'x^{2}-y', f:function(x,y){return x*x-y;}, aut:false},
+    {label:'y(1−y)', tex:'y(1-y)', f:function(x,y){return y*(1-y);}, aut:true},
+    {label:'−2xy', tex:'-2xy', f:function(x,y){return -2*x*y;}, aut:false}
+  ];
+  var cur=0, p0={x:0,y:1}, V=null;
+  segmented(ctr,PRE.map(function(p,i){return {label:p.label,value:i};}),0,function(v){ cur=v; draw(); });
+  function draw(){
+    var d=size(), w=d.w, h=d.h; ctx.clearRect(0,0,w,h);
+    V=mkView(4,4,w-8,h-8,-3,3,-3,3);
+    frame(ctx,V,1,1);
+    var P=PRE[cur];
+    clipBox(ctx,V);
+    slopeField(ctx,V,P.f,16,16,cssVar('--muted'),.55);
+    traceSol(ctx,V,P.f,p0.x,p0.y,cssVar('--accent'),2.6);
+    dot(ctx,V,p0.x,p0.y,cssVar('--accent2'),5);
+    ctx.restore();
+    lbl(ctx,'x',V.X(V.x1)-8,V.Y(0)-10,cssVar('--faint'));
+    lbl(ctx,'y',V.X(0)+8,V.Y(V.y1)+10,cssVar('--faint'));
+    readout.innerHTML='\\(\\dfrac{dy}{dx}='+P.tex+'\\)'+(P.aut?' · <b>autónoma</b>: el campo se repite en cada columna':' · <b>no autónoma</b>: el campo cambia con \\(x\\)')+
+      '<br>Condición inicial \\(y('+p0.x.toFixed(2)+')='+p0.y.toFixed(2)+'\\); pendiente ahí: \\(f='+P.f(p0.x,p0.y).toFixed(2)+'\\).';
+    typeset(readout);
+  }
+  cv.addEventListener('pointerdown',function(e){
+    if(!V) return;
+    var r=cv.getBoundingClientRect();
+    p0={x:V.ix(e.clientX-r.left), y:V.iy(e.clientY-r.top)};
+    draw();
+  });
+  requestAnimationFrame(draw); window.addEventListener('resize',function(){ requestAnimationFrame(draw); });
+};
+
+/* 2) Falla de unicidad: infinitas soluciones de y'=x sqrt(y), y(0)=0 */
+WIDGETS['no-unicidad']=function(host){
+  whead(host,'Cuando la unicidad falla','y\u2032 = x\u221ay,  y(0) = 0');
+  var S=setupCanvas(host,300);
+  var ctx=S.ctx, size=S.size;
+  var readout=el('div','readout'); host.appendChild(readout);
+  var ctr=ctrlRow(host);
+  var a=0.9;
+  ctr.appendChild(rangeField('a',0,2.4,0.9,0.05,function(v){ a=v; draw(); }).f);
+  function fam(x,a){ return x<a?0:Math.pow(x*x-a*a,2)/16; }
+  function draw(){
+    var d=size(), w=d.w, h=d.h; ctx.clearRect(0,0,w,h);
+    var V=mkView(4,4,w-8,h-8,-0.2,3,-0.35,3);
+    frame(ctx,V,1,1);
+    clipBox(ctx,V);
+    /* familia de fondo */
+    ctx.lineWidth=1.4; ctx.globalAlpha=.35;
+    for(var k=0;k<=8;k++){
+      var aa=k*0.3; ctx.strokeStyle=cssVar('--accent3'); ctx.beginPath();
+      for(var i=0;i<=300;i++){ var x=V.x0+(V.x1-V.x0)*i/300, y=fam(x,aa);
+        if(i===0) ctx.moveTo(V.X(x),V.Y(y)); else ctx.lineTo(V.X(x),V.Y(y)); }
+      ctx.stroke();
+    }
+    ctx.globalAlpha=1;
+    /* solucion nula */
+    ctx.strokeStyle=cssVar('--ok'); ctx.lineWidth=2.6; ctx.beginPath();
+    ctx.moveTo(V.X(V.x0),V.Y(0)); ctx.lineTo(V.X(V.x1),V.Y(0)); ctx.stroke();
+    /* solucion destacada */
+    ctx.strokeStyle=cssVar('--accent'); ctx.lineWidth=3; ctx.beginPath();
+    for(var j=0;j<=400;j++){ var xx=V.x0+(V.x1-V.x0)*j/400, yy=fam(xx,a);
+      if(j===0) ctx.moveTo(V.X(xx),V.Y(yy)); else ctx.lineTo(V.X(xx),V.Y(yy)); }
+    ctx.stroke();
+    dot(ctx,V,0,0,cssVar('--bad'),6);
+    ctx.restore();
+    lbl(ctx,'(0,0)',V.X(0)+10,V.Y(0)-12,cssVar('--bad'));
+    readout.innerHTML='Todas estas curvas pasan por \\((0,0)\\) y todas resuelven \\(y\\,\'=x\\sqrt{y}\\). En verde \\(y\\equiv0\\); en azul '+
+      '\\(y=\\dfrac{(x^{2}-a^{2})^{2}}{16}\\) para \\(x\\ge a\\) (y \\(0\\) antes), con \\(a='+a.toFixed(2)+'\\).<br>'+
+      'Con \\(a=0\\) se obtiene \\(y=\\dfrac{x^{4}}{16}\\). La culpable es \\(\\dfrac{\\partial f}{\\partial y}=\\dfrac{x}{2\\sqrt{y}}\\), discontinua en \\(y=0\\).';
+    typeset(readout);
+  }
+  requestAnimationFrame(draw); window.addEventListener('resize',function(){ requestAnimationFrame(draw); });
+};
+
+/* 3) Linea de fase + diagrama de fase de una EDO autonoma */
+WIDGETS['linea-fase']=function(host){
+  whead(host,'Línea de fase y diagrama de fase','EDO autónoma  y\u2032 = f(y)');
+  var S=setupCanvas(host,340);
+  var ctx=S.ctx, size=S.size;
+  var readout=el('div','readout'); host.appendChild(readout);
+  var ctr=ctrlRow(host);
+  var PRE=[
+    {label:'y²−1', tex:'y^{2}-1', f:function(y){return y*y-1;}, crit:[-1,1], lo:-2.6, hi:2.6},
+    {label:'y(1−y)', tex:'y(1-y)', f:function(y){return y*(1-y);}, crit:[0,1], lo:-0.9, hi:2.0},
+    {label:'y(4−y²)', tex:'y(4-y^{2})', f:function(y){return y*(4-y*y);}, crit:[-2,0,2], lo:-3.4, hi:3.4}
+  ];
+  var cur=2;
+  segmented(ctr,PRE.map(function(p,i){return {label:p.label,value:i};}),2,function(v){ cur=v; draw(); });
+  function classify(P,c){
+    var e=0.06, b=P.f(c-e), a=P.f(c+e);
+    if(b>0&&a<0) return {t:'atractor', s:'asintóticamente estable', col:'--ok'};
+    if(b<0&&a>0) return {t:'repulsor', s:'inestable', col:'--bad'};
+    return {t:'semiestable', s:'semiestable', col:'--warn'};
+  }
+  function draw(){
+    var d=size(), w=d.w, h=d.h; ctx.clearRect(0,0,w,h);
+    var P=PRE[cur], LW=58;
+    var V=mkView(LW,4,w-LW-6,h-8,0,4,P.lo,P.hi);
+    var PL=mkView(4,4,LW-12,h-8,0,1,P.lo,P.hi);
+    frame(ctx,V,1,1);
+    var f2=function(x,y){ return P.f(y); };
+    clipBox(ctx,V);
+    /* curvas solucion para varias condiciones iniciales */
+    var n=13;
+    for(var i=0;i<=n;i++){
+      var y0=P.lo+(P.hi-P.lo)*i/n;
+      var isCrit=P.crit.some(function(c){ return Math.abs(c-y0)<0.06; });
+      if(isCrit) continue;
+      traceSol(ctx,V,f2,0.4,y0,cssVar('--accent'),1.5);
+    }
+    /* equilibrios */
+    P.crit.forEach(function(c){
+      var k=classify(P,c);
+      ctx.strokeStyle=cssVar(k.col); ctx.lineWidth=2.6; ctx.setLineDash([7,4]);
+      ctx.beginPath(); ctx.moveTo(V.px0,V.Y(c)); ctx.lineTo(V.px0+V.pw,V.Y(c)); ctx.stroke();
+      ctx.setLineDash([]);
+    });
+    ctx.restore();
+    /* linea de fase a la izquierda */
+    var lx=PL.px0+PL.pw/2;
+    ctx.strokeStyle=cssVar('--muted'); ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(lx,PL.py0+4); ctx.lineTo(lx,PL.py0+PL.ph-4); ctx.stroke();
+    var bounds=[P.lo].concat(P.crit,[P.hi]);
+    for(var b=0;b<bounds.length-1;b++){
+      var mid=(bounds[b]+bounds[b+1])/2, up=P.f(mid)>0;
+      var my=PL.Y(mid), L=13;
+      ctx.strokeStyle=up?cssVar('--accent2'):cssVar('--accent3'); ctx.lineWidth=2.4;
+      ctx.beginPath(); ctx.moveTo(lx,my+(up?L:-L)); ctx.lineTo(lx,my-(up?L:-L)); ctx.stroke();
+      var ty=my-(up?L:-L);
+      ctx.beginPath(); ctx.moveTo(lx,ty); ctx.lineTo(lx-4.5,ty+(up?6:-6)); ctx.lineTo(lx+4.5,ty+(up?6:-6)); ctx.closePath();
+      ctx.fillStyle=up?cssVar('--accent2'):cssVar('--accent3'); ctx.fill();
+    }
+    P.crit.forEach(function(c){
+      var k=classify(P,c);
+      ctx.fillStyle=cssVar(k.col); ctx.beginPath(); ctx.arc(lx,PL.Y(c),5.5,0,6.284); ctx.fill();
+      lbl(ctx,String(c),lx-10,PL.Y(c),cssVar(k.col),'right');
+    });
+    var txt='\\(\\dfrac{dy}{dx}='+P.tex+'\\)<br>';
+    P.crit.forEach(function(c){
+      var k=classify(P,c);
+      txt+='\\(c='+c+'\\): <b>'+k.s+'</b> ('+k.t+')<br>';
+    });
+    readout.innerHTML=txt+'<span style="opacity:.75">Las rectas punteadas son las soluciones de equilibrio y actúan como barreras: ninguna otra curva las cruza.</span>';
+    typeset(readout);
+  }
+  requestAnimationFrame(draw); window.addEventListener('resize',function(){ requestAnimationFrame(draw); });
+};
+
+/* 4) Familia de soluciones de una separable + solucion singular */
+WIDGETS['familia-sep']=function(host){
+  whead(host,'Familia de soluciones','y\u2032 = \u22122xy  \u2192  y = C e^(\u2212x\u00b2)');
+  var S=setupCanvas(host,300);
+  var ctx=S.ctx, size=S.size;
+  var readout=el('div','readout'); host.appendChild(readout);
+  var ctr=ctrlRow(host);
+  var C=1.8;
+  ctr.appendChild(rangeField('C',-3,3,1.8,0.1,function(v){ C=v; draw(); }).f);
+  function draw(){
+    var d=size(), w=d.w, h=d.h; ctx.clearRect(0,0,w,h);
+    var V=mkView(4,4,w-8,h-8,-2.6,2.6,-3.2,3.2);
+    frame(ctx,V,1,1);
+    clipBox(ctx,V);
+    ctx.globalAlpha=.3; ctx.lineWidth=1.3; ctx.strokeStyle=cssVar('--accent3');
+    for(var k=-6;k<=6;k++){
+      if(k===0) continue;
+      var cc=k*0.5; ctx.beginPath();
+      for(var i=0;i<=250;i++){ var x=V.x0+(V.x1-V.x0)*i/250, y=cc*Math.exp(-x*x);
+        if(i===0) ctx.moveTo(V.X(x),V.Y(y)); else ctx.lineTo(V.X(x),V.Y(y)); }
+      ctx.stroke();
+    }
+    ctx.globalAlpha=1;
+    /* solucion singular y=0 */
+    ctx.strokeStyle=cssVar('--ok'); ctx.lineWidth=2.4; ctx.setLineDash([7,4]);
+    ctx.beginPath(); ctx.moveTo(V.px0,V.Y(0)); ctx.lineTo(V.px0+V.pw,V.Y(0)); ctx.stroke(); ctx.setLineDash([]);
+    /* solucion destacada */
+    ctx.strokeStyle=cssVar('--accent'); ctx.lineWidth=3; ctx.beginPath();
+    for(var j=0;j<=350;j++){ var xx=V.x0+(V.x1-V.x0)*j/350, yy=C*Math.exp(-xx*xx);
+      if(j===0) ctx.moveTo(V.X(xx),V.Y(yy)); else ctx.lineTo(V.X(xx),V.Y(yy)); }
+    ctx.stroke();
+    dot(ctx,V,0,C,cssVar('--accent2'),5);
+    ctx.restore();
+    readout.innerHTML='Separando: \\(\\dfrac{dy}{y}=-2x\\,dx\\Rightarrow \\ln|y|=-x^{2}+c\\Rightarrow y=C\\,e^{-x^{2}}\\).<br>'+
+      'Aquí \\(C='+C.toFixed(2)+'\\), o sea \\(y(0)='+C.toFixed(2)+'\\). La recta verde punteada es \\(y=0\\): la <b>solución singular</b> que se pierde al dividir por \\(y\\), '+
+      'y que aquí se recupera admitiendo \\(C=0\\).';
+    typeset(readout);
+  }
+  requestAnimationFrame(draw); window.addEventListener('resize',function(){ requestAnimationFrame(draw); });
+};
+
+/* 5) Familia de soluciones de una lineal: parte particular + parte homogenea */
+WIDGETS['lineal-familia']=function(host){
+  whead(host,'Solución particular + homogénea','y = y_part + c/\u03bc(x)');
+  var S=setupCanvas(host,300);
+  var ctx=S.ctx, size=S.size;
+  var readout=el('div','readout'); host.appendChild(readout);
+  var ctr=ctrlRow(host);
+  var PRE=[
+    {label:"y'−2y/x=x³",
+     sol:function(x,c){ return x*x*x*x/2+c*x*x; },
+     part:function(x){ return x*x*x*x/2; },
+     tex:"y'-\\dfrac{2}{x}y=x^{3}", stex:"y=\\dfrac{x^{4}}{2}+c\\,x^{2}",
+     note:"La parte homogénea \\(c\\,x^{2}\\) <b>crece</b> con \\(|x|\\): las soluciones se separan.",
+     x0:-2.2,x1:2.2,y0:-3.5,y1:5},
+    {label:"y'+2xy=x",
+     sol:function(x,c){ return 0.5+c*Math.exp(-x*x); },
+     part:function(x){ return 0.5; },
+     tex:"y'+2xy=x", stex:"y=\\dfrac12+c\\,e^{-x^{2}}",
+     note:"La parte homogénea \\(c\\,e^{-x^{2}}\\) <b>se apaga</b>: todas las soluciones convergen a \\(y=\\tfrac12\\).",
+     x0:-2.6,x1:2.6,y0:-1.6,y1:3}
+  ];
+  var cur=1, c=1.2;
+  segmented(ctr,PRE.map(function(p,i){return {label:p.label,value:i};}),1,function(v){ cur=v; draw(); });
+  ctr.appendChild(rangeField('c',-3,3,1.2,0.1,function(v){ c=v; draw(); }).f);
+  function draw(){
+    var d=size(), w=d.w, h=d.h; ctx.clearRect(0,0,w,h);
+    var P=PRE[cur];
+    var V=mkView(4,4,w-8,h-8,P.x0,P.x1,P.y0,P.y1);
+    frame(ctx,V,1,1);
+    clipBox(ctx,V);
+    ctx.globalAlpha=.3; ctx.lineWidth=1.3; ctx.strokeStyle=cssVar('--accent3');
+    for(var k=-6;k<=6;k++){
+      var cc=k*0.5; ctx.beginPath();
+      for(var i=0;i<=280;i++){ var x=V.x0+(V.x1-V.x0)*i/280, y=P.sol(x,cc);
+        if(i===0) ctx.moveTo(V.X(x),V.Y(y)); else ctx.lineTo(V.X(x),V.Y(y)); }
+      ctx.stroke();
+    }
+    ctx.globalAlpha=1;
+    /* solucion particular c=0 */
+    ctx.strokeStyle=cssVar('--ok'); ctx.lineWidth=2.4; ctx.setLineDash([7,4]); ctx.beginPath();
+    for(var m=0;m<=280;m++){ var xp=V.x0+(V.x1-V.x0)*m/280, yp=P.part(xp);
+      if(m===0) ctx.moveTo(V.X(xp),V.Y(yp)); else ctx.lineTo(V.X(xp),V.Y(yp)); }
+    ctx.stroke(); ctx.setLineDash([]);
+    /* destacada */
+    ctx.strokeStyle=cssVar('--accent'); ctx.lineWidth=3; ctx.beginPath();
+    for(var j=0;j<=350;j++){ var xx=V.x0+(V.x1-V.x0)*j/350, yy=P.sol(xx,c);
+      if(j===0) ctx.moveTo(V.X(xx),V.Y(yy)); else ctx.lineTo(V.X(xx),V.Y(yy)); }
+    ctx.stroke();
+    ctx.restore();
+    readout.innerHTML='\\('+P.tex+'\\) &rarr; \\('+P.stex+'\\), con \\(c='+c.toFixed(2)+'\\).<br>'+
+      'La curva verde punteada es la <b>solución particular</b> (\\(c=0\\)). '+P.note;
+    typeset(readout);
+  }
+  requestAnimationFrame(draw); window.addEventListener('resize',function(){ requestAnimationFrame(draw); });
+};
+
+/* 6) Curvas de nivel de la funcion potencial de una EDO exacta */
+WIDGETS['contorno-exacta']=function(host){
+  whead(host,'Las soluciones son curvas de nivel','f(x,y) = 3x\u00b2y \u2212 xy\u00b3 + 2y\u00b2 = c');
+  var S=setupCanvas(host,330);
+  var ctx=S.ctx, size=S.size;
+  var readout=el('div','readout'); host.appendChild(readout);
+  var ctr=ctrlRow(host);
+  var c=2;
+  ctr.appendChild(rangeField('c',-12,12,2,0.5,function(v){ c=v; draw(); }).f);
+  function F(x,y){ return 3*x*x*y-x*y*y*y+2*y*y; }
+  function draw(){
+    var d=size(), w=d.w, h=d.h; ctx.clearRect(0,0,w,h);
+    var V=mkView(4,4,w-8,h-8,-2.6,2.6,-2.6,2.6);
+    frame(ctx,V,1,1);
+    clipBox(ctx,V);
+    ctx.globalAlpha=.32;
+    for(var k=-6;k<=6;k++){ if(k===0) continue; contour(ctx,V,F,k*2,cssVar('--accent3'),1.3,90); }
+    ctx.globalAlpha=1;
+    contour(ctx,V,F,c,cssVar('--accent'),3,140);
+    ctx.restore();
+    readout.innerHTML='La EDO \\((6xy-y^{3})dx+(4y+3x^{2}-3xy^{2})dy=0\\) es exacta, y su solución general es \\(f(x,y)=c\\) con '+
+      '\\(f=3x^{2}y-xy^{3}+2y^{2}\\).<br>Curva destacada: \\(c='+c.toFixed(1)+'\\). Cada valor de \\(c\\) es una curva solución distinta; '+
+      'mover el deslizador es <b>moverse por la familia</b>.';
+    typeset(readout);
+  }
+  requestAnimationFrame(draw); window.addEventListener('resize',function(){ requestAnimationFrame(draw); });
+};
+
+/* 7) EDO homogenea: la pendiente es constante sobre cada rayo y=vx */
+WIDGETS['rayos-homog']=function(host){
+  whead(host,'Homogénea: pendiente constante en cada rayo','(x\u00b2 \u2212 xy + y\u00b2)dx \u2212 xy dy = 0');
+  var S=setupCanvas(host,320);
+  var ctx=S.ctx, size=S.size;
+  var readout=el('div','readout'); host.appendChild(readout);
+  var ctr=ctrlRow(host);
+  var v=1.2;
+  ctr.appendChild(rangeField('v = y/x',-2.5,2.5,1.2,0.05,function(t){ v=t; draw(); }).f);
+  function slope(x,y){ var vv=y/x; if(!isFinite(vv)||Math.abs(vv)<1e-9) return NaN; return (1-vv+vv*vv)/vv; }
+  function draw(){
+    var d=size(), w=d.w, h=d.h; ctx.clearRect(0,0,w,h);
+    var V=mkView(4,4,w-8,h-8,-3,3,-3,3);
+    frame(ctx,V,1,1);
+    clipBox(ctx,V);
+    slopeField(ctx,V,slope,17,17,cssVar('--muted'),.5);
+    /* rayos de fondo */
+    ctx.strokeStyle=cssVar('--accent3'); ctx.globalAlpha=.35; ctx.lineWidth=1.2;
+    [-2,-1,-0.5,0.5,1,2].forEach(function(vv){
+      ctx.beginPath(); ctx.moveTo(V.X(-3),V.Y(-3*vv)); ctx.lineTo(V.X(3),V.Y(3*vv)); ctx.stroke();
+    });
+    ctx.globalAlpha=1;
+    /* rayo destacado */
+    ctx.strokeStyle=cssVar('--accent2'); ctx.lineWidth=2.6;
+    ctx.beginPath(); ctx.moveTo(V.X(-3),V.Y(-3*v)); ctx.lineTo(V.X(3),V.Y(3*v)); ctx.stroke();
+    /* marcas de pendiente sobre el rayo: todas paralelas */
+    var m=(1-v+v*v)/v;
+    if(isFinite(m)){
+      ctx.strokeStyle=cssVar('--accent'); ctx.lineWidth=3;
+      var sX=V.pw/(V.x1-V.x0), sY=V.ph/(V.y1-V.y0);
+      [-2.2,-1.5,-0.8,0.8,1.5,2.2].forEach(function(t){
+        var x=t, y=v*t; if(Math.abs(y)>3) return;
+        var ux=1, uy=-m*sY/sX, n=Math.hypot(ux,uy); ux=ux/n*16; uy=uy/n*16;
+        ctx.beginPath(); ctx.moveTo(V.X(x)-ux,V.Y(y)-uy); ctx.lineTo(V.X(x)+ux,V.Y(y)+uy); ctx.stroke();
+      });
+    }
+    ctx.restore();
+    readout.innerHTML='Despejando, \\(\\dfrac{dy}{dx}=\\dfrac{x^{2}-xy+y^{2}}{xy}=\\dfrac{1-v+v^{2}}{v}\\) con \\(v=y/x\\): '+
+      '<b>depende solo de \\(v\\)</b>.<br>Sobre el rayo destacado \\(y='+v.toFixed(2)+'x\\) todas las marcas azules son <b>paralelas</b>: la pendiente vale '+
+      '\\('+(isFinite(m)?m.toFixed(2):'\\infty')+'\\) en todo el rayo. Por eso \\(y=vx\\) es la sustitución natural.';
+    typeset(readout);
+  }
+  requestAnimationFrame(draw); window.addEventListener('resize',function(){ requestAnimationFrame(draw); });
+};
+
+/* ============================================================ chrome */
+$('#menuBtn').onclick=()=>{ $('#sidebar').classList.toggle('open'); $('#scrim').classList.toggle('open'); };
+function closeDrawer(){ $('#sidebar').classList.remove('open'); $('#scrim').classList.remove('open'); }
+$('#scrim').onclick=closeDrawer;
+function applyTheme(t){ document.documentElement.setAttribute('data-theme',t); $('#themeBtn').textContent= t==='light'?'☀️':'🌙'; $('meta[name=theme-color]').setAttribute('content', t==='light'?'#eef1f8':'#0f1220'); }
+let theme='dark'; try{ theme=localStorage.getItem(LS_THEME)||'dark'; }catch(e){}
+applyTheme(theme);
+$('#themeBtn').onclick=()=>{ theme=theme==='light'?'dark':'light'; applyTheme(theme); try{localStorage.setItem(LS_THEME,theme);}catch(e){} setTimeout(()=>{ if(window.__mjReady) typeset(contentEl); },30); };
+
+/* ============================================================ keyboard */
+document.addEventListener('keydown',(e)=>{
+  const t=e.target;
+  if(t && (t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable)) return;
+  if(e.metaKey||e.ctrlKey||e.altKey) return;
+  if(e.key==='ArrowRight'){ if(current<MODULES.length-1){ e.preventDefault(); go(current+1); } }
+  else if(e.key==='ArrowLeft'){ if(current>0){ e.preventDefault(); go(current-1); } }
+});
+
+/* ============================================================ boot */
+if(!MODULES.length){
+  contentEl.innerHTML='<div class="card"><h2>⏳ Contenido en preparación</h2><p style="color:var(--muted)">Los datos de los módulos aún no se han inyectado en este archivo. Si ves esto, vuelve a generar el archivo final.</p></div>';
+} else {
+  renderNav(); renderModule();
+}
+</script>
+</body>
+</html>
