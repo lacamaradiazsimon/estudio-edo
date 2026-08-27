@@ -337,6 +337,85 @@ window.MODULES_DATA = [
   ]
 },
 {
+  id: "radiografia", icon: "🔍", title: "Radiografía del Control",
+  subtitle: "Qué cae, cuánto vale cada paso y cómo corrigen — leído de 9 pautas reales",
+  widget: "frecuencia-temas",
+  theory: [
+    { type: "para", content: "Este módulo no enseña matemática nueva: enseña **el control**. Está construido leyendo **9 pautas oficiales de Control 1** de MAT-208 (secciones y semestres distintos, entre 2023 y 2025). El hallazgo principal es que el formato casi no cambia de un semestre a otro, así que se puede estudiar apuntando exactamente a lo que se pregunta." },
+    { type: "formula", content: "\\begin{array}{l|l}\\text{Duración} & 70\\ \\text{minutos}\\\\\\hline \\text{Estructura} & 3\\ \\text{preguntas de }20\\ \\text{pts}=60\\ \\text{pts}\\\\\\hline \\text{Subpartes} & \\text{casi siempre a) y b); a veces a) b) c)}\\\\\\hline \\text{Calculadora} & \\text{simple, no programable}\\\\\\hline \\text{Regla escrita} & \\text{cada respuesta debe ser justificada con claridad}\\end{array}", caption: "Anatomía estable en las 9 pautas. Son unos **23 minutos por pregunta**: no alcanza para dudar sobre qué método usar." },
+    { type: "para", content: "**1 · Qué cae de verdad.** Contando en cuántos de los 9 controles aparece cada tema (una pregunta puede tocar dos):" },
+    { type: "formula", content: "\\begin{array}{l|c}\\text{Tema} & \\text{Aparece en}\\\\\\hline \\text{EDO autónoma / diagrama de fase} & 9\\ \\text{de }9\\\\\\hline \\text{Lineal de 1er orden (factor integrante)} & 8\\ \\text{de }9\\\\\\hline \\text{Variables separables} & 8\\ \\text{de }9\\\\\\hline \\text{Existencia y unicidad} & 8\\ \\text{de }9\\\\\\hline \\text{Exacta + factor integrante} & 2\\ \\text{de }9\\\\\\hline \\text{PVI sin solución (trampa)} & 2\\ \\text{de }9\\\\\\hline \\text{Riccati con solución particular} & 1\\ \\text{de }9\\\\\\hline \\text{Bernoulli, homogénea, }f(ax+by+c) & 0\\ \\text{de }9\\end{array}", caption: "Cuatro temas se reparten casi todo el control: **autónomas, lineales, separables y existencia-unicidad**." },
+    { type: "callout", content: "**Bernoulli, homogéneas y \\(y'=f(ax+by+c)\\) no aparecieron en ninguna de las 9 pautas.** Eso no las borra del temario — si están en el programa pueden caer — pero sí dice dónde rinde más cada minuto de estudio. Si vas corto de tiempo, asegura primero los cuatro temas de arriba." },
+    { type: "para", content: "**2 · Los seis arquetipos.** Prácticamente todas las preguntas de las 9 pautas son una de estas seis. Reconocer el arquetipo en los primeros 20 segundos es la mitad del puntaje." },
+    { type: "formula", content: "\\textbf{A}\\quad\\text{Autónoma: equilibrios} \\to \\text{diagrama de fase} \\to \\text{clasificar} \\to \\lim_{x\\to\\infty}y(x)", caption: "El arquetipo rey. Casi siempre la última parte pide el **límite** de una solución con condición inicial dada, y vale entre 5 y 6 puntos **aparte**." },
+    { type: "formula", content: "\\textbf{B}\\quad\\text{Lineal: normalizar} \\to \\mu=e^{\\int p\\,dx} \\to \\left(\\mu y\\right)'=\\mu q \\to \\text{integrar} \\to c \\to \\textbf{intervalo}", caption: "La integral del lado derecho casi siempre exige una técnica: **por partes** (\\(\\int x\\cos x\\,dx\\), \\(\\int\\ln x\\,dx\\), \\(\\int\\arctan x\\,dx\\)), **sustitución** (\\(\\int xe^{x^{2}}dx\\)) o **fracciones parciales**." },
+    { type: "formula", content: "\\textbf{C}\\quad\\text{Separable: separar} \\to \\text{dos integrales} \\to \\text{familia implícita} \\to (\\text{despejar}) \\to \\textbf{dominio}", caption: "Ojo con el enunciado: si dice *familia paramétrica de soluciones implícitas*, **no hace falta despejar** \\(y\\). Si dice *explícitamente*, sí — y entonces hay que dar el dominio." },
+    { type: "formula", content: "\\textbf{D}\\quad\\text{TEU: despejar }y'=f(x,y) \\to f\\ \\text{continua} \\to \\frac{\\partial f}{\\partial y}\\ \\text{continua} \\to \\text{rectángulo }R\\ni(x_0,y_0) \\to \\text{concluir}", caption: "Los cuatro pasos se puntúan por separado. Saltarse el rectángulo o no concluir explícitamente cuesta puntos aunque el cálculo esté bien." },
+    { type: "formula", content: "\\textbf{E}\\quad\\text{Exacta: }M_y\\ \\text{vs}\\ N_x \\to \\mu(x)\\ \\text{o}\\ \\mu(y) \\to \\text{reconstruir }f \\to f(x,y)=c", caption: "Apareció 2 de 9 veces, pero cuando aparece vale los 20 puntos completos. En una de esas dos la respuesta correcta era que **no existe** factor integrante de una sola variable." },
+    { type: "formula", content: "\\textbf{F}\\quad\\text{Trampa: }a(x)y'=\\ldots\\ \\text{con }a(x_0)=0\\ \\text{y}\\ y(x_0)=y_0 \\to \\text{evaluar en }x_0 \\to \\text{contradicción}", caption: "El PVI **sin solución**. Se resuelve en tres líneas si lo reconoces, y se pierde entero si intentas resolver la EDO." },
+    { type: "para", content: "**3 · Cómo reparten los 20 puntos.** Varias pautas traen la rúbrica desglosada. Esto es lo más útil de todo: muestra que hay puntos que se ganan sin resolver nada, y puntos que se pierden aunque la EDO esté perfectamente resuelta." },
+    { type: "formula", content: "\\begin{array}{l|c}\\text{Pregunta de EDO lineal} & \\text{pts}\\\\\\hline \\text{Reconocer que es lineal y normalizar} & 1\\text{–}5\\\\\\hline \\text{Factor integrante correcto} & 3\\text{–}6\\\\\\hline \\text{Reconocer }\\frac{d}{dx}\\left[\\mu y\\right]=\\mu q & 5\\\\\\hline \\text{Integrar bien el lado derecho} & 3\\text{–}8\\\\\\hline \\text{Determinar }c\\ \\text{con la condición inicial} & 2\\text{–}5\\\\\\hline \\textbf{Indicar el intervalo de definición} & 2\\text{–}4\\end{array}", caption: "El intervalo de definición se corrige como **ítem independiente**. Dar la fórmula correcta y omitir el intervalo es perder puntos garantizados." },
+    { type: "formula", content: "\\begin{array}{l|c}\\text{Pregunta de EDO autónoma} & \\text{pts}\\\\\\hline \\text{Plantear }f(y)=0 & 2\\text{–}3\\\\\\hline \\text{Entregar los equilibrios} & 3\\text{–}5\\\\\\hline \\text{Diagrama de fase dibujado} & 7\\text{–}10\\\\\\hline \\text{Clasificar cada equilibrio} & 3\\text{–}5\\\\\\hline \\textbf{Calcular el límite, justificado} & 5\\text{–}6\\end{array}", caption: "**El dibujo vale más que la clasificación.** Hazlo siempre, aunque sea la recta de fase vertical con flechas: es el ítem mejor pagado de la pregunta." },
+    { type: "formula", content: "\\begin{array}{l|c}\\text{Pregunta de existencia y unicidad} & \\text{pts}\\\\\\hline \\text{Identificar }f(x,y)\\ \\text{despejando }y' & 2\\text{–}3\\\\\\hline \\text{Describir el rectángulo }R\\ \\text{adecuado} & 3\\text{–}5\\\\\\hline \\text{Calcular }\\partial f/\\partial y\\ \\text{y su continuidad} & 3\\text{–}15\\\\\\hline \\text{Concluir: única solución en }(x_0-\\delta,x_0+\\delta) & 2\\text{–}5\\end{array}", caption: "Una pauta detalla: 3 puntos son solo por decir que el rectángulo **no corta al eje** \\(Y\\) y contiene a \\((x_0,y_0)\\) **en su interior**." },
+    { type: "formula", content: "\\begin{array}{l|c}\\text{Separable / exacta} & \\text{pts}\\\\\\hline \\text{Separar correctamente las variables} & 5\\\\\\hline \\text{Resolver AMBAS integrales} & 5\\text{–}10\\\\\\hline \\text{Familia implícita con la constante bien puesta} & 5\\\\\\hline \\text{Exacta: verificar }M_y\\neq N_x & 2\\text{–}3\\\\\\hline \\text{Exacta: hallar el factor integrante} & 6\\\\\\hline \\text{Exacta: reconstruir }f\\ \\text{y dar }f=c & 5\\text{–}10\\end{array}", caption: "En exactas el **factor integrante es el ítem más caro** de la pregunta." },
+    { type: "callout", content: "**Los cuatro puntos invisibles.** Se pierden con la EDO bien resuelta: (1) no indicar el **dominio o intervalo** de la solución; (2) **omitir la constante** de integración, o ponerla después de despejar en vez de antes — una pauta dice literalmente que no descuenta errores de cálculo pero **sí** descuenta por la constante mal puesta; (3) dar el límite **sin justificar** con las bandas del diagrama; (4) concluir unicidad **sin haber verificado** antes las dos continuidades." },
+    { type: "para", content: "**4 · La notación del curso.** Cambia de profesor a profesor entre secciones, así que reconoce todas las variantes: en el control te van a evaluar con la de tu sección." },
+    { type: "formula", content: "\\begin{array}{l|l}\\text{Factor integrante} & \\mu(x),\\quad u(x),\\quad \\text{o simplemente FI}\\\\\\hline \\text{Teorema} & \\text{TEU, o teorema de Picard-Lindelöf}\\\\\\hline \\text{Intervalos abiertos} & (a,b)\\quad\\text{o}\\quad ]a,b[\\\\\\hline \\text{Equilibrios} & \\text{atractor / repulsor / semiestable}\\\\\\hline \\text{Sinónimos} & \\text{estable}=\\text{atractor},\\ \\ \\text{inestable}=\\text{repulsor}\\\\\\hline \\text{Respuesta implícita} & \\text{familia paramétrica de soluciones implícitas}\\\\\\hline \\text{Seno} & \\operatorname{sen}(x)\\ \\text{(no }\\sin\\text{)}\\end{array}", caption: "También aparecen *soluciones estacionarias* y *soluciones constantes* como sinónimos de soluciones de equilibrio." },
+    { type: "callout", content: "**Las pautas tienen erratas.** En las 9 revisadas encontramos: un signo cambiado al juntar \\(\\ln|x|-\\ln|x+1|\\) en la respuesta final; un *y = 6 es repulsor, y = 6 es atractor* que debía decir \\(y=-6\\); una sustitución escrita como \\(u=\\frac2x+\\frac1u\\) que debía ser \\(y=\\frac2x+\\frac1u\\); y una condición inicial que nunca se usa. Moraleja doble: **verifica siempre tu resultado derivando hacia atrás**, y si en el control tu respuesta no calza con lo que esperabas, no asumas de inmediato que el error es tuyo." },
+    { type: "para", content: "**5 · Reparto del tiempo.** Con 70 minutos y 3 preguntas: 5 minutos al principio para leer las tres y **clasificarlas**, ~20 minutos por pregunta, y 5 minutos al final para el barrido de cierre: ¿puse todas las constantes? ¿di los dominios e intervalos? ¿justifiqué los límites? ¿dibujé el diagrama de fase? Ese barrido final recupera más puntos que seguir peleando con una integral." },
+    { type: "callout", content: "**Orden recomendado de ataque:** parte por la autónoma. Es la que aparece en el 100% de los controles, no requiere integrar nada, y tiene el ítem mejor pagado del control (el dibujo). Tenerla lista en 12 minutos te deja casi 30 para cada una de las otras dos." }
+  ],
+  conceptual: [
+    {
+      question: "Resolviste una lineal con PVI, llegaste a \\(y(x)=x+\\dfrac1x\\) y verificaste que satisface la condición inicial \\(y(1)=2\\). ¿Qué falta para el puntaje completo según las pautas?",
+      options: [
+        { text: "Indicar el **intervalo de definición** de la solución, aquí \\((0,\\infty)\\).", correct: true, feedback: "Correcto. Varias pautas lo corrigen como ítem aparte, con 2 a 4 puntos propios. Como la condición inicial está en \\(x=1\\gt0\\) y la solución revienta en \\(x=0\\), el intervalo es \\((0,\\infty)\\)." },
+        { text: "Verificar que la solución es única aplicando el TEU.", correct: false, feedback: "Solo si te lo piden explícitamente. Cuando la pregunta dice *determine la solución*, el TEU no se puntúa; el intervalo sí." },
+        { text: "Nada: la fórmula más la constante ya es la respuesta completa.", correct: false, feedback: "Es el error más común y el más barato de evitar. La fórmula sin intervalo pierde puntos que no requieren ningún cálculo extra." },
+        { text: "Escribir la solución en forma implícita además de la explícita.", correct: false, feedback: "No se pide: si el enunciado dice *explícitamente*, la forma explícita basta. Lo que falta es el intervalo." }
+      ],
+      explanation: "Regla mecánica de cierre: **toda solución de un PVI se entrega con su intervalo**, y el intervalo es el mayor donde la fórmula es continua y que contiene a \\(x_0\\)."
+    },
+    {
+      question: "En una autónoma te piden \\(\\lim_{x\\to\\infty}y(x)\\) para la solución con \\(y(0)=y_0\\). ¿Qué respuesta obtiene los 5–6 puntos completos?",
+      options: [
+        { text: "El valor del equilibrio, **más** el argumento de en qué banda cae \\(y_0\\) y hacia dónde apunta la flecha ahí.", correct: true, feedback: "Correcto. Las pautas escriben literalmente *5 pts por determinar el límite justificadamente*: el número solo no basta." },
+        { text: "Solo el valor numérico del límite, que es lo que pregunta el enunciado.", correct: false, feedback: "Es exactamente lo que las pautas penalizan. Sin la justificación por bandas, el puntaje se corta." },
+        { text: "Resolver la EDO explícitamente y tomar el límite de la fórmula.", correct: false, feedback: "Da la respuesta correcta, pero gasta 15 minutos en una integral que el método cualitativo evita por completo. Y varias de estas EDO ni siquiera se integran de forma cerrada." },
+        { text: "Decir que el límite es \\(+\\infty\\) salvo que \\(y_0\\) sea un equilibrio.", correct: false, feedback: "Falso: si \\(y_0\\) está entre dos equilibrios, la solución es monótona y acotada, así que converge al equilibrio hacia el que apunta la flecha." }
+      ],
+      explanation: "El argumento completo es: \\(y_0\\) cae en la banda \\((c_1,c_2)\\); ahí \\(f\\gt0\\) (o \\(f\\lt0\\)), luego \\(y\\) es monótona; está acotada por el equilibrio de ese lado y **no puede cruzarlo** por unicidad; monótona + acotada ⇒ converge a él."
+    },
+    {
+      question: "Te dan el PVI \\(x^{2}\\dfrac{dy}{dx}=y-x\\), \\(y(0)=2\\). ¿Cuál es la respuesta correcta?",
+      options: [
+        { text: "**No tiene solución**: evaluando la ecuación original en \\(x=0\\) queda \\(0=y(0)-0=2\\), absurdo.", correct: true, feedback: "Correcto, y es el arquetipo F. Si \\(\\varphi\\) fuera solución derivable cerca de \\(0\\), debería cumplir \\(0\\cdot\\varphi'(0)=\\varphi(0)-0\\), es decir \\(\\varphi(0)=0\\), contradiciendo \\(\\varphi(0)=2\\)." },
+        { text: "El teorema no decide, porque \\(f=\\dfrac{y-x}{x^{2}}\\) no es continua en \\(x=0\\).", correct: false, feedback: "Es cierto pero **insuficiente**: las pautas piden la contradicción explícita. *No decide* y *no existe* son conclusiones distintas, y aquí sí se puede concluir la fuerte." },
+        { text: "Tiene solución única, porque \\(f\\) y \\(f_y=\\dfrac{1}{x^{2}}\\) son continuas para \\(x\\neq0\\).", correct: false, feedback: "El teorema exige continuidad en un rectángulo que contenga a \\((0,2)\\) **en su interior**, y todo rectángulo así cruza \\(x=0\\)." },
+        { text: "Tiene infinitas soluciones, como todos los PVI donde falla la hipótesis.", correct: false, feedback: "Que fallen las hipótesis no implica nada por sí solo: puede haber una, ninguna o infinitas. Aquí, de hecho, no hay ninguna." }
+      ],
+      explanation: "Receta del arquetipo F: si el coeficiente de \\(y'\\) se anula justo en \\(x_0\\), **evalúa la ecuación original en \\(x_0\\)**. Si el dato inicial contradice lo que sale, no hay solución; si calza, el argumento no concluye y suele haber infinitas."
+    },
+    {
+      question: "Según las 9 pautas, ¿cuál es el único tema que aparece en **todos** los controles?",
+      options: [
+        { text: "EDO autónomas: equilibrios, diagrama de fase y límites.", correct: true, feedback: "Correcto: 9 de 9. Además es el tema donde más puntos se pagan por dibujar, no por calcular." },
+        { text: "Ecuaciones exactas y factor integrante.", correct: false, feedback: "Solo 2 de 9. Cuando cae vale los 20 puntos, pero no es apuesta segura." },
+        { text: "Ecuaciones de Bernoulli.", correct: false, feedback: "0 de 9 en las pautas revisadas. No la abandones si está en el temario, pero no es donde rinde estudiar primero." },
+        { text: "Variables separables.", correct: false, feedback: "Muy frecuente (8 de 9), pero no unánime. La autónoma es la única que no falló nunca." }
+      ],
+      explanation: "Prioridad de estudio derivada de los datos: **autónomas → lineales → separables → existencia y unicidad**, y después exactas con factor integrante."
+    }
+  ],
+  keyTakeaways: [
+    "**3 preguntas, 20 pts cada una, 70 minutos.** Unos 23 minutos por pregunta: el tiempo se pierde eligiendo mal el método, no calculando.",
+    "**La autónoma cayó en 9 de 9 controles** y el diagrama de fase vale 7–10 de sus 20 puntos. Empieza por ella.",
+    "**El intervalo o dominio de la solución se corrige aparte** (2–4 pts). Nunca entregues un PVI resuelto sin él.",
+    "**El límite en autónomas se paga justificado**, no como número suelto: banda, signo de \\(f\\), monotonía, cota por el equilibrio.",
+    "**Si el coeficiente de \\(y'\\) se anula en \\(x_0\\)**, evalúa la ecuación original ahí antes de resolver nada: puede que el PVI simplemente no tenga solución."
+  ]
+},
+{
   id: "fundamentos", icon: "📖", title: "Lenguaje básico y PVI",
   subtitle: "Qué es una EDO, qué es una solución y qué es un problema de valor inicial",
   widget: "campo-dir",
@@ -441,6 +520,21 @@ window.MODULES_DATA = [
     { type: "para", content: "El segundo punto fino: las condiciones son **suficientes pero no necesarias**. Que fallen no permite concluir que haya varias soluciones; solo significa que el teorema **no se puede invocar**. Un PVI podría perfectamente tener solución única aunque \\(f\\) o \\(\\partial f/\\partial y\\) sean discontinuas en \\((x_0,y_0)\\)." },
     { type: "callout", content: "Redacta siempre en esa dirección: si las hipótesis se cumplen, **afirma** unicidad. Si fallan, di **“el teorema no decide”** y, si te lo piden, analiza a mano. Escribir “como falla la hipótesis, hay varias soluciones” es un error lógico." },
     { type: "para", content: "En la práctica, la pregunta “¿en qué región del plano hay solución única?” se responde con un procedimiento fijo: se despeja \\(y'=f(x,y)\\), se calcula \\(\\partial f/\\partial y\\), y se excluyen los puntos donde alguna de las dos no sea continua (típicamente, donde se anula un denominador)." }
+,
+    { type: "para", content: "**Tres usos del teorema en el control.** Verificar hipótesis y concluir unicidad es solo el primero. Las pautas de controles anteriores usan el teorema de otras dos maneras que valen exactamente el mismo puntaje y son mucho menos conocidas." },
+    { type: "para", content: "**Arquetipo A — el PVI que NO tiene solución.** Aparece cuando el coeficiente de \\(y'\\) se anula justo en el punto inicial:" },
+    { type: "formula", content: "\\begin{cases}x\\,\\dfrac{dy}{dx}=y+x^{3}\\cos x\\\\[2pt] y(0)=-3\\end{cases}", caption: "El reflejo de despejar \\(y'=\\dfrac{y+x^{3}\\cos x}{x}\\) y decir *no es continua en \\(x=0\\)* es correcto pero **no basta**: solo concluye que el teorema no aplica." },
+    { type: "para", content: "El argumento que sí concluye no usa el teorema, sino la ecuación misma. Si existiera una solución \\(\\varphi\\), derivable en un entorno de \\(x=0\\), tendría que satisfacer la ecuación **original** en todo punto de ese entorno, incluido \\(x=0\\):" },
+    { type: "formula", content: "0\\cdot\\varphi'(0)=\\varphi(0)+0\\ \\Longrightarrow\\ \\varphi(0)=0\\ \\neq\\ -3", caption: "Contradicción directa: ninguna función derivable puede cumplir las dos cosas. El PVI **no tiene solución**, y no hay nada más que calcular." },
+    { type: "callout", content: "Distingue tres conclusiones que **no** son la misma: *hay solución única* (las hipótesis se cumplen), *el teorema no decide* (fallan las hipótesis, pero eso solo por sí mismo no dice nada), y *no existe solución* (hay una contradicción demostrada). Solo la tercera te permite escribir la palabra **no existe**." },
+    { type: "para", content: "El detalle fino: la contradicción depende del valor inicial. Si el dato fuera \\(y(0)=0\\), evaluar en \\(x=0\\) da \\(0=0\\) y no hay contradicción alguna; el argumento se cae y, típicamente, el PVI pasa a tener **infinitas** soluciones. Por eso hay que hacer la cuenta y no memorizar que *coeficiente nulo ⇒ no hay solución*." },
+    { type: "para", content: "**Arquetipo B — las soluciones no se cruzan.** Se pregunta así: *si \\(y\\) es la solución no constante con \\(y(1)=2\\), ¿existe algún \\(x\\) con \\(y(x)=3\\)?* La respuesta casi siempre es **no**, y la razón es la unicidad." },
+    { type: "formula", content: "f(c)=0\\ \\text{ y }\\ y(x^{*})=c\\ \\Longrightarrow\\ y\\ \\text{ y }\\ \\bar y\\equiv c\\ \\text{ resuelven el mismo PVI}", caption: "Dos soluciones distintas del PVI \\(y'=f(y),\\ y(x^{*})=c\\): la que te dieron y la constante. Si \\(f\\) y \\(f_y\\) son continuas ahí, eso **contradice** el teorema." },
+    { type: "para", content: "Dicho geométricamente: las soluciones de equilibrio son **barreras infranqueables**. Una solución que arranca estrictamente entre dos equilibrios consecutivos se queda estrictamente entre ellos para siempre, acercándose asintóticamente pero sin tocarlos nunca en tiempo finito." },
+    { type: "callout", content: "Redacción que puntúa completo: *si existiera \\(x^{*}\\) con \\(y(x^{*})=c\\), entonces \\(y\\) y la solución constante \\(\\bar y\\equiv c\\) serían dos soluciones distintas del mismo PVI; como \\(f\\) y \\(\\partial f/\\partial y\\) son continuas en \\(\\mathbb{R}^{2}\\), esto contradice el teorema de existencia y unicidad. Luego no existe tal \\(x^{*}\\).*" },
+    { type: "para", content: "**Arquetipo C — la región del plano.** No hay condición inicial: se pide describir **dónde** el teorema garantiza unicidad. El procedimiento es siempre el mismo y conviene escribirlo en ese orden, porque cada paso se puntúa:" },
+    { type: "formula", content: "y'=f(x,y)\\ \\longrightarrow\\ \\{f\\ \\text{continua}\\}\\ \\longrightarrow\\ \\left\\{\\frac{\\partial f}{\\partial y}\\ \\text{continua}\\right\\}\\ \\longrightarrow\\ \\text{intersección}", caption: "La región pedida es la **intersección** de los dos conjuntos, que casi siempre coincide con el segundo por ser el más restrictivo." },
+    { type: "callout", content: "Las pautas exigen nombrar el rectángulo: *existe un rectángulo \\(R\\) que contiene a \\((x_0,y_0)\\) en su interior y está contenido en la región*, y solo entonces concluir. Una pauta asigna **3 puntos** exclusivamente a decir que ese rectángulo no corta al eje \\(Y\\). Es puntaje regalado por una frase." }
   ],
   guidedDerivation: {
     title: "Región de unicidad de \\((y^{2}-x)\\,y'=y+2x\\)",
@@ -470,6 +564,28 @@ window.MODULES_DATA = [
         { prompt: "Despeja y examina la derivada en \\(x=x_0\\). ¿Es una solución legítima ahí?", hints: ["\\(y=\\sqrt[3]{3(x-x_0)}\\). Deriva y evalúa en \\(x_0\\)."], revealLatex: "y'=\\frac{1}{\\sqrt[3]{9(x-x_0)^{2}}}\\ \\xrightarrow[x\\to x_0]{}\\ +\\infty", explanation: "La curva tiene tangente **vertical** en \\(x_0\\): allí \\(y'\\) no existe, así que no hay solución derivable en un entorno de \\(x_0\\). El teorema no se podía invocar, y en efecto el PVI falla." }
       ],
       finalAnswerLatex: "\\text{El teorema no aplica: }f=\\tfrac{1}{y^{2}}\\ \\text{es discontinua en }y=0"
+    }
+,
+    {
+      statement: "**(Estilo control)** Decide si el PVI \\(\\left(x-1\\right)y'=3y+x\\), \\(y(1)=2\\), tiene solución. ¿Y si la condición inicial fuera \\(y(1)=-\\tfrac13\\)?",
+      steps: [
+        { prompt: "Empieza por el camino habitual: despeja \\(y'\\) y mira dónde falla \\(f\\).", hints: ["Divide por \\(x-1\\).", "¿Qué pasa exactamente en \\(x=1\\), que es el punto inicial?"], revealLatex: "y'=\\frac{3y+x}{x-1}\\ \\ \\text{no está definida en }x=1", explanation: "Todo rectángulo que contenga a \\((1,2)\\) en su interior cruza la recta \\(x=1\\), así que el teorema **no aplica**. Pero eso, por sí solo, no es una respuesta: hay que decidir si hay solución o no." },
+        { prompt: "Supón que existe una solución \\(\\varphi\\) derivable en un entorno de \\(x=1\\). ¿Qué debe cumplir en el propio punto \\(x=1\\)?", hints: ["Una solución satisface la ecuación **original** en todo su intervalo, no solo donde \\(f\\) es continua.", "Evalúa \\(\\left(x-1\\right)y'=3y+x\\) en \\(x=1\\)."], revealLatex: "\\left(1-1\\right)\\varphi'(1)=3\\varphi(1)+1\\ \\Longrightarrow\\ 0=3\\varphi(1)+1", explanation: "El lado izquierdo se anula porque el factor \\(x-1\\) vale cero, sin importar cuánto valga \\(\\varphi'(1)\\)." },
+        { prompt: "Impón \\(\\varphi(1)=2\\) y concluye.", hints: ["Sustituye \\(2\\) en \\(0=3\\varphi(1)+1\\)."], revealLatex: "0=3(2)+1=7\\neq 0\\quad\\text{(contradicción)}", explanation: "No existe ninguna función derivable que cumpla la ecuación y pase por \\((1,2)\\): el PVI **no tiene solución**. Tres líneas, 20 puntos." },
+        { prompt: "Ahora repite la cuenta con \\(\\varphi(1)=-\\tfrac13\\). ¿Cambia la conclusión?", hints: ["Sustituye \\(-\\tfrac13\\) en la misma igualdad."], revealLatex: "0=3\\left(-\\tfrac13\\right)+1=0\\quad\\checkmark", explanation: "Sin contradicción: el argumento de no-existencia **se cae**. Y el teorema tampoco decide, porque \\(f\\) sigue siendo discontinua en \\(x=1\\)." },
+        { prompt: "Resuelve la EDO como lineal para ver qué pasa realmente con \\(y(1)=-\\tfrac13\\).", hints: ["\\(y'-\\dfrac{3}{x-1}y=\\dfrac{x}{x-1}\\), con \\(\\mu=(x-1)^{-3}\\).", "Para integrar \\(\\int x(x-1)^{-4}dx\\) usa \\(t=x-1\\), \\(x=t+1\\)."], revealLatex: "y=-\\frac{x-1}{2}-\\frac13+C\\left(x-1\\right)^{3}", explanation: "Evaluando en \\(x=1\\): \\(y(1)=-\\tfrac13\\) para **todo** \\(C\\). El PVI tiene **infinitas** soluciones. La misma ecuación, según el dato inicial, pasa de no tener ninguna a tener infinitas." }
+      ],
+      finalAnswerLatex: "y(1)=2:\\ \\text{no existe solución};\\qquad y(1)=-\\tfrac13:\\ y=-\\tfrac{x-1}{2}-\\tfrac13+C(x-1)^{3}\\ \\ (\\text{infinitas})"
+    },
+    {
+      statement: "**(Estilo control)** Para \\(\\dfrac{dy}{dx}=\\sqrt{4-x^{2}-y^{2}}\\): **(a)** determina la región del plano donde el teorema garantiza solución única; **(b)** decide si el PVI con \\(y(0)=1\\) tiene solución única.",
+      steps: [
+        { prompt: "**(a)** ¿Dónde está definida y es continua \\(f(x,y)=\\sqrt{4-x^{2}-y^{2}}\\)?", hints: ["Una raíz cuadrada real exige radicando \\(\\ge 0\\)."], revealLatex: "4-x^{2}-y^{2}\\ge 0\\iff x^{2}+y^{2}\\le 4", explanation: "El **disco cerrado** de radio \\(2\\) centrado en el origen. En todo él \\(f\\) es continua, así que ahí hay **existencia**." },
+        { prompt: "Calcula \\(\\dfrac{\\partial f}{\\partial y}\\) tratando \\(x\\) como constante.", hints: ["Regla de la cadena: la derivada de \\(\\sqrt{u}\\) es \\(\\dfrac{u'}{2\\sqrt{u}}\\).", "Aquí \\(u=4-x^{2}-y^{2}\\) y \\(\\partial u/\\partial y=-2y\\)."], revealLatex: "\\frac{\\partial f}{\\partial y}=\\frac{-2y}{2\\sqrt{4-x^{2}-y^{2}}}=\\frac{-y}{\\sqrt{4-x^{2}-y^{2}}}", explanation: "Es un cociente: falla exactamente donde el denominador se anula, es decir sobre la circunferencia \\(x^{2}+y^{2}=4\\)." },
+        { prompt: "Intersecta las dos regiones de continuidad y escribe la respuesta de (a).", hints: ["La segunda condición es estrictamente más fuerte que la primera."], revealLatex: "R=\\left\\{(x,y)\\in\\mathbb{R}^{2}\\ :\\ x^{2}+y^{2}\\lt 4\\right\\}", explanation: "El disco **abierto**. Sobre la circunferencia frontera \\(f\\) sigue siendo continua (hay existencia) pero \\(\\partial f/\\partial y\\) explota: ahí el teorema **no decide** sobre unicidad. Esa distinción es lo que se puntúa." },
+        { prompt: "**(b)** Ubica el punto inicial \\((0,1)\\) y concluye.", hints: ["Calcula \\(0^{2}+1^{2}\\) y compáralo con \\(4\\)."], revealLatex: "0^{2}+1^{2}=1\\lt 4\\ \\Longrightarrow\\ (0,1)\\in R", explanation: "Como \\((0,1)\\) está en el interior de \\(R\\), existe un rectángulo centrado en él y contenido en \\(R\\) donde \\(f\\) y \\(\\partial f/\\partial y\\) son continuas. Por el teorema, hay **una única** solución en algún intervalo \\((-\\delta,\\delta)\\)." }
+      ],
+      finalAnswerLatex: "\\text{(a) }x^{2}+y^{2}\\lt 4\\ \\text{(disco abierto)};\\qquad\\text{(b) sí: solución única cerca de }x=0"
     }
   ],
   conceptual: [
@@ -502,6 +618,17 @@ window.MODULES_DATA = [
         { text: "\\(\\delta\\) puede ser cero si el punto está en el borde de \\(R\\).", correct: false, feedback: "El teorema exige \\((x_0,y_0)\\) en el **interior** de \\(R\\) y afirma \\(\\delta\\gt 0\\)." }
       ],
       explanation: "Existencia y unicidad **locales**: hay un entorno, pero el teorema no cuantifica su tamaño."
+    }
+,
+    {
+      question: "Sea \\(y\\) la solución de \\(\\dfrac{dy}{dx}=y^{2}\\left(4-y\\right)\\) con \\(y(0)=1\\). ¿Existe algún \\(x\\) con \\(y(x)=4\\)?",
+      options: [
+        { text: "No: si lo hubiera, \\(y\\) y la constante \\(\\bar y\\equiv 4\\) serían dos soluciones del mismo PVI, contradiciendo el teorema.", correct: true, feedback: "Correcto. \\(f(y)=y^{2}(4-y)\\) y \\(f_y=8y-3y^{2}\\) son continuas en todo \\(\\mathbb{R}^{2}\\), así que por cada punto pasa exactamente una solución: \\(y\\) se acerca a \\(4\\) asintóticamente sin alcanzarlo." },
+        { text: "Sí, porque \\(y=4\\) es un atractor y la solución converge a él.", correct: false, feedback: "Converger a \\(4\\) cuando \\(x\\to\\infty\\) no es lo mismo que **valer** \\(4\\) en algún \\(x\\) finito. La convergencia es asintótica, precisamente porque cruzar está prohibido." },
+        { text: "Sí, en \\(x\\) suficientemente grande, ya que \\(y\\) es creciente y no acotada.", correct: false, feedback: "Sí es creciente, pero **sí** está acotada: la barrera \\(y=4\\) se lo impide. Monótona y acotada ⇒ converge, no explota." },
+        { text: "No se puede saber sin resolver explícitamente la EDO.", correct: false, feedback: "Se puede, y esa es la gracia del método cualitativo: el argumento de unicidad responde sin integrar nada." }
+      ],
+      explanation: "Las soluciones de equilibrio parten el plano en franjas horizontales estancas. Una solución que nace dentro de una franja **muere** dentro de ella: es el argumento de no-cruce, y vale 10 puntos completos en una de las pautas."
     }
   ],
   keyTakeaways: [
@@ -563,6 +690,28 @@ window.MODULES_DATA = [
         { prompt: "Traduce eso a flechas y clasifica.", hints: ["\\(f\\gt0\\) significa \\(\\uparrow\\) en ambas bandas."], revealLatex: "\\uparrow\\ \\ 3\\ \\ \\uparrow\\ \\Longrightarrow\\ \\text{semiestable}", explanation: "Por debajo las soluciones suben **hacia** \\(3\\); por encima suben **alejándose** de \\(3\\). Atrae por un lado y repele por el otro." }
       ],
       finalAnswerLatex: "c=3\\ \\text{es semiestable}"
+    }
+,
+    {
+      statement: "**(Estilo control)** Considera \\(\\dfrac{dy}{dx}=y\\left(y-2\\right)^{2}\\left(y+3\\right)\\). **(a)** Halla y clasifica los equilibrios. **(b)** Calcula \\(\\lim_{x\\to\\infty}y(x)\\) para la solución con \\(y(0)=1\\).",
+      steps: [
+        { prompt: "**(a)** Resuelve \\(f(y)=0\\).", hints: ["Ya viene factorizado: iguala cada factor a cero.", "Cuidado con la multiplicidad del factor al cuadrado."], revealLatex: "y=-3,\\qquad y=0,\\qquad y=2\\ \\text{(raíz doble)}", explanation: "Tres equilibrios. Que \\(y=2\\) sea raíz **doble** es la clave de toda la pregunta: anticipa un punto semiestable." },
+        { prompt: "Determina el signo de \\(f\\) en cada banda. Aprovecha que \\((y-2)^{2}\\ge 0\\) siempre.", hints: ["Como \\((y-2)^{2}\\) nunca es negativo, el signo de \\(f\\) lo fija \\(y(y+3)\\).", "Prueba \\(y=-4,\\ y=-1,\\ y=1,\\ y=3\\)."], revealLatex: "\\begin{array}{c|c|c}\\text{banda} & \\text{signo de }y(y+3) & y(x)\\\\\\hline (-\\infty,-3) & \\gt 0 & \\uparrow\\\\ (-3,0) & \\lt 0 & \\downarrow\\\\ (0,2) & \\gt 0 & \\uparrow\\\\ (2,\\infty) & \\gt 0 & \\uparrow\\end{array}", explanation: "Factorizar el signo así ahorra la mitad del trabajo: el factor cuadrado no aporta cambios de signo, solo un equilibrio extra." },
+        { prompt: "Clasifica los tres equilibrios comparando la flecha de abajo con la de arriba.", hints: ["\\(\\uparrow\\) debajo y \\(\\downarrow\\) encima: atractor. Al revés: repulsor. Iguales: semiestable."], revealLatex: "y=-3\\ \\text{atractor},\\qquad y=0\\ \\text{repulsor},\\qquad y=2\\ \\text{semiestable}", explanation: "En \\(y=2\\) las dos flechas apuntan hacia arriba (\\(\\uparrow\\ \\uparrow\\)): atrae por debajo y repele por encima. Eso es exactamente lo que produce una raíz de multiplicidad **par**." },
+        { prompt: "**(b)** ¿En qué banda cae \\(y_0=1\\) y hacia dónde va?", hints: ["\\(1\\) está entre \\(0\\) y \\(2\\).", "Ahí \\(f\\gt0\\), así que la solución crece; y no puede cruzar el equilibrio de arriba."], revealLatex: "y_0=1\\in(0,2),\\ f\\gt 0\\ \\Rightarrow\\ y\\ \\text{creciente y acotada por }2", explanation: "Monótona creciente y acotada superiormente por el equilibrio \\(y=2\\) (que no puede cruzar, por unicidad) ⇒ converge a él." }
+      ],
+      finalAnswerLatex: "y=-3\\ \\text{atractor},\\ y=0\\ \\text{repulsor},\\ y=2\\ \\text{semiestable};\\qquad \\lim_{x\\to\\infty}y(x)=2"
+    },
+    {
+      statement: "**(Estilo control)** Sea \\(y\\) la solución no constante de \\(\\dfrac{dy}{dx}=\\left(y-1\\right)\\left(y+4\\right)\\) con \\(y(2)=0\\). **(a)** ¿Existe algún \\(x\\in\\mathbb{R}\\) tal que \\(y(x)=1\\)? Justifica. **(b)** Calcula \\(\\lim_{x\\to\\infty}y(x)\\) y \\(\\lim_{x\\to-\\infty}y(x)\\).",
+      steps: [
+        { prompt: "Halla los equilibrios y localiza el dato inicial respecto de ellos.", hints: ["Iguala cada factor a cero.", "¿Dónde queda \\(y=0\\)?"], revealLatex: "y=1,\\quad y=-4;\\qquad -4\\lt 0\\lt 1", explanation: "El dato inicial cae **estrictamente dentro** de la banda \\((-4,1)\\). Ese es el hecho que decide toda la pregunta." },
+        { prompt: "**(a)** Antes de argumentar, verifica que el teorema es invocable en todo el plano.", hints: ["Desarrolla \\(f(y)=(y-1)(y+4)\\) y deriva respecto de \\(y\\)."], revealLatex: "f(y)=y^{2}+3y-4,\\qquad \\frac{\\partial f}{\\partial y}=2y+3", explanation: "Ambas son polinomios, luego continuas en todo \\(\\mathbb{R}^{2}\\): por **cada** punto del plano pasa exactamente una solución. Sin este paso el argumento siguiente no se sostiene." },
+        { prompt: "Supón que existe \\(x^{*}\\) con \\(y(x^{*})=1\\) y busca la contradicción.", hints: ["¿Qué otra solución conocida pasa por el punto \\((x^{*},1)\\)?", "\\(y=1\\) es un equilibrio, así que la función constante \\(\\bar y\\equiv 1\\) es solución."], revealLatex: "y\\ \\text{y}\\ \\bar y\\equiv 1\\ \\text{resolverían}\\ \\begin{cases}y'=(y-1)(y+4)\\\\ y(x^{*})=1\\end{cases}", explanation: "Serían dos soluciones **distintas** del mismo PVI (una constante y otra no), contradiciendo la unicidad. Luego no existe tal \\(x^{*}\\): la respuesta es **no**." },
+        { prompt: "**(b)** Determina el signo de \\(f\\) en la banda \\((-4,1)\\) con un punto de prueba.", hints: ["Evalúa en \\(y=0\\), que es justo el dato inicial."], revealLatex: "f(0)=(0-1)(0+4)=-4\\lt 0\\ \\Longrightarrow\\ y\\ \\text{decreciente}", explanation: "Toda solución que viva en esa banda es decreciente, en todo \\(x\\)." },
+        { prompt: "Concluye los dos límites usando que \\(y\\) es decreciente y atrapada entre los equilibrios.", hints: ["Hacia \\(+\\infty\\) baja; ¿hasta dónde puede bajar?", "Hacia \\(-\\infty\\) sube; ¿hasta dónde puede subir?"], revealLatex: "\\lim_{x\\to\\infty}y(x)=-4,\\qquad \\lim_{x\\to-\\infty}y(x)=1", explanation: "Decreciente y acotada inferiormente por \\(-4\\) ⇒ converge a \\(-4\\) hacia adelante. Yendo hacia atrás crece, acotada por \\(1\\) ⇒ converge a \\(1\\). Nunca toca ninguno de los dos: los alcanza solo en el límite." }
+      ],
+      finalAnswerLatex: "\\text{(a) No existe tal }x;\\qquad\\text{(b) }\\lim_{x\\to\\infty}y=-4,\\quad \\lim_{x\\to-\\infty}y=1"
     }
   ],
   conceptual: [
@@ -667,6 +816,29 @@ window.MODULES_DATA = [
       ],
       finalAnswerLatex: "x^{2}+y^{2}=Cx"
     }
+,
+    {
+      statement: "**(Estilo control)** Resuelve **explícitamente** el PVI \\(y'=e^{x}\\left(1+y^{2}\\right)\\), \\(y(0)=0\\), e indica el **dominio** de la solución.",
+      steps: [
+        { prompt: "Separa las variables.", hints: ["Todo lo que tiene \\(y\\) a un lado con \\(dy\\); todo lo que tiene \\(x\\) al otro con \\(dx\\)."], revealLatex: "\\frac{dy}{1+y^{2}}=e^{x}\\,dx", explanation: "Aquí no se pierde ninguna solución constante: \\(1+y^{2}\\) no se anula nunca, así que no hay soluciones singulares que recuperar." },
+        { prompt: "Integra ambos lados.", hints: ["\\(\\int\\dfrac{dy}{1+y^{2}}\\) es una primitiva inmediata que conviene tener memorizada."], revealLatex: "\\arctan y=e^{x}+C", explanation: "Familia de soluciones implícitas. Como el enunciado pide forma **explícita**, hay que seguir." },
+        { prompt: "Usa \\(y(0)=0\\) para determinar \\(C\\) y despeja \\(y\\).", hints: ["\\(\\arctan 0=0\\) y \\(e^{0}=1\\).", "Aplica \\(\\tan\\) a ambos lados."], revealLatex: "0=1+C\\ \\Rightarrow\\ C=-1;\\qquad y(x)=\\tan\\left(e^{x}-1\\right)", explanation: "Comprobación rápida: \\(y'=\\sec^{2}\\left(e^{x}-1\\right)e^{x}=\\left(1+\\tan^{2}\\right)e^{x}=e^{x}\\left(1+y^{2}\\right)\\) ✓, y \\(y(0)=\\tan 0=0\\) ✓." },
+        { prompt: "Ahora el dominio: ¿para qué \\(x\\) es continua \\(\\tan\\left(e^{x}-1\\right)\\)?", hints: ["\\(\\tan\\) explota cuando su argumento llega a \\(\\pm\\dfrac{\\pi}{2}\\).", "Impón \\(-\\dfrac{\\pi}{2}\\lt e^{x}-1\\lt\\dfrac{\\pi}{2}\\) y estudia cada desigualdad por separado."], revealLatex: "e^{x}\\gt 0\\Rightarrow e^{x}-1\\gt -1\\gt -\\frac{\\pi}{2}\\ \\ \\checkmark;\\qquad e^{x}-1\\lt\\frac{\\pi}{2}\\iff x\\lt\\ln\\left(1+\\frac{\\pi}{2}\\right)", explanation: "La cota inferior se cumple sola, gracias a que la exponencial es positiva. Solo la superior recorta el dominio." },
+        { prompt: "Escribe el intervalo, verificando que contiene al punto inicial.", hints: ["El dominio de la solución de un PVI es el mayor intervalo de continuidad que contiene a \\(x_0=0\\)."], revealLatex: "x\\in\\left(-\\infty,\\ \\ln\\left(1+\\tfrac{\\pi}{2}\\right)\\right),\\qquad \\ln\\left(1+\\tfrac{\\pi}{2}\\right)\\approx 0{,}944", explanation: "Contiene a \\(x=0\\) ✓. Nota que la solución **explota en tiempo finito** aunque la EDO se vea inofensiva: eso es justo lo que el teorema advierte al garantizar solo un entorno local." }
+      ],
+      finalAnswerLatex: "y(x)=\\tan\\left(e^{x}-1\\right),\\qquad x\\in\\left(-\\infty,\\ \\ln\\left(1+\\tfrac{\\pi}{2}\\right)\\right)"
+    },
+    {
+      statement: "**(Estilo control)** Resuelve el PVI \\(y'=\\dfrac{\\ln x}{y}\\), \\(y(1)=2\\), e indica el dominio de la solución.",
+      steps: [
+        { prompt: "Separa las variables.", hints: ["Multiplica cruzado: el \\(y\\) del denominador pasa al lado de \\(dy\\)."], revealLatex: "y\\,dy=\\ln x\\,dx", explanation: "Ambos lados quedan en una sola variable. La EDO ya exige \\(x\\gt0\\) por el \\(\\ln x\\), y \\(y\\neq0\\) por el denominador." },
+        { prompt: "Integra el lado derecho. Necesita integración **por partes**.", hints: ["Toma \\(u=\\ln x\\) y \\(dv=dx\\).", "Entonces \\(du=\\dfrac{dx}{x}\\) y \\(v=x\\), y la integral restante se simplifica sola."], revealLatex: "\\int\\ln x\\,dx=x\\ln x-\\int x\\cdot\\frac1x\\,dx=x\\ln x-x", explanation: "Es una de las tres primitivas por partes que más aparecen en estos controles, junto con \\(\\int x\\cos x\\,dx\\) y \\(\\int\\arctan x\\,dx\\)." },
+        { prompt: "Escribe la familia implícita y usa \\(y(1)=2\\).", hints: ["El lado izquierdo da \\(\\dfrac{y^{2}}{2}\\).", "En \\(x=1\\): \\(\\ln 1=0\\)."], revealLatex: "\\frac{y^{2}}{2}=x\\ln x-x+C;\\qquad 2=0-1+C\\ \\Rightarrow\\ C=3", explanation: "Cuidado: \\(\\dfrac{y^{2}}{2}\\) con \\(y=2\\) vale \\(2\\), no \\(4\\). Es el error aritmético más frecuente en este paso." },
+        { prompt: "Despeja \\(y\\) eligiendo la rama correcta.", hints: ["Multiplica por \\(2\\) y saca raíz.", "¿La condición inicial \\(y(1)=2\\) es positiva o negativa?"], revealLatex: "y^{2}=2x\\ln x-2x+6\\ \\Longrightarrow\\ y(x)=\\sqrt{2x\\ln x-2x+6}", explanation: "Rama **positiva**, porque \\(y(1)=2\\gt0\\) y una solución continua no puede saltar de una rama a la otra sin pasar por \\(y=0\\), donde la EDO ni siquiera está definida." },
+        { prompt: "Determina el dominio: hace falta \\(x\\gt0\\) y radicando positivo. Estudia \\(g(x)=2x\\ln x-2x+6\\).", hints: ["Deriva \\(g\\): los términos se cancelan casi todos.", "\\(g'(x)=2\\ln x\\), que se anula en \\(x=1\\)."], revealLatex: "g'(x)=2\\ln x\\ \\Rightarrow\\ \\min_{x\\gt0}g=g(1)=0-2+6=4\\gt 0", explanation: "El mínimo global de \\(g\\) en \\((0,\\infty)\\) vale \\(4\\), así que el radicando **nunca** se anula: el dominio es todo \\((0,\\infty)\\), limitado solo por el \\(\\ln x\\)." }
+      ],
+      finalAnswerLatex: "y(x)=\\sqrt{2x\\ln x-2x+6},\\qquad x\\in(0,\\infty)"
+    }
   ],
   conceptual: [
     {
@@ -770,6 +942,39 @@ window.MODULES_DATA = [
         { prompt: "Pega los tramos exigiendo continuidad en \\(x=1\\).", hints: ["Iguala el valor por la izquierda con el valor por la derecha en \\(x=1\\).", "Por la izquierda: \\(\\dfrac12+\\dfrac32e^{-1}\\). Por la derecha: \\(c_2e^{-1}\\)."], revealLatex: "c_2e^{-1}=\\frac12+\\frac32e^{-1}\\ \\Longrightarrow\\ c_2=\\frac{e}{2}+\\frac32=\\frac{e+3}{2}", explanation: "Se exige continuidad de \\(y\\), no de \\(y'\\): la derivada sí salta porque \\(f\\) salta." }
       ],
       finalAnswerLatex: "y(x)=\\begin{cases}\\dfrac12+\\dfrac32e^{-x^{2}}, & 0\\le x\\lt 1\\\\ \\dfrac{e+3}{2}\\,e^{-x^{2}}, & x\\ge 1\\end{cases}"
+    }
+,
+    {
+      statement: "**(Estilo control)** Resuelve \\(\\left(x^{2}+1\\right)y'+2xy=\\arctan x\\), \\(y(0)=3\\), e indica el intervalo de definición.",
+      steps: [
+        { prompt: "Lleva la ecuación a la forma estándar.", hints: ["Divide todo por \\(x^{2}+1\\), que nunca se anula."], revealLatex: "y'+\\frac{2x}{x^{2}+1}\\,y=\\frac{\\arctan x}{x^{2}+1}", explanation: "Con \\(p(x)=\\dfrac{2x}{x^{2}+1}\\) y \\(q(x)=\\dfrac{\\arctan x}{x^{2}+1}\\). Ambas continuas en todo \\(\\mathbb{R}\\): buena señal para el intervalo final." },
+        { prompt: "Calcula el factor integrante.", hints: ["\\(\\int\\dfrac{2x}{x^{2}+1}dx\\) es una sustitución directa \\(u=x^{2}+1\\).", "Recuerda \\(e^{\\ln A}=A\\)."], revealLatex: "\\mu(x)=e^{\\int\\frac{2x}{x^{2}+1}dx}=e^{\\ln\\left(x^{2}+1\\right)}=x^{2}+1", explanation: "El factor integrante reconstruye el coeficiente original: señal de que la ecuación de partida ya era una derivada de producto disfrazada." },
+        { prompt: "Escribe la ecuación como derivada de un producto.", hints: ["\\(\\mu q=\\left(x^{2}+1\\right)\\cdot\\dfrac{\\arctan x}{x^{2}+1}\\)."], revealLatex: "\\frac{d}{dx}\\left[\\left(x^{2}+1\\right)y\\right]=\\arctan x", explanation: "Los \\(x^{2}+1\\) se cancelan y queda la integral limpia. Este paso vale 5 puntos por sí solo en las rúbricas." },
+        { prompt: "Integra \\(\\int\\arctan x\\,dx\\) por partes.", hints: ["\\(u=\\arctan x\\), \\(dv=dx\\), luego \\(du=\\dfrac{dx}{1+x^{2}}\\) y \\(v=x\\).", "La integral que queda, \\(\\int\\dfrac{x}{1+x^{2}}dx\\), es un logaritmo."], revealLatex: "\\int\\arctan x\\,dx=x\\arctan x-\\frac12\\ln\\left(1+x^{2}\\right)", explanation: "Sin valor absoluto porque \\(1+x^{2}\\gt0\\) siempre." },
+        { prompt: "Aplica \\(y(0)=3\\) y despeja.", hints: ["En \\(x=0\\): \\(\\arctan 0=0\\) y \\(\\ln 1=0\\).", "El lado izquierdo vale \\(\\left(0+1\\right)\\cdot 3\\)."], revealLatex: "3=0-0+C\\ \\Rightarrow\\ C=3", explanation: "Intervalo de definición: \\(\\mathbb{R}\\) completo, porque \\(x^{2}+1\\) nunca se anula y \\(p,q\\) son continuas en todo \\(\\mathbb{R}\\). Es el caso agradable; compáralo con los que tienen \\(x\\) en el denominador." }
+      ],
+      finalAnswerLatex: "y(x)=\\frac{x\\arctan x-\\frac12\\ln\\left(1+x^{2}\\right)+3}{x^{2}+1},\\qquad x\\in\\mathbb{R}"
+    },
+    {
+      statement: "**(Estilo control)** Determina la solución general de \\(x\\,y'+3y=6x^{2}\\) y decide si alguna solución permanece **acotada** cuando \\(x\\to0^{+}\\).",
+      steps: [
+        { prompt: "Normaliza (para \\(x\\neq0\\)) e identifica \\(p\\) y \\(q\\).", hints: ["Divide por \\(x\\)."], revealLatex: "y'+\\frac3x\\,y=6x,\\qquad p(x)=\\frac3x,\\ q(x)=6x", explanation: "Sin normalizar, el factor integrante sale mal: es el error número uno en esta pregunta." },
+        { prompt: "Calcula \\(\\mu\\) y escribe la derivada del producto.", hints: ["\\(\\int\\dfrac3x dx=3\\ln|x|\\), y \\(e^{3\\ln|x|}=|x|^{3}\\); para \\(x\\gt0\\) es \\(x^{3}\\)."], revealLatex: "\\mu(x)=x^{3};\\qquad \\frac{d}{dx}\\left[x^{3}y\\right]=6x^{4}", explanation: "En \\(\\mu\\) **nunca** se añade constante de integración: cualquier constante se cancelaría al dividir." },
+        { prompt: "Integra y despeja la solución general.", hints: ["\\(\\int 6x^{4}dx=\\dfrac65 x^{5}\\)."], revealLatex: "x^{3}y=\\frac65 x^{5}+C\\ \\Longrightarrow\\ y=\\frac65 x^{2}+\\frac{C}{x^{3}}", explanation: "Verificación: si \\(y=\\tfrac65x^{2}\\), entonces \\(xy'+3y=\\tfrac{12}{5}x^{2}+\\tfrac{18}{5}x^{2}=6x^{2}\\) ✓." },
+        { prompt: "Estudia el comportamiento de cada término cuando \\(x\\to0^{+}\\).", hints: ["\\(\\dfrac65x^{2}\\to 0\\). ¿Y \\(\\dfrac{C}{x^{3}}\\)?"], revealLatex: "\\frac{C}{x^{3}}\\to\\pm\\infty\\ \\text{si}\\ C\\neq 0;\\qquad C=0\\ \\Rightarrow\\ y=\\frac65x^{2}\\to 0", explanation: "Solo la solución con \\(C=0\\) queda acotada, y de hecho se extiende con continuidad a \\(x=0\\) con \\(y(0)=0\\). Todas las demás explotan." },
+        { prompt: "Compara con \\(x\\,y'-3y=x^{4}\\), donde **todas** las soluciones pasan por el origen. ¿Qué cambia?", hints: ["Ahí \\(p=-\\dfrac3x\\) y el factor integrante es \\(x^{-3}\\).", "Mira si la parte homogénea es \\(x^{3}\\) o \\(x^{-3}\\)."], revealLatex: "x\\,y'-3y=x^{4}\\ \\Rightarrow\\ y=x^{4}+Cx^{3}\\ \\Rightarrow\\ y(0)=0\\ \\ \\forall C", explanation: "El **signo de \\(p\\)** decide todo: con \\(+\\dfrac3x\\) la parte homogénea es \\(Cx^{-3}\\) y explota; con \\(-\\dfrac3x\\) es \\(Cx^{3}\\) y se apaga. Misma técnica, conclusiones opuestas." }
+      ],
+      finalAnswerLatex: "y=\\frac65 x^{2}+\\frac{C}{x^{3}};\\qquad\\text{solo }C=0\\ \\text{queda acotada: }y=\\frac65 x^{2}"
+    },
+    {
+      statement: "**(Estilo control)** Resuelve \\(x\\,y'+2y=\\dfrac{1}{x^{2}\\left(x+1\\right)}\\) para \\(x\\gt0\\).",
+      steps: [
+        { prompt: "Normaliza dividiendo por \\(x\\).", hints: ["El \\(x\\) se junta con el \\(x^{2}\\) del denominador."], revealLatex: "y'+\\frac2x\\,y=\\frac{1}{x^{3}\\left(x+1\\right)}", explanation: "Fíjate en cómo el denominador subió de \\(x^{2}\\) a \\(x^{3}\\): si te saltas este paso, todo lo demás falla." },
+        { prompt: "Calcula \\(\\mu\\) y simplifica el lado derecho.", hints: ["\\(\\mu=e^{2\\ln x}=x^{2}\\) para \\(x\\gt0\\).", "Multiplica \\(\\mu\\) por \\(q\\) y cancela."], revealLatex: "\\mu=x^{2};\\qquad \\frac{d}{dx}\\left[x^{2}y\\right]=x^{2}\\cdot\\frac{1}{x^{3}\\left(x+1\\right)}=\\frac{1}{x\\left(x+1\\right)}", explanation: "La cancelación deja una integral que ya no tiene potencias altas: exactamente el tipo que estos controles usan para meter fracciones parciales." },
+        { prompt: "Descompón en fracciones parciales.", hints: ["\\(\\dfrac{1}{x(x+1)}=\\dfrac{A}{x}+\\dfrac{B}{x+1}\\), con \\(1=A(x+1)+Bx\\).", "Evalúa en \\(x=0\\) y en \\(x=-1\\)."], revealLatex: "\\frac{1}{x\\left(x+1\\right)}=\\frac1x-\\frac{1}{x+1}\\qquad(A=1,\\ B=-1)", explanation: "El truco de evaluar en las raíces del denominador entrega \\(A\\) y \\(B\\) en dos segundos, sin resolver sistemas." },
+        { prompt: "Integra y despeja \\(y\\).", hints: ["\\(\\int\\left(\\dfrac1x-\\dfrac{1}{x+1}\\right)dx=\\ln x-\\ln(x+1)\\) para \\(x\\gt0\\).", "Junta los dos logaritmos en uno."], revealLatex: "x^{2}y=\\ln x-\\ln\\left(x+1\\right)+C=\\ln\\left(\\frac{x}{x+1}\\right)+C", explanation: "**Atención al signo.** Una de las pautas reales integra correctamente \\(\\ln x-\\ln(x+1)\\) y dos líneas después escribe la respuesta final con un **más** entre los logaritmos. Es una errata: al juntar logaritmos con signo menos queda un **cociente**, no un producto." }
+      ],
+      finalAnswerLatex: "y(x)=\\frac{1}{x^{2}}\\left[\\ln\\left(\\frac{x}{x+1}\\right)+C\\right],\\qquad x\\gt 0"
     }
   ],
   conceptual: [
@@ -888,6 +1093,28 @@ window.MODULES_DATA = [
         { prompt: "Resuelve la ecuación exacta resultante.", hints: ["\\(f=\\int\\left(2xy^{4}+4x^{3}y^{3}\\right)dx\\)."], revealLatex: "f=x^{2}y^{4}+x^{4}y^{3}+g(y);\\quad f_y=4x^{2}y^{3}+3x^{4}y^{2}=\\mu N\\ \\Rightarrow\\ g'=0", explanation: "El \\(g'(y)\\) sale cero, lo que confirma que \\(p=1,q=2\\) eran correctos." }
       ],
       finalAnswerLatex: "\\mu(x,y)=x\\,y^{2};\\qquad x^{2}y^{4}+x^{4}y^{3}=c"
+    }
+,
+    {
+      statement: "**(Estilo control)** Utiliza un factor integrante adecuado para determinar una familia uniparamétrica de soluciones de \\(\\left(4xy+x^{2}\\right)dx+x^{2}\\,dy=0\\).",
+      steps: [
+        { prompt: "Identifica \\(M\\) y \\(N\\) y verifica si es exacta.", hints: ["\\(M\\) acompaña a \\(dx\\); \\(N\\) acompaña a \\(dy\\).", "Deriva \\(M\\) respecto de \\(y\\) y \\(N\\) respecto de \\(x\\)."], revealLatex: "M=4xy+x^{2},\\ N=x^{2};\\qquad M_y=4x,\\ N_x=2x\\ \\Longrightarrow\\ M_y\\neq N_x", explanation: "No es exacta. Antes de buscar nada más, este chequeo cuesta 10 segundos y vale 2–3 puntos." },
+        { prompt: "Prueba el caso \\(\\mu(x)\\): calcula \\(\\dfrac{M_y-N_x}{N}\\).", hints: ["Se divide por \\(N\\), y el numerador va \\(M_y\\) primero.", "Simplifica el cociente de potencias."], revealLatex: "\\frac{M_y-N_x}{N}=\\frac{4x-2x}{x^{2}}=\\frac{2x}{x^{2}}=\\frac2x", explanation: "Depende **solo de \\(x\\)**, así que el caso 1 aplica. Si hubiera quedado algún \\(y\\), habría que probar el caso \\(\\mu(y)\\)." },
+        { prompt: "Calcula \\(\\mu\\), multiplica la ecuación y verifica que ahora sí es exacta.", hints: ["\\(\\mu=\\exp\\left(\\int\\frac2x dx\\right)\\).", "Multiplica **ambos** términos, no solo uno."], revealLatex: "\\mu(x)=x^{2};\\qquad \\left(4x^{3}y+x^{4}\\right)dx+x^{4}dy=0,\\quad \\widetilde M_y=4x^{3}=\\widetilde N_x\\ \\checkmark", explanation: "Verificar la exactitud después de multiplicar es un ítem de puntaje propio (2 pts) y además te avisa si te equivocaste en \\(\\mu\\)." },
+        { prompt: "Reconstruye \\(f\\) integrando por el lado más simple.", hints: ["\\(\\widetilde N=x^{4}\\) es mucho más fácil de integrar en \\(y\\) que \\(\\widetilde M\\) en \\(x\\).", "Al integrar en \\(y\\), la constante es una función \\(h(x)\\)."], revealLatex: "f(x,y)=\\int x^{4}\\,dy=x^{4}y+h(x)", explanation: "Elegir el lado fácil es media pregunta: siempre mira los dos antes de empezar a integrar." },
+        { prompt: "Deriva respecto de \\(x\\), iguala a \\(\\widetilde M\\) y despeja \\(h\\).", hints: ["\\(f_x=4x^{3}y+h'(x)\\).", "Iguala con \\(4x^{3}y+x^{4}\\): los términos con \\(y\\) se cancelan."], revealLatex: "4x^{3}y+h'(x)=4x^{3}y+x^{4}\\ \\Rightarrow\\ h'(x)=x^{4}\\ \\Rightarrow\\ h(x)=\\frac{x^{5}}{5}", explanation: "Que los términos en \\(y\\) se cancelen exactamente confirma que \\(\\mu\\) era correcto. Si sobrara un \\(y\\), habría un error antes." }
+      ],
+      finalAnswerLatex: "x^{4}y+\\frac{x^{5}}{5}=c"
+    },
+    {
+      statement: "**(Estilo control)** Muestra que \\(\\left(y^{2}+x\\right)dx+\\left(x^{2}+y\\right)dy=0\\) **no es exacta** y que **no admite** un factor integrante que dependa solo de \\(x\\) ni solo de \\(y\\).",
+      steps: [
+        { prompt: "Verifica la exactitud.", hints: ["\\(M=y^{2}+x\\), \\(N=x^{2}+y\\)."], revealLatex: "M_y=2y,\\quad N_x=2x\\ \\Longrightarrow\\ M_y-N_x=2\\left(y-x\\right)\\neq 0", explanation: "Solo coinciden sobre la recta \\(y=x\\), no en una región: la ecuación no es exacta. Eso vale 3 puntos." },
+        { prompt: "Caso \\(\\mu(x)\\): calcula \\(\\dfrac{M_y-N_x}{N}\\) y decide si puede depender solo de \\(x\\).", hints: ["Sustituye directamente.", "Para descartarlo, basta exhibir **dos puntos con el mismo \\(x\\)** que den valores distintos."], revealLatex: "\\frac{M_y-N_x}{N}=\\frac{2\\left(y-x\\right)}{x^{2}+y};\\qquad (1,2)\\mapsto\\tfrac23,\\quad (1,3)\\mapsto 1", explanation: "Mismo \\(x=1\\), valores distintos ⇒ el cociente **no** es función solo de \\(x\\). Exhibir dos puntos es la forma más rápida y limpia de justificarlo." },
+        { prompt: "Caso \\(\\mu(y)\\): calcula \\(\\dfrac{N_x-M_y}{M}\\). Ojo con el orden del numerador.", hints: ["Aquí el numerador va **invertido** y se divide por \\(M\\).", "Busca ahora dos puntos con el mismo \\(y\\)."], revealLatex: "\\frac{N_x-M_y}{M}=\\frac{2\\left(x-y\\right)}{y^{2}+x};\\qquad (1,1)\\mapsto 0,\\quad (2,1)\\mapsto\\tfrac23", explanation: "Mismo \\(y=1\\), valores distintos ⇒ tampoco es función solo de \\(y\\). Confundir el orden del numerador entre los dos casos es el error clásico aquí." },
+        { prompt: "Escribe la conclusión.", hints: ["El enunciado no pide resolver la ecuación: pide demostrar una imposibilidad."], revealLatex: "\\text{No exacta, y no existe }\\mu(x)\\ \\text{ni}\\ \\mu(y)\\ \\text{con los métodos del curso}", explanation: "**Esa es la respuesta completa.** Una pauta real plantea exactamente esta pregunta y reparte los puntos así: 3 por probar que no es exacta y 3 por probar que no se puede convertir en exacta. Quien se empeña en encontrar una solución cerrada pierde la pregunta entera." }
+      ],
+      finalAnswerLatex: "\\text{No es exacta y no admite }\\mu(x)\\ \\text{ni}\\ \\mu(y)"
     }
   ],
   conceptual: [
@@ -1022,6 +1249,18 @@ window.MODULES_DATA = [
       ],
       finalAnswerLatex: "(x+y)^{2}=2x+C"
     }
+,
+    {
+      statement: "**(Estilo control)** Resuelve el PVI \\(y'=-\\dfrac{9}{x^{2}}-\\dfrac{y}{x}+y^{2}\\), \\(y(1)=0\\), usando la sustitución \\(y=\\dfrac3x+\\dfrac1u\\).",
+      steps: [
+        { prompt: "Antes de sustituir, comprueba que \\(y_p=\\dfrac3x\\) es una solución particular.", hints: ["Calcula \\(y_p'=-\\dfrac{3}{x^{2}}\\) y reemplaza \\(y_p\\) en el lado derecho.", "Los tres términos son múltiplos de \\(\\dfrac{1}{x^{2}}\\)."], revealLatex: "-\\frac{9}{x^{2}}-\\frac{3}{x^{2}}+\\frac{9}{x^{2}}=-\\frac{3}{x^{2}}=y_p'\\ \\ \\checkmark", explanation: "Es una **Riccati**: \\(y'=p(x)+q(x)y+r(x)y^{2}\\). La sustitución \\(y=y_p+\\dfrac1u\\) solo funciona si \\(y_p\\) es realmente solución, así que verificarlo primero es obligatorio." },
+        { prompt: "Deriva la sustitución respecto de \\(x\\).", hints: ["\\(\\dfrac{d}{dx}\\left(\\dfrac3x\\right)=-\\dfrac{3}{x^{2}}\\).", "\\(\\dfrac{d}{dx}\\left(u^{-1}\\right)=-u^{-2}u'\\)."], revealLatex: "y'=-\\frac{3}{x^{2}}-\\frac{u'}{u^{2}}", explanation: "Ahora hay que reemplazar este \\(y'\\) y este \\(y\\) en la EDO y simplificar. Es el paso largo, pero todo lo que no lleva \\(u\\) se cancela." },
+        { prompt: "Sustituye en la ecuación y simplifica. ¿Qué EDO queda para \\(u\\)?", hints: ["Desarrolla \\(\\left(\\dfrac3x+\\dfrac1u\\right)^{2}=\\dfrac{9}{x^{2}}+\\dfrac{6}{xu}+\\dfrac{1}{u^{2}}\\).", "Los términos en \\(\\dfrac{1}{x^{2}}\\) se cancelan a ambos lados; después multiplica todo por \\(-u^{2}\\)."], revealLatex: "u'+\\frac{5}{x}\\,u=-1", explanation: "Una **lineal** de primer orden, que es siempre el destino de una Riccati con solución particular conocida. Si te queda algo con \\(u^{2}\\), hubo un error de signo al desarrollar el cuadrado." },
+        { prompt: "Resuelve la lineal en \\(u\\) con factor integrante.", hints: ["\\(\\mu=e^{\\int 5/x\\,dx}=x^{5}\\).", "\\(\\left(x^{5}u\\right)'=-x^{5}\\)."], revealLatex: "x^{5}u=-\\frac{x^{6}}{6}+C_1\\ \\Longrightarrow\\ u=\\frac{K-x^{6}}{6x^{5}}\\quad (K=6C_1)", explanation: "Agrupar en una sola fracción **antes** de invertir evita el error algebraico más común de esta pregunta. En una pauta real, justo aquí se cuela una simplificación incorrecta." },
+        { prompt: "Invierte, vuelve a \\(y\\) y aplica \\(y(1)=0\\).", hints: ["\\(\\dfrac1u=\\dfrac{6x^{5}}{K-x^{6}}\\).", "En \\(x=1\\): \\(y(1)=3+\\dfrac{6}{K-1}=0\\)."], revealLatex: "y=\\frac3x+\\frac{6x^{5}}{K-x^{6}};\\qquad 3+\\frac{6}{K-1}=0\\ \\Rightarrow\\ K=-1", explanation: "Verificación: en \\(x=1\\), \\(y=3-\\dfrac{6}{2}=0\\) ✓. Y derivando, \\(y'(1)=-9\\), que coincide con el lado derecho evaluado en \\((1,0)\\): \\(-9-0+0=-9\\) ✓." }
+      ],
+      finalAnswerLatex: "y(x)=\\frac3x-\\frac{6x^{5}}{1+x^{6}}"
+    }
   ],
   conceptual: [
     {
@@ -1071,6 +1310,121 @@ window.MODULES_DATA = [
     "**Riccati** \\(y'=p+qy+ry^{2}\\): con \\(y_1\\) conocida, \\(y=y_1+\\dfrac1z\\) da una lineal en \\(z\\). Si los coeficientes son constantes, \\(y_1\\) sale de \\(ay^{2}+by+c=0\\).",
     "**\\(y'=f(ax+by+c)\\)**: usa \\(u=ax+by+c\\), obtén \\(u'=a+b\\,f(u)\\) y separa.",
     "La sustitución solo cambia el disfraz: después vuelves a **separables** o a **lineales**, así que domina primero esos dos métodos."
+  ]
+},
+{
+  id: "controles", icon: "📝", title: "Controles tipo",
+  subtitle: "Tres controles completos, nuevos, con el formato exacto de las pautas reales",
+  widget: "none",
+  theory: [
+    { type: "para", content: "Tres controles inéditos construidos con la **misma estructura, dificultad y reparto de temas** que las 9 pautas reales: 3 preguntas de 20 puntos, 70 minutos, subpartes a) y b) —y a veces c)—, y siempre al menos una autónoma." },
+    { type: "callout", content: "**Cómo usarlos.** Uno por sesión, cronometrado a 70 minutos, en papel y sin mirar los apuntes. Recién al terminar abres los pasos. Hacerlos leyendo las pistas sirve para aprender, pero **no** mide si estás listo: el control no trae pistas." },
+    { type: "para", content: "**Barrido de cierre obligatorio** en los últimos 5 minutos de cada uno, porque es donde están los puntos más baratos: ¿escribí la constante de integración y en el lugar correcto? ¿di el **dominio o intervalo** de cada solución? ¿**justifiqué** cada límite con las bandas del diagrama? ¿**dibujé** el diagrama de fase? ¿verifiqué las hipótesis antes de concluir unicidad?" }
+  ],
+  exercises: [
+    {
+      statement: "**CONTROL A · P1 (20 pts).** Considera el PVI \\(\\dfrac{dy}{dx}=2x\\left(1+y^{2}\\right)\\), \\(y(0)=1\\). **(a)** Prueba con el teorema de existencia y unicidad que tiene solución única. **(b)** Determina explícitamente la solución e indica su dominio.",
+      steps: [
+        { prompt: "**(a)** Identifica \\(f\\) y estudia su continuidad y la de \\(\\partial f/\\partial y\\).", hints: ["La EDO ya viene despejada.", "Ambas son polinomios en dos variables."], revealLatex: "f(x,y)=2x\\left(1+y^{2}\\right),\\qquad \\frac{\\partial f}{\\partial y}=4xy", explanation: "Polinomios: continuas en todo \\(\\mathbb{R}^{2}\\). Existe un rectángulo \\(R\\) que contiene a \\((0,1)\\) en su interior donde ambas lo son, luego hay **única** solución en algún \\((-\\delta,\\delta)\\)." },
+        { prompt: "**(b)** Separa e integra.", hints: ["\\(\\dfrac{dy}{1+y^{2}}=2x\\,dx\\).", "La primitiva de la izquierda es \\(\\arctan\\)."], revealLatex: "\\arctan y=x^{2}+C", explanation: "No se pierde ninguna solución constante: \\(1+y^{2}\\) nunca se anula." },
+        { prompt: "Aplica la condición inicial y despeja.", hints: ["\\(\\arctan 1=\\dfrac{\\pi}{4}\\).", "En \\(x=0\\) el lado derecho es solo \\(C\\)."], revealLatex: "C=\\frac{\\pi}{4};\\qquad y(x)=\\tan\\left(x^{2}+\\frac{\\pi}{4}\\right)", explanation: "Comprobación: \\(y'=\\sec^{2}\\left(x^{2}+\\tfrac{\\pi}{4}\\right)\\cdot 2x=2x\\left(1+y^{2}\\right)\\) ✓." },
+        { prompt: "Determina el dominio.", hints: ["\\(\\tan\\) explota cuando el argumento alcanza \\(\\dfrac{\\pi}{2}\\).", "Como \\(x^{2}\\ge0\\), el argumento nunca baja de \\(\\dfrac{\\pi}{4}\\): solo importa la cota superior."], revealLatex: "x^{2}+\\frac{\\pi}{4}\\lt\\frac{\\pi}{2}\\iff x^{2}\\lt\\frac{\\pi}{4}\\iff |x|\\lt\\frac{\\sqrt{\\pi}}{2}", explanation: "Dominio \\(\\left(-\\tfrac{\\sqrt{\\pi}}{2},\\ \\tfrac{\\sqrt{\\pi}}{2}\\right)\\approx(-0{,}886,\\ 0{,}886)\\), que contiene a \\(x=0\\) ✓. Otro caso de explosión en tiempo finito." }
+      ],
+      finalAnswerLatex: "y(x)=\\tan\\left(x^{2}+\\frac{\\pi}{4}\\right),\\qquad x\\in\\left(-\\frac{\\sqrt{\\pi}}{2},\\ \\frac{\\sqrt{\\pi}}{2}\\right)"
+    },
+    {
+      statement: "**CONTROL A · P2 (20 pts).** Determina la solución general de \\(x\\,y'-2y=x^{4}\\operatorname{sen}(x)\\) y prueba que toda solución pasa por el origen.",
+      steps: [
+        { prompt: "Normaliza e identifica \\(p\\) y \\(q\\).", hints: ["Divide por \\(x\\)."], revealLatex: "y'-\\frac2x\\,y=x^{3}\\operatorname{sen}(x)", explanation: "Ojo con el signo de \\(p=-\\dfrac2x\\): arrastrarlo mal invierte el exponente del factor integrante." },
+        { prompt: "Calcula el factor integrante.", hints: ["\\(\\int-\\dfrac2x dx=-2\\ln|x|\\).", "\\(e^{-2\\ln x}=x^{-2}\\)."], revealLatex: "\\mu(x)=x^{-2}=\\frac{1}{x^{2}}", explanation: "Exponente **negativo**, porque \\(p\\) es negativo. Este es el ítem de 5 puntos de la rúbrica." },
+        { prompt: "Escribe la derivada del producto y simplifica el lado derecho.", hints: ["\\(\\mu q=x^{-2}\\cdot x^{3}\\operatorname{sen}(x)\\)."], revealLatex: "\\frac{d}{dx}\\left[x^{-2}y\\right]=x\\operatorname{sen}(x)", explanation: "La simplificación deja una integral por partes clásica, de las que más aparecen en estos controles." },
+        { prompt: "Integra \\(\\int x\\operatorname{sen}(x)\\,dx\\) por partes.", hints: ["\\(u=x\\), \\(dv=\\operatorname{sen}(x)dx\\), luego \\(v=-\\cos x\\).", "Queda \\(-x\\cos x+\\int\\cos x\\,dx\\)."], revealLatex: "\\int x\\operatorname{sen}(x)\\,dx=-x\\cos x+\\operatorname{sen}(x)", explanation: "Elegir \\(u=x\\) (y no al revés) es lo que hace que la integral restante sea inmediata." },
+        { prompt: "Despeja \\(y\\) y evalúa en \\(x=0\\).", hints: ["Multiplica todo por \\(x^{2}\\).", "Cada término resultante tiene un factor \\(x^{2}\\) o superior."], revealLatex: "y=-x^{3}\\cos x+x^{2}\\operatorname{sen}(x)+C\\,x^{2}\\ \\Longrightarrow\\ y(0)=0\\ \\ \\forall C", explanation: "Los tres términos se anulan en \\(x=0\\) sin importar \\(C\\): **toda** solución pasa por el origen. Ese remate es un ítem de puntaje propio y se olvida mucho porque el enunciado no da condición inicial." }
+      ],
+      finalAnswerLatex: "y(x)=-x^{3}\\cos x+x^{2}\\operatorname{sen}(x)+C\\,x^{2};\\qquad y(0)=0\\ \\ \\forall C\\in\\mathbb{R}"
+    },
+    {
+      statement: "**CONTROL A · P3 (20 pts).** Para la EDO autónoma \\(\\dfrac{dy}{dx}=\\left(y+1\\right)^{2}\\left(4-y\\right)\\): **(a)** determina las soluciones de equilibrio; **(b)** dibuja el diagrama de fase y clasifícalas; **(c)** calcula \\(\\lim_{x\\to\\infty}y(x)\\) si \\(y(0)=0\\).",
+      steps: [
+        { prompt: "**(a)** Resuelve \\(f(y)=0\\).", hints: ["Iguala cada factor a cero."], revealLatex: "y=-1\\ \\text{(raíz doble)},\\qquad y=4", explanation: "Dos equilibrios, pero uno con multiplicidad par: anticipa semiestabilidad." },
+        { prompt: "**(b)** Determina el signo de \\(f\\) por bandas.", hints: ["\\((y+1)^{2}\\ge0\\) siempre, así que el signo lo decide \\(4-y\\).", "Prueba \\(y=-2,\\ y=0,\\ y=5\\)."], revealLatex: "\\begin{array}{c|c|c}\\text{banda} & 4-y & y(x)\\\\\\hline (-\\infty,-1) & \\gt 0 & \\uparrow\\\\ (-1,4) & \\gt 0 & \\uparrow\\\\ (4,\\infty) & \\lt 0 & \\downarrow\\end{array}", explanation: "El factor cuadrado aporta un equilibrio pero **no** un cambio de signo: por eso las dos primeras bandas suben igual." },
+        { prompt: "Clasifica los equilibrios.", hints: ["En \\(y=-1\\): \\(\\uparrow\\) abajo y \\(\\uparrow\\) arriba.", "En \\(y=4\\): \\(\\uparrow\\) abajo y \\(\\downarrow\\) arriba."], revealLatex: "y=-1\\ \\text{semiestable},\\qquad y=4\\ \\text{atractor (asintóticamente estable)}", explanation: "\\(y=-1\\) atrae por debajo y repele por encima. En el control, **dibuja** la recta de fase con las flechas: vale 7–10 de los 20 puntos." },
+        { prompt: "**(c)** Ubica \\(y_0=0\\) y concluye.", hints: ["\\(0\\) está entre \\(-1\\) y \\(4\\).", "Ahí la solución crece y tiene una barrera arriba."], revealLatex: "y_0=0\\in(-1,4),\\ f\\gt0\\ \\Rightarrow\\ y\\ \\uparrow\\ \\text{acotada por }4\\ \\Rightarrow\\ \\lim_{x\\to\\infty}y(x)=4", explanation: "Justificación completa: monótona creciente, acotada por el equilibrio \\(y=4\\) que no puede cruzar por unicidad, luego converge a él." }
+      ],
+      finalAnswerLatex: "y=-1\\ \\text{semiestable},\\ y=4\\ \\text{atractor};\\qquad \\lim_{x\\to\\infty}y(x)=4"
+    },
+    {
+      statement: "**CONTROL B · P1 (20 pts).** Considera \\(\\dfrac{dy}{dx}=\\sqrt{y^{2}-1}\\). **(a)** Determina la región del plano donde el teorema garantiza solución única. **(b)** Muestra que el PVI con \\(y(0)=1\\) tiene **al menos dos** soluciones en \\([0,\\infty)\\).",
+      steps: [
+        { prompt: "**(a)** ¿Dónde es continua \\(f(x,y)=\\sqrt{y^{2}-1}\\)?", hints: ["Radicando \\(\\ge 0\\).", "\\(y^{2}\\ge 1\\iff |y|\\ge 1\\)."], revealLatex: "y^{2}-1\\ge 0\\iff |y|\\ge 1", explanation: "Dos franjas horizontales cerradas: \\(y\\ge1\\) e \\(y\\le-1\\). Ahí hay **existencia**." },
+        { prompt: "Calcula \\(\\partial f/\\partial y\\) y su dominio de continuidad.", hints: ["Cadena: \\(\\dfrac{\\partial}{\\partial y}\\sqrt{u}=\\dfrac{u_y}{2\\sqrt{u}}\\) con \\(u=y^{2}-1\\)."], revealLatex: "\\frac{\\partial f}{\\partial y}=\\frac{y}{\\sqrt{y^{2}-1}},\\qquad\\text{continua si }|y|\\gt 1", explanation: "Se pierde exactamente la frontera \\(y=\\pm1\\), que es donde viven los equilibrios. Región de unicidad: \\(|y|\\gt1\\) (franjas **abiertas**), sin restricción sobre \\(x\\)." },
+        { prompt: "**(b)** El punto inicial es \\((0,1)\\), justo en la frontera. Encuentra la solución obvia.", hints: ["¿Es \\(y=1\\) un equilibrio de esta EDO?", "Comprueba: \\(y'=0\\) y \\(\\sqrt{1-1}=0\\)."], revealLatex: "\\bar y(x)\\equiv 1\\ \\text{es solución, y cumple }\\bar y(0)=1", explanation: "Es la solución que se pierde al dividir por \\(\\sqrt{y^{2}-1}\\) al separar variables. Recuperarla siempre." },
+        { prompt: "Ahora separa variables y encuentra la otra.", hints: ["\\(\\dfrac{dy}{\\sqrt{y^{2}-1}}=dx\\); la primitiva de la izquierda es \\(\\operatorname{arccosh}(y)\\).", "Con \\(y(0)=1\\): \\(\\operatorname{arccosh}(1)=0\\)."], revealLatex: "\\operatorname{arccosh}(y)=x+C,\\ C=0\\ \\Longrightarrow\\ y(x)=\\cosh x", explanation: "Verificación en \\([0,\\infty)\\): \\(y'=\\operatorname{senh}(x)\\) y \\(\\sqrt{\\cosh^{2}x-1}=|\\operatorname{senh}(x)|=\\operatorname{senh}(x)\\) para \\(x\\ge0\\) ✓." },
+        { prompt: "Concluye por qué esto no contradice el teorema.", hints: ["¿Se cumplían las hipótesis en \\((0,1)\\)?"], revealLatex: "\\frac{\\partial f}{\\partial y}=\\frac{y}{\\sqrt{y^{2}-1}}\\ \\text{no está definida en }y=1", explanation: "\\(f\\) es continua ahí (hay existencia), pero la parcial explota justo sobre el punto inicial: el teorema **no garantizaba** unicidad, y de hecho falla. Redacta así: *no hay contradicción, porque la hipótesis de unicidad no se cumplía*." }
+      ],
+      finalAnswerLatex: "\\text{(a) }|y|\\gt 1;\\qquad\\text{(b) }\\bar y\\equiv 1\\ \\text{ y }\\ y=\\cosh x\\ \\text{ ambas cumplen el PVI}"
+    },
+    {
+      statement: "**CONTROL B · P2 (20 pts).** Utiliza un factor integrante adecuado para resolver el PVI \\(\\left(2y^{2}+3x\\right)dx+2xy\\,dy=0\\), \\(y(1)=2\\).",
+      steps: [
+        { prompt: "Verifica la exactitud.", hints: ["\\(M=2y^{2}+3x\\), \\(N=2xy\\)."], revealLatex: "M_y=4y,\\quad N_x=2y\\ \\Longrightarrow\\ M_y\\neq N_x", explanation: "No es exacta; hay que buscar factor integrante." },
+        { prompt: "Prueba el caso \\(\\mu(x)\\).", hints: ["\\(\\dfrac{M_y-N_x}{N}\\), con el numerador en ese orden.", "Simplifica el \\(y\\)."], revealLatex: "\\frac{M_y-N_x}{N}=\\frac{4y-2y}{2xy}=\\frac{2y}{2xy}=\\frac1x", explanation: "Depende solo de \\(x\\) ⇒ caso 1. Este es el ítem de **6 puntos** en la rúbrica de exactas." },
+        { prompt: "Calcula \\(\\mu\\), multiplica y verifica.", hints: ["\\(\\mu=e^{\\int dx/x}=x\\)."], revealLatex: "\\mu=x;\\qquad \\left(2xy^{2}+3x^{2}\\right)dx+2x^{2}y\\,dy=0,\\quad \\widetilde M_y=4xy=\\widetilde N_x\\ \\checkmark", explanation: "Comprobar la exactitud después de multiplicar es puntaje propio y además detecta errores en \\(\\mu\\)." },
+        { prompt: "Reconstruye \\(f\\) integrando \\(\\widetilde N\\) respecto de \\(y\\).", hints: ["\\(\\int 2x^{2}y\\,dy\\) con \\(x\\) constante.", "La constante de integración es \\(h(x)\\)."], revealLatex: "f(x,y)=x^{2}y^{2}+h(x);\\qquad f_x=2xy^{2}+h'(x)=2xy^{2}+3x^{2}\\ \\Rightarrow\\ h(x)=x^{3}", explanation: "Los términos en \\(y\\) se cancelan limpiamente: confirmación de que \\(\\mu\\) era correcto." },
+        { prompt: "Impón \\(y(1)=2\\) para determinar la constante.", hints: ["Sustituye \\(x=1\\), \\(y=2\\) en \\(x^{2}y^{2}+x^{3}=c\\)."], revealLatex: "1\\cdot 4+1=5=c", explanation: "La respuesta puede quedar implícita: el enunciado no pide despejar \\(y\\)." }
+      ],
+      finalAnswerLatex: "x^{2}y^{2}+x^{3}=5"
+    },
+    {
+      statement: "**CONTROL B · P3 (20 pts).** Considera \\(\\dfrac{dy}{dx}=y\\left(y-a\\right)\\), con \\(a\\gt0\\) parámetro. **(a)** Halla y clasifica los equilibrios. **(b)** Si \\(y(0)=\\dfrac{a}{2}\\), calcula \\(\\lim_{x\\to\\infty}y(x)\\) y \\(\\lim_{x\\to-\\infty}y(x)\\), justificando.",
+      steps: [
+        { prompt: "**(a)** Resuelve \\(f(y)=0\\).", hints: ["Producto igual a cero."], revealLatex: "y=0,\\qquad y=a", explanation: "Como \\(a\\gt0\\), el orden en el eje vertical es \\(0\\lt a\\). Si el parámetro pudiera ser negativo habría que separar casos: mencionarlo suma." },
+        { prompt: "Determina el signo de \\(f\\) en las tres bandas.", hints: ["Prueba \\(y=-1\\), \\(y=\\dfrac{a}{2}\\) y \\(y=a+1\\).", "En \\(y=\\dfrac a2\\): positivo por negativo."], revealLatex: "\\begin{array}{c|c|c}\\text{banda} & f(y)=y(y-a) & y(x)\\\\\\hline (-\\infty,0) & \\gt 0 & \\uparrow\\\\ (0,a) & \\lt 0 & \\downarrow\\\\ (a,\\infty) & \\gt 0 & \\uparrow\\end{array}", explanation: "En \\((0,a)\\): \\(y\\gt0\\) y \\(y-a\\lt0\\), luego el producto es negativo." },
+        { prompt: "Clasifica los dos equilibrios.", hints: ["En \\(y=0\\): \\(\\uparrow\\) abajo, \\(\\downarrow\\) arriba.", "En \\(y=a\\): \\(\\downarrow\\) abajo, \\(\\uparrow\\) arriba."], revealLatex: "y=0\\ \\text{atractor (estable)},\\qquad y=a\\ \\text{repulsor (inestable)}", explanation: "Es la logística con el signo dado vuelta: aquí la población colapsa a \\(0\\) y \\(a\\) es el umbral crítico que hay que superar para crecer." },
+        { prompt: "**(b)** Ubica \\(y_0=\\dfrac a2\\) y deduce los dos límites.", hints: ["\\(\\dfrac a2\\) está estrictamente entre \\(0\\) y \\(a\\), donde la solución **decrece**.", "Hacia adelante baja; hacia atrás sube. ¿Hasta dónde, en cada caso?"], revealLatex: "\\lim_{x\\to\\infty}y(x)=0,\\qquad \\lim_{x\\to-\\infty}y(x)=a", explanation: "Decreciente y acotada inferiormente por \\(0\\) ⇒ converge a \\(0\\) hacia adelante. Hacia atrás crece, acotada por \\(a\\) ⇒ converge a \\(a\\). En ningún caso los alcanza: por unicidad no puede cruzar un equilibrio." }
+      ],
+      finalAnswerLatex: "y=0\\ \\text{atractor},\\ y=a\\ \\text{repulsor};\\qquad \\lim_{x\\to\\infty}y=0,\\quad \\lim_{x\\to-\\infty}y=a"
+    },
+    {
+      statement: "**CONTROL C · P1 (20 pts).** Para cada PVI, determina existencia y unicidad de la solución, justificando en detalle. **(a)** \\(x^{2}\\dfrac{dy}{dx}=y-x\\), \\(y(0)=2\\). **(b)** \\(\\dfrac{dy}{dx}=\\dfrac{\\cos\\left(x+y\\right)}{1+x^{2}+y^{2}}\\), \\(y(0)=0\\).",
+      steps: [
+        { prompt: "**(a)** El coeficiente de \\(y'\\) se anula en el punto inicial. Evalúa la ecuación **original** en \\(x=0\\).", hints: ["Si \\(\\varphi\\) es solución derivable cerca de \\(0\\), debe cumplir la ecuación también en \\(x=0\\).", "El lado izquierdo lleva un factor \\(x^{2}\\)."], revealLatex: "0^{2}\\cdot\\varphi'(0)=\\varphi(0)-0\\ \\Longrightarrow\\ \\varphi(0)=0", explanation: "Sea cual sea \\(\\varphi'(0)\\), el lado izquierdo es cero, así que la ecuación fuerza \\(\\varphi(0)=0\\)." },
+        { prompt: "Contrasta con el dato y concluye.", hints: ["El dato es \\(y(0)=2\\)."], revealLatex: "\\varphi(0)=0\\ \\text{vs}\\ \\varphi(0)=2\\ \\Longrightarrow\\ \\text{contradicción}", explanation: "El PVI **no tiene solución**. Decir solo *\\(f=\\dfrac{y-x}{x^{2}}\\) no es continua en \\(x=0\\), luego el teorema no aplica* deja la mitad del puntaje sobre la mesa: no es lo mismo *no decide* que *no existe*." },
+        { prompt: "**(b)** Estudia la continuidad de \\(f\\).", hints: ["Mira el denominador: ¿puede anularse?", "\\(1+x^{2}+y^{2}\\ge 1\\)."], revealLatex: "1+x^{2}+y^{2}\\ge 1\\gt 0\\ \\Longrightarrow\\ f\\ \\text{continua en todo }\\mathbb{R}^{2}", explanation: "Cociente de funciones continuas con denominador que nunca se anula. Hay existencia en todo el plano." },
+        { prompt: "Calcula \\(\\partial f/\\partial y\\) con la regla del cociente y decide su continuidad.", hints: ["Numerador \\(\\cos(x+y)\\), derivada \\(-\\operatorname{sen}(x+y)\\).", "Denominador \\(1+x^{2}+y^{2}\\), derivada respecto de \\(y\\) igual a \\(2y\\)."], revealLatex: "\\frac{\\partial f}{\\partial y}=\\frac{-\\operatorname{sen}\\left(x+y\\right)}{1+x^{2}+y^{2}}-\\frac{2y\\cos\\left(x+y\\right)}{\\left(1+x^{2}+y^{2}\\right)^{2}}", explanation: "Mismo denominador, que sigue sin anularse: también es continua en todo \\(\\mathbb{R}^{2}\\)." },
+        { prompt: "Concluye nombrando el rectángulo.", hints: ["\\((0,0)\\) está en el interior de cualquier rectángulo centrado en él."], revealLatex: "\\exists R\\ni(0,0)\\ \\text{con }f,\\ \\partial f/\\partial y\\ \\text{continuas}\\ \\Longrightarrow\\ \\text{solución única en }(-\\delta,\\delta)", explanation: "La conclusión es **local**: el teorema no dice cuánto vale \\(\\delta\\), y no hay que inventarlo." }
+      ],
+      finalAnswerLatex: "\\text{(a) No existe solución};\\qquad\\text{(b) existe solución única en }(-\\delta,\\delta),\\ \\delta\\gt 0"
+    },
+    {
+      statement: "**CONTROL C · P2 (20 pts).** Resuelve explícitamente el PVI \\(y'=\\dfrac{x^{2}}{y\\sqrt{1+x^{3}}}\\), \\(y(0)=2\\), e indica el dominio de la solución.",
+      steps: [
+        { prompt: "Separa las variables.", hints: ["El \\(y\\) del denominador pasa al lado izquierdo."], revealLatex: "y\\,dy=\\frac{x^{2}}{\\sqrt{1+x^{3}}}\\,dx", explanation: "La EDO exige \\(y\\neq0\\) y \\(1+x^{3}\\gt0\\); ambas condiciones reaparecerán en el dominio." },
+        { prompt: "Integra el lado derecho con una sustitución.", hints: ["Toma \\(u=1+x^{3}\\), entonces \\(du=3x^{2}dx\\).", "Queda \\(\\dfrac13\\int u^{-1/2}du\\)."], revealLatex: "\\int\\frac{x^{2}}{\\sqrt{1+x^{3}}}\\,dx=\\frac13\\cdot 2\\sqrt{u}=\\frac23\\sqrt{1+x^{3}}", explanation: "El \\(x^{2}\\) del numerador es justo lo que pide \\(du\\): esa es la señal de que la sustitución va a salir limpia." },
+        { prompt: "Escribe la familia implícita y usa \\(y(0)=2\\).", hints: ["El lado izquierdo da \\(\\dfrac{y^{2}}{2}\\).", "En \\(x=0\\): \\(\\sqrt{1+0}=1\\)."], revealLatex: "\\frac{y^{2}}{2}=\\frac23\\sqrt{1+x^{3}}+C;\\qquad 2=\\frac23+C\\ \\Rightarrow\\ C=\\frac43", explanation: "Otra vez el detalle de \\(\\dfrac{y^{2}}{2}=\\dfrac{4}{2}=2\\), no \\(4\\)." },
+        { prompt: "Despeja \\(y\\) eligiendo la rama.", hints: ["Multiplica por \\(2\\) y saca raíz.", "\\(y(0)=2\\gt0\\)."], revealLatex: "y(x)=\\sqrt{\\frac43\\sqrt{1+x^{3}}+\\frac83}", explanation: "Rama positiva. Verificación en \\(x=0\\): \\(\\sqrt{\\tfrac43+\\tfrac83}=\\sqrt{4}=2\\) ✓." },
+        { prompt: "Determina el dominio.", hints: ["¿Qué necesita \\(\\sqrt{1+x^{3}}\\) para ser derivable?", "¿Puede anularse el radicando exterior?"], revealLatex: "1+x^{3}\\gt 0\\iff x\\gt -1;\\qquad \\frac43\\sqrt{1+x^{3}}+\\frac83\\ge\\frac83\\gt 0", explanation: "El radicando exterior nunca se anula, así que la única restricción viene de \\(1+x^{3}\\): dominio \\((-1,\\infty)\\), que contiene a \\(x=0\\) ✓." }
+      ],
+      finalAnswerLatex: "y(x)=\\sqrt{\\frac43\\sqrt{1+x^{3}}+\\frac83},\\qquad x\\in(-1,\\infty)"
+    },
+    {
+      statement: "**CONTROL C · P3 (20 pts).** Resuelve el PVI \\(\\left(x-2\\right)y'+y=\\dfrac1x\\), \\(y(1)=0\\), **indicando el intervalo de definición** de la solución.",
+      steps: [
+        { prompt: "Normaliza e identifica \\(p\\) y \\(q\\).", hints: ["Divide por \\(x-2\\)."], revealLatex: "y'+\\frac{1}{x-2}\\,y=\\frac{1}{x\\left(x-2\\right)}", explanation: "Aparecen dos puntos problemáticos, \\(x=0\\) y \\(x=2\\): apúntalos ya, porque van a decidir el intervalo final." },
+        { prompt: "Calcula el factor integrante.", hints: ["\\(\\int\\dfrac{dx}{x-2}=\\ln|x-2|\\).", "Cerca de \\(x=1\\) se tiene \\(x\\lt2\\), pero la constante absorbe el signo."], revealLatex: "\\mu(x)=e^{\\int\\frac{dx}{x-2}}=x-2", explanation: "Reaparece el coeficiente original, señal de que el lado izquierdo ya era una derivada de producto." },
+        { prompt: "Escribe la derivada del producto y simplifica.", hints: ["\\(\\mu q=(x-2)\\cdot\\dfrac{1}{x(x-2)}\\)."], revealLatex: "\\frac{d}{dx}\\left[\\left(x-2\\right)y\\right]=\\frac1x", explanation: "La cancelación es total y deja la integral más simple posible. Este paso vale 5 puntos." },
+        { prompt: "Integra y aplica \\(y(1)=0\\).", hints: ["\\(\\int\\dfrac{dx}{x}=\\ln|x|\\).", "En \\(x=1\\): \\(\\ln 1=0\\) y el lado izquierdo vale \\((1-2)\\cdot 0=0\\)."], revealLatex: "\\left(x-2\\right)y=\\ln|x|+C;\\qquad 0=0+C\\ \\Rightarrow\\ C=0", explanation: "Constante nula: cómodo, pero escríbela igual. Una pauta descuenta explícitamente por omitir la constante." },
+        { prompt: "Despeja \\(y\\) y determina el intervalo de definición.", hints: ["La fórmula falla en \\(x=0\\) (por el \\(\\ln\\)) y en \\(x=2\\) (denominador nulo).", "El intervalo debe ser el mayor que contiene a \\(x_0=1\\) y evita ambos."], revealLatex: "y(x)=\\frac{\\ln x}{x-2},\\qquad x\\in(0,2)", explanation: "Verificación: \\((x-2)y'+y=\\dfrac{(x-2)/x-\\ln x}{x-2}+\\dfrac{\\ln x}{x-2}=\\dfrac1x\\) ✓. El intervalo \\((0,2)\\) contiene a \\(x=1\\) y es maximal: en \\(x=0\\) y \\(x=2\\) la solución deja de existir." }
+      ],
+      finalAnswerLatex: "y(x)=\\frac{\\ln x}{x-2},\\qquad x\\in(0,2)"
+    }
+  ],
+  keyTakeaways: [
+    "**Cronometra 70 minutos y no mires los pasos hasta terminar.** Un control tipo hecho con pistas mide cuánto entiendes, no cuánto rindes.",
+    "**Empieza por la autónoma** de cada control: sin integrales, con el ítem mejor pagado (el diagrama) y en unos 12 minutos.",
+    "**Ninguna solución de PVI se entrega sin su intervalo**, y ningún límite sin su justificación por bandas.",
+    "**Si el coeficiente de \\(y'\\) se anula en \\(x_0\\)**, evalúa ahí la ecuación original antes de intentar resolverla.",
+    "**Verifica derivando hacia atrás** cada respuesta final: cuesta 30 segundos y es la única red de seguridad que tienes en el control."
   ]
 },
 {
@@ -1524,6 +1878,71 @@ function slopeField(ctx,V,f,nx,ny,color,alpha){
 /* ============================================================ WIDGETS */
 
 /* 1) Campo direccional + curva solucion (toca el grafico) */
+/* 8) Radiografia del control: que cae y como reparten el puntaje */
+WIDGETS['frecuencia-temas']=function(host){
+  whead(host,'Qué cae en el Control 1','9 pautas reales · cambia la vista');
+  var S=setupCanvas(host,330);
+  var ctx=S.ctx, size=S.size;
+  var readout=el('div','readout'); host.appendChild(readout);
+  var ctr=ctrlRow(host);
+  var SETS=[
+    { max:9, note:'Número de controles, sobre <b>9 pautas oficiales</b>, en que aparece cada tema. Cuatro temas se reparten casi todo el control.',
+      rows:[
+        {l:'Autónomas / fase', v:9},
+        {l:'Lineal 1er orden', v:8},
+        {l:'Separables', v:8},
+        {l:'Existencia y unicidad', v:8},
+        {l:'Exacta + factor int.', v:2},
+        {l:'PVI sin solución', v:2},
+        {l:'Riccati / sustitución', v:1},
+        {l:'Bernoulli / homogénea', v:0}
+      ]},
+    { max:10, note:'Reparto típico de los <b>20 puntos</b> de una pregunta de EDO autónoma. El dibujo del diagrama vale más que la clasificación.',
+      rows:[
+        {l:'Plantear f(y)=0', v:3},
+        {l:'Entregar equilibrios', v:4},
+        {l:'Diagrama de fase', v:9},
+        {l:'Clasificar equilibrios', v:4},
+        {l:'Límite justificado', v:6}
+      ]},
+    { max:6, note:'Reparto típico de los <b>20 puntos</b> de una lineal con PVI. El intervalo de definición se corrige como ítem aparte.',
+      rows:[
+        {l:'Reconocer y normalizar', v:3},
+        {l:'Factor integrante', v:5},
+        {l:'Factorizar la derivada', v:5},
+        {l:'Integrar lado derecho', v:4},
+        {l:'Constante con el PVI', v:3},
+        {l:'Intervalo de definición', v:3}
+      ]}
+  ];
+  var cur=0;
+  segmented(ctr,[{label:'Temas',value:0},{label:'Autónoma',value:1},{label:'Lineal',value:2}],0,function(v){ cur=v; draw(); });
+  function draw(){
+    var d=size(), w=d.w, h=d.h; ctx.clearRect(0,0,w,h);
+    var D=SETS[cur], rows=D.rows, n=rows.length;
+    var padL=Math.min(148, Math.max(96, w*0.40)), padR=34, top=4;
+    var gap=(h-top-2)/n, bh=Math.min(22, gap-8);
+    ctx.font='11px ui-monospace, SFMono-Regular, Menlo, monospace';
+    ctx.textBaseline='middle';
+    for(var i=0;i<n;i++){
+      var cy=top+gap*i+gap/2;
+      var frac=rows[i].v/D.max;
+      var full=w-padL-padR;
+      var bw=Math.max(2, full*frac);
+      ctx.fillStyle=cssVar('--muted'); ctx.textAlign='right';
+      ctx.fillText(rows[i].l, padL-9, cy);
+      ctx.fillStyle=cssVar('--bg2');
+      ctx.fillRect(padL, cy-bh/2, full, bh);
+      ctx.fillStyle = frac>=0.75 ? cssVar('--accent2') : (frac>=0.25 ? cssVar('--accent') : cssVar('--bad'));
+      ctx.fillRect(padL, cy-bh/2, bw, bh);
+      ctx.fillStyle=cssVar('--txt'); ctx.textAlign='left';
+      ctx.fillText(String(rows[i].v), padL+full+7, cy);
+    }
+    readout.innerHTML=D.note;
+  }
+  requestAnimationFrame(draw);
+  window.addEventListener('resize',function(){ requestAnimationFrame(draw); });
+};
 WIDGETS['campo-dir']=function(host){
   whead(host,'Campo direccional','toca el gráfico para soltar una solución');
   var S=setupCanvas(host,320);
