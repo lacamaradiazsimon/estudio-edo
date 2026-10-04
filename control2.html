@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Control 2 · Ecuaciones Diferenciales (MAT-208)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#FBFAF6;--grid:color-mix(in srgb,var(--acc) 10%,#FBFAF6);--grid2:color-mix(in srgb,var(--acc) 22%,#FBFAF6);--ink:#111827;--muted:#4B5563;--line:#CFD6E3;--card:#FFFFFF;--head:#F3F5F9;--shadow:#CBD3E1;
+--acc-l:#1D3F7A;--acc:var(--acc-l);--acc-d:#8FB0EE;--pen-l:#B8430B;--pen-d:#F08A4B;--acc-soft:color-mix(in srgb,var(--acc) 9%,#fff);--side:#16284A;--side-line:#3B5582;--side-muted:#8FA3C7;--side-ink:#C9D3E6;--pen:var(--pen-l);--pen-soft:color-mix(in srgb,var(--pen) 9%,#fff);--bar-ok:#9DB6E8;--bar-bad:#F09A62;
+--c0:var(--acc);--c1:var(--pen);--c2:#2E7D5B;--c3:#7A3FA0;--c4:#6B7280;
+--serif:"Source Serif 4",Georgia,"Times New Roman",serif;--sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;--hand:Caveat,"Segoe Print","Comic Sans MS",cursive;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#11141B;--grid:color-mix(in srgb,var(--acc-d) 9%,#11141B);--grid2:color-mix(in srgb,var(--acc-d) 17%,#11141B);--ink:#E7E9EE;--muted:#A3A9B6;--line:#2F3747;--card:#171B24;--head:#1E2431;--shadow:#0A0C11;--acc:var(--acc-d);--acc-soft:color-mix(in srgb,var(--acc-d) 16%,#171B24);--pen:var(--pen-d);--pen-soft:color-mix(in srgb,var(--pen-d) 14%,#171B24);--c2:#5BC293;--c3:#C18BE0;--c4:#9CA3AF}}
+:root[data-theme="dark"]{--paper:#11141B;--grid:color-mix(in srgb,var(--acc-d) 9%,#11141B);--grid2:color-mix(in srgb,var(--acc-d) 17%,#11141B);--ink:#E7E9EE;--muted:#A3A9B6;--line:#2F3747;--card:#171B24;--head:#1E2431;--shadow:#0A0C11;--acc:var(--acc-d);--acc-soft:color-mix(in srgb,var(--acc-d) 16%,#171B24);--pen:var(--pen-d);--pen-soft:color-mix(in srgb,var(--pen-d) 14%,#171B24);--c2:#5BC293;--c3:#C18BE0;--c4:#9CA3AF}
+*,*::before,*::after{box-sizing:inherit}
+html,body{height:100%}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px)}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 var(--sans)}
+/* papel */
+body.p-cuadriculado{background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px}
+body.p-milimetrado{background-image:linear-gradient(var(--grid2) 1px,transparent 1px),linear-gradient(90deg,var(--grid2) 1px,transparent 1px),linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px,40px 40px,8px 8px,8px 8px}
+body.p-puntos{background-image:radial-gradient(var(--grid2) 1.2px,transparent 1.3px);background-size:22px 22px}
+body.p-rayado{background-image:linear-gradient(transparent 27px,var(--grid) 27px);background-size:100% 28px}
+body.p-liso{background-image:none}
+a{color:var(--acc)}
+.serif{font-family:var(--serif)}.mono{font-family:var(--mono)}.pen{font-family:var(--hand);color:var(--pen);font-size:1.4rem;line-height:1.25}
+.lbl{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.app{display:flex;min-height:100%}
+/* barra lateral tipo plano */
+.side{position:sticky;top:0;align-self:flex-start;width:290px;flex-shrink:0;height:100vh;height:100dvh;overflow-y:auto;padding:30px 22px calc(24px + env(safe-area-inset-bottom,0px));background:var(--side);background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:24px 24px;color:#fff;display:flex;flex-direction:column;gap:26px}
+.side .lbl{color:var(--side-muted)}
+.side h1{font:600 1.45rem/1.15 var(--serif);margin:4px 0 0}
+.nav{display:flex;align-items:center;gap:12px;min-height:44px;padding:0 12px;color:var(--side-ink);text-decoration:none;font:500 .95rem var(--sans);border:1px solid transparent;background:none;width:100%;text-align:left;cursor:pointer}
+.nav:hover{color:#fff;border-color:var(--side-line)}.nav.on{background:#fff;color:#111827}
+.nav .mono{font-size:.75rem;width:46px;flex-shrink:0}
+.dom{display:grid;grid-template-columns:30px minmax(0,1fr) 38px;gap:8px;align-items:center;font-size:.8rem;color:var(--side-ink);background:none;border:0;padding:2px 0;cursor:pointer;text-align:left;width:100%}
+.dom .b{height:6px;background:rgba(255,255,255,.14)}.dom .b i{display:block;height:6px}
+.rotulo{margin-top:auto;border-top:1px solid var(--side-line);border-left:1px solid var(--side-line);display:grid;grid-template-columns:1fr 1fr}
+.rotulo div{padding:7px 9px;border-right:1px solid var(--side-line);border-bottom:1px solid var(--side-line);display:flex;flex-direction:column;gap:2px;font-size:.8rem;min-width:0}
+.rotulo .w{grid-column:span 2}.rotulo .lbl{font-size:.6rem}
+.side .tbtn{background:none;border:1px solid var(--side-line);color:var(--side-ink);font:500 .8rem var(--sans);min-height:40px;cursor:pointer}
+.content{flex:1;min-width:0}
+.mtop{display:none}
+main{max-width:1120px;margin:0 auto;padding:48px 56px 80px;display:flex;flex-direction:column;gap:32px}
+/* cabeceras */
+.hdr{padding-bottom:22px;border-bottom:2px solid var(--ink);display:flex;flex-direction:column;gap:10px}
+.hdr h2{margin:0;font:600 clamp(2rem,4.2vw,3.1rem)/1.06 var(--serif);letter-spacing:-.01em}
+.hdr h2 .n{color:var(--acc);font-weight:400;margin-right:.35em}
+.hdr p{margin:0;font-size:1.05rem;color:var(--muted);max-width:820px}
+/* hoja: tarjeta con barra superior */
+.sheet{background:var(--card);border:1px solid var(--ink)}
+.sheet>.sh{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 20px;border-bottom:1px solid var(--ink);background:var(--head)}
+.sheet>.sh h3{margin:0;font:600 1.15rem var(--serif)}
+.sheet>.sb{padding:18px 22px}
+.sec{color:var(--acc);font:500 .85em var(--mono);margin-right:.6em}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+.dots{display:inline-flex;gap:4px}.dots i{width:9px;height:9px;border:1.5px solid var(--acc)}.dots i.f{background:var(--acc)}
+.eqrow{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:14px;padding:8px 0;border-bottom:1px dashed var(--line)}
+.eqrow .num{font:.8rem var(--mono);color:var(--muted)}.eqrow .nt{font-size:.82rem;color:var(--muted)}
+.mx{overflow-x:auto;overflow-y:hidden}
+p{margin:.4em 0}ul,ol{margin:.35em 0;padding-left:1.3em}li{margin:.2em 0}
+code{font-family:var(--mono);font-size:.88em;background:var(--acc-soft);padding:1px 5px}
+/* capítulo */
+.subnav{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.chip{border:1px solid var(--ink);background:var(--card);color:var(--ink);min-height:40px;padding:0 14px;font:500 .85rem var(--sans);cursor:pointer;white-space:nowrap}
+.chip.on{background:var(--ink);color:var(--paper)}
+.chap{display:block;padding-right:270px}
+.chap>.blk{margin:0 0 24px}
+.chap>.blk::after{content:"";display:table;clear:both}
+.nota{float:right;clear:right;width:230px;margin:0 -270px 16px 0;font-size:.88rem;color:var(--muted);border-left:1px solid var(--ink);padding-left:14px}
+.nota .lbl{display:block;margin-bottom:4px}
+.lapiz{float:right;clear:right;width:240px;margin:0 -275px 12px 0;transform:rotate(-2.5deg)}
+.h3{margin:0 0 8px;font:600 1.5rem/1.25 var(--serif)}
+.defi{background:var(--card);border:1px solid var(--ink);padding:16px 20px}
+.defi .nm{font-family:var(--serif);font-style:italic;font-size:1.05em}
+.formula{background:var(--card);border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:14px 20px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center}
+.formula .num{font:.9rem var(--mono);color:var(--muted)}
+.ans{border:2px solid var(--acc);background:var(--card);padding:12px 16px;font-weight:500;overflow-x:auto}
+.step{padding:6px 0 6px 14px;border-left:2px solid var(--line);margin:8px 0}.step b.t{font:600 .78rem var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--acc);display:block}
+.qed{text-align:right;font-size:1.2rem}
+.ojo{border:2px solid var(--pen);background:var(--card);padding:14px 18px}.ojo .lbl{color:var(--pen)}
+.code{background:#161A22;color:#E6E8EC;font:.9rem/1.55 var(--mono);padding:16px 18px;overflow-x:auto;white-space:pre;margin:0}
+.code+.out{border:1px solid var(--ink);border-top:0;font:.85rem var(--mono);padding:10px 16px;white-space:pre;overflow-x:auto;background:var(--card)}
+.gadget .sb{padding:22px}
+.g-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:10px 0}.g-row label{min-width:130px;font-size:.9rem}
+.g-row input[type=range]{flex:1;min-width:150px;accent-color:var(--acc)}.g-row .v{font-family:var(--mono);min-width:64px}
+.g-out{margin:10px 0;font-size:.95rem}
+input[type=text],select{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--ink);padding:8px 10px;min-height:42px}
+canvas{max-width:100%;display:block}
+.tbl{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:.93rem;background:var(--card)}
+.tbl table{border:1px solid var(--ink)}th{font:600 .7rem var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);background:var(--head);text-align:left;padding:9px 12px;border-bottom:1px solid var(--ink)}
+td{padding:9px 12px;border-bottom:1px dashed var(--line);vertical-align:top}
+.btn{border:1px solid var(--ink);background:var(--card);color:var(--ink);font:500 .92rem var(--sans);min-height:44px;padding:0 18px;cursor:pointer}
+.btn:hover{background:var(--head)}.btn.pri{background:var(--ink);color:var(--paper)}.btn.pri:hover{opacity:.9}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.row.sp{justify-content:space-between}
+.hide{display:none!important}
+/* autoevaluación */
+.opt{display:flex;align-items:center;gap:14px;width:100%;min-height:52px;margin:8px 0;padding:10px 14px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;text-align:left;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--ink)}
+.opt .bub{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--ink);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font:.85rem var(--mono)}
+.opt .tx{flex:1}.opt .tg{font-family:var(--hand);font-size:1.3rem;color:var(--pen)}
+.opt.ok{border:2px solid var(--acc)}.opt.ok .bub{background:var(--acc);border-color:var(--acc);color:var(--card)}.opt.ok .tg{color:var(--acc)}
+.opt.bad{border:2px solid var(--pen)}.opt.bad .bub{border-color:var(--pen);color:var(--pen)}
+.big{font:400 3.6rem/1 var(--serif)}.big small{color:var(--muted);font-size:.6em}
+.hbar{height:12px;border:1px solid var(--ink);background:var(--card)}.hbar i{display:block;height:100%;background:var(--acc);background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.28) 0 4px,transparent 4px 8px)}
+.freq{display:grid;grid-template-columns:minmax(140px,230px) minmax(0,1fr) 30px;gap:14px;align-items:center;font-size:.9rem;margin:6px 0}
+/* evaluaciones */
+.exam{background:var(--card);border:1px solid var(--ink);box-shadow:6px 6px 0 var(--shadow)}
+.exam .rot{display:grid;grid-template-columns:minmax(0,1fr) auto auto;border-bottom:1px solid var(--ink)}
+.exam .rot>div{padding:10px 18px;display:flex;flex-direction:column;gap:2px;font:.88rem var(--mono)}
+.exam .rot>div+div{border-left:1px solid var(--ink)}.exam .rot .of{background:var(--acc-soft);color:var(--acc)}.exam .rot .pr{background:var(--pen-soft);color:var(--pen)}
+.exam .en{padding:22px 26px 6px;font:1.18rem/1.6 var(--serif)}
+.tabs{display:flex;border-bottom:1px solid var(--ink);margin:14px 26px 0;overflow-x:auto}
+.tab{min-height:44px;padding:0 18px;font:500 .85rem var(--mono);cursor:pointer;margin-bottom:-1px;border:1px solid transparent;background:none;color:var(--muted);white-space:nowrap}
+.tab.on{border-color:var(--ink);border-bottom-color:var(--card);background:var(--card);color:var(--ink)}
+.pane{padding:18px 26px}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 26px 18px;flex-wrap:wrap}
+.chk{display:flex;align-items:center;gap:10px;min-height:44px;cursor:pointer}.chk input{width:20px;height:20px;accent-color:var(--acc)}
+/* responsive */
+@media (max-width:1100px){.chap{padding-right:0}.nota,.lapiz{float:none;width:auto;margin:0 0 16px}.lapiz{transform:none}}
+@media (max-width:900px){
+.app{display:block}
+.side{position:fixed;inset:0 auto 0 0;z-index:30;transform:translateX(-105%);transition:transform .2s;height:100%;width:min(300px,86vw);padding-top:calc(24px + env(safe-area-inset-top,0px))}
+body.menu .side{transform:none;box-shadow:0 0 0 100vmax rgba(0,0,0,.45)}
+.mtop{display:flex;position:sticky;top:0;z-index:20;align-items:center;gap:12px;padding:calc(8px + env(safe-area-inset-top,0px)) 14px 8px;background:var(--side);color:#fff}
+.mtop button{background:none;border:1px solid var(--side-line);color:#fff;min-height:42px;padding:0 12px;font:500 .85rem var(--sans)}
+.mtop b{font:600 1rem var(--serif);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+main{padding:26px 16px 70px;gap:24px}
+.grid2{grid-template-columns:minmax(0,1fr)}
+.exam .rot{grid-template-columns:1fr 1fr}.exam .rot>div:first-child{grid-column:span 2;border-bottom:1px solid var(--ink)}.exam .rot>div:nth-child(2){border-left:0}
+.exam .en,.pane{padding-left:16px;padding-right:16px}.tabs{margin:14px 16px 0}.foot{padding:8px 16px 16px}
+.big{font-size:2.8rem}.freq{grid-template-columns:minmax(0,1fr) 90px 26px}
+}
+@media print{.side,.mtop,.btn,.chip,.subnav,.tabs{display:none!important}body{background:#fff!important}.chap{padding-right:0}.sheet,.exam{break-inside:avoid;box-shadow:none}}
+</style>
+<script>window.MathJax={tex:{inlineMath:[['$','$']],displayMath:[['$$','$$']],processEscapes:true},svg:{fontCache:'global'},startup:{typeset:false}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" async></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body class="p-cuadriculado">
+<div class="app">
+<aside class="side" id="side"></aside>
+<div class="content">
+<div class="mtop"><button id="menuBtn" aria-label="Abrir menú">Menú</button><b id="mtitle"></b></div>
+<main id="main"></main>
+</div>
+</div>
+<script>
+const DATA = {"meta": {"ramo": "Ecuaciones Diferenciales (MAT-208)", "evaluacion": "Control 2", "carrera": "Ingeniería · UAI", "semestre": "2026-2", "contenidos": "EDO lineales de orden superior y masa-resorte", "fuentes": ["Clases 10 a 15 (V. Bravo)", "Guía 3", "Control 2 2025-2 Sec. 3 + solución", "4 pautas de Control 2 2026-1"], "estilo": {"preset": "matematica", "papel": "cuadriculado", "unidad": "Capítulo"}}, "resumen": [{"tema": "t1", "ideas": ["Lineal de orden $n$: $a_n(x)y^{(n)}+\\dots+a_1(x)y'+a_0(x)y=g(x)$. Homogénea si $g=0$.", "**Existencia y unicidad:** si $a_i, g$ son continuas en $I$ y $a_n(x)\\neq 0$ en $I$, el PVI con $y(x_0),\\dots,y^{(n-1)}(x_0)$ tiene solución única en $I$.", "**Superposición:** combinaciones lineales de soluciones de $L(y)=0$ también son solución.", "$n$ soluciones de la homogénea son LI $\\iff W\\neq 0$ en $I$ → forman un **conjunto fundamental** y $y_h=c_1y_1+\\dots+c_ny_n$.", "No homogénea: $y=y_h+y_p$. Si $g=g_1+g_2$, entonces $y_p=y_{p1}+y_{p2}$."], "formulas": [{"tex": "W[y_1,y_2]=\\begin{vmatrix}y_1&y_2\\\\y_1'&y_2'\\end{vmatrix}=y_1y_2'-y_1'y_2", "nota": "Wronskiano 2×2"}], "ojo": ["$W=0$ en un punto no basta para decir LD si las funciones no son soluciones de la misma EDO.", "Las constantes del PVI se calculan con $y_h+y_p$, nunca solo con $y_h$."]}, {"tema": "t2", "ideas": ["Si conoces $y_1$, la segunda solución sale de **normalizar** ($y''+P(x)y'+Q(x)y=0$) y aplicar Abel.", "Abel para el wronskiano: $W=c\\,e^{-\\int a_{n-1}(x)\\,dx}$ (con la EDO normalizada).", "Alternativa: $y_2=u\\,y_1$ y $v=u'$ deja una EDO de primer orden (separable)."], "formulas": [{"tex": "y_2=y_1\\int\\frac{e^{-\\int P(x)\\,dx}}{y_1^2}\\,dx", "nota": "fórmula de Abel para la segunda solución"}], "ojo": ["Olvidar dividir por $a_2(x)$ antes de leer $P(x)$: es el error que más puntos cuesta.", "El signo: es $e^{-\\int P}$. Con $P=-\\frac{x}{x-1}$ queda $e^{+x}(x-1)$."]}, {"tema": "t3", "ideas": ["Se prueba $y=e^{mx}$ → ecuación auxiliar $a_nm^n+\\dots+a_1m+a_0=0$.", "Reales distintas: $c_1e^{m_1x}+c_2e^{m_2x}$. Doble $m$: $(c_1+c_2x)e^{mx}$. Complejas $\\alpha\\pm\\beta i$: $e^{\\alpha x}(c_1\\cos\\beta x+c_2\\sin\\beta x)$.", "Raíz de multiplicidad $k$: $e^{mx},xe^{mx},\\dots,x^{k-1}e^{mx}$ (igual con los pares complejos).", "Orden $n$ ⇒ exactamente $n$ funciones en $y_h$. $\\sin x$ sola no puede ser solución sin $\\cos x$."], "formulas": [{"tex": "m=\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}", "nota": "para $ay''+by'+cy=0$"}], "ojo": ["Raíz $\\pm 2i$ da $\\cos 2x,\\ \\sin 2x$ (sin exponencial, porque $\\alpha=0$).", "En orden 3 factoriza por agrupación: $r^2(r-3)+4(r-3)$."]}, {"tema": "t4", "ideas": ["**Coef. indeterminados:** solo con coeficientes constantes y $g$ = polinomio · $e^{kx}$ · $\\cos/\\sin\\beta x$ (o sumas).", "Propuesta: misma forma que $g$, con polinomio completo del mismo grado y **seno y coseno juntos**.", "Si $k+i\\beta$ es raíz de la auxiliar con multiplicidad $s$, multiplica la propuesta por $x^s$.", "**Variación de parámetros:** sirve siempre (tan, sec, $1/t$, ln, coeficientes variables). Normaliza primero.", "Puedes separar $g=g_1+g_2$ y sumar las particulares (superposición)."], "formulas": [{"tex": "u_1'=\\frac{W_1}{W}=\\frac{-y_2f}{W},\\qquad u_2'=\\frac{W_2}{W}=\\frac{y_1f}{W}", "nota": "$f$ = lado derecho de la EDO normalizada"}, {"tex": "y_p=u_1y_1+u_2y_2", "nota": ""}], "ojo": ["Proponer $Ae^{3x}$ cuando $e^{3x}$ ya está en $y_h$: al reemplazar da $0=1$.", "En VP usar $f$ sin dividir por el coeficiente de $y''$."]}, {"tema": "t5", "ideas": ["Forma $ax^2y''+bxy'+cy=g(x)$, con $x>0$. Se prueba $y=x^m$.", "Ecuación indicial: $am^2+(b-a)m+c=0$ (sale de $m(m-1)a+bm+c$).", "Distintas: $c_1x^{m_1}+c_2x^{m_2}$. Doble: $x^m(c_1+c_2\\ln x)$. Complejas: $x^\\alpha[c_1\\cos(\\beta\\ln x)+c_2\\sin(\\beta\\ln x)]$.", "Cambio $x=e^t$ ($t=\\ln x$): queda $aY''+(b-a)Y'+cY=g(e^t)$, de coeficientes constantes.", "No homogénea: VP (dividiendo por $ax^2$), o proponer $Ax^p$ si $g=x^p$ y $p$ no es raíz."], "formulas": [{"tex": "am^2+(b-a)m+c=0", "nota": "ecuación indicial"}], "ojo": ["Escribir $m^2+bm+c$ (olvidar el $-a$): cambia todas las raíces.", "Raíz compleja da $\\cos(\\beta\\ln x)$, no $\\cos(\\beta x)$."]}, {"tema": "t6", "ideas": ["Hooke en el equilibrio: $mg=ks$. En sistema inglés $m=W/32$ [slug]; en SI el peso es $9{,}8\\,m$ [N].", "Modelo: $mx''+cx'+kx=f(t)$. **Abajo positivo** (convención de clase), salvo que el enunciado diga otra cosa.", "Libre no amortiguado: $\\omega=\\sqrt{k/m}$, $T=2\\pi/\\omega$, $f=\\omega/2\\pi$, $A=\\sqrt{c_1^2+c_2^2}$.", "Amortiguado según $c^2-4mk$: $>0$ sobreamortiguado, $=0$ crítico (cruza 0 a lo más 1 vez), $<0$ subamortiguado (oscila).", "Forzado sin roce con frecuencia igual a $\\omega$: resonancia, $x_p=t(\\dots)$ crece sin límite."], "formulas": [{"tex": "\\lambda=\\frac{-c\\pm\\sqrt{c^2-4mk}}{2m}", "nota": "raíces del caso amortiguado"}, {"tex": "x(t)=A\\sin(\\omega t+\\varphi),\\quad \\sin\\varphi=\\tfrac{c_1}{A},\\ \\cos\\varphi=\\tfrac{c_2}{A}", "nota": "forma sinusoidal"}], "ojo": ["“1 pie sobre el equilibrio” con abajo positivo es $x(0)=-1$; “hacia arriba” es velocidad negativa.", "“Se libera desde el reposo” significa $x'(0)=0$."]}], "temas": [{"id": "t1", "titulo": "Teoría de las EDO lineales", "peso": 2, "intro": "Es la base de todo el control: te dice cuándo un PVI tiene solución única, cuántas soluciones necesitas para la solución general y cómo se arma la solución de una no homogénea. Rara vez sale sola, pero aparece en verdadero/falso y en la justificación de casi todas las preguntas.", "bloques": [{"tipo": "texto", "titulo": "Qué es una EDO lineal de orden n", "md": "Una EDO es **lineal** cuando $y$ y sus derivadas aparecen a la primera potencia y multiplicadas solo por funciones de $x$:\n$$a_n(x)\\frac{d^ny}{dx^n}+a_{n-1}(x)\\frac{d^{n-1}y}{dx^{n-1}}+\\dots+a_1(x)\\frac{dy}{dx}+a_0(x)y=g(x)$$\nSi $g(x)=0$ se llama **homogénea**. Con el operador $L=a_nD^n+\\dots+a_1D+a_0$ se escribe corto: $L(y)=g(x)$, y la homogénea asociada es $L(y)=0$.\n\nPara usar los teoremas y fórmulas conviene la **forma normalizada**: dividir todo por $a_n(x)$ para que $y^{(n)}$ quede con coeficiente 1."}, {"tipo": "definicion", "etiqueta": "Teorema", "nombre": "Existencia y unicidad", "md": "Sean $a_n,\\dots,a_1,a_0$ y $g$ continuas en un intervalo $I$ con $a_n(x)\\neq 0$ para todo $x\\in I$. Si $x_0\\in I$, entonces el PVI\n$$L(y)=g(x),\\quad y(x_0)=y_0,\\ y'(x_0)=y_1,\\ \\dots,\\ y^{(n-1)}(x_0)=y_{n-1}$$\ntiene solución en $I$ y es **única**."}, {"tipo": "nota", "md": "Para orden $n$ se necesitan $n$ condiciones iniciales, todas en el mismo punto $x_0$."}, {"tipo": "ejemplo", "titulo": "PVI con condiciones nulas (Clase 10)", "enunciado": "Considere $3y'''+5y''-y'+7y=0$ con $y(1)=y'(1)=y''(1)=0$. ¿Cuál es la solución?", "pasos": [{"titulo": "Candidato obvio", "md": "$y(x)=0$ cumple la EDO y las tres condiciones."}, {"titulo": "Unicidad", "md": "Los coeficientes son constantes (continuos en $\\mathbb R$) y $a_3=3\\neq 0$, así que el teorema garantiza que hay **una sola** solución."}], "respuesta": "$y(x)\\equiv 0$ es la única solución."}, {"tipo": "gadget", "id": "g_intervalo", "titulo": "¿En qué intervalo vale el teorema?", "instrucciones": "Elige una ecuación y mueve $x_0$. Las líneas punteadas son los puntos donde $a_n(x)=0$ (o donde $g$ no es continua). El intervalo sombreado es el mayor $I$ que contiene a $x_0$ donde el teorema garantiza solución única."}, {"tipo": "texto", "titulo": "Superposición y dependencia lineal", "md": "Si $y_1,\\dots,y_k$ resuelven $L(y)=0$, cualquier combinación $\\alpha_1y_1+\\dots+\\alpha_ky_k$ también la resuelve (porque $L$ es lineal). Por ejemplo, $e^x$ y $e^{-x}$ resuelven $y''-y=0$, así que $c_1e^x+c_2e^{-x}$ también.\n\nLa pregunta es: ¿cuántas soluciones necesito para tenerlas **todas**? Exactamente $n$, pero que no sean \"repetidas\", es decir, linealmente independientes."}, {"tipo": "definicion", "etiqueta": "Definición", "nombre": "Dependencia e independencia lineal", "md": "$u_1,\\dots,u_n$ son **linealmente dependientes (LD)** en $I$ si existen $c_1,\\dots,c_n$ **no todas nulas** con $c_1u_1(x)+\\dots+c_nu_n(x)=0$ para todo $x\\in I$. Son **LI** si eso solo ocurre con $c_1=\\dots=c_n=0$.\n\nCon dos funciones es fácil: son LD si y solo si una es múltiplo constante de la otra."}, {"tipo": "definicion", "etiqueta": "Definición", "nombre": "Wronskiano", "md": "$$W[u_1,\\dots,u_n](x)=\\det\\begin{bmatrix}u_1&u_2&\\cdots&u_n\\\\u_1'&u_2'&\\cdots&u_n'\\\\\\vdots&&&\\vdots\\\\u_1^{(n-1)}&u_2^{(n-1)}&\\cdots&u_n^{(n-1)}\\end{bmatrix}$$"}, {"tipo": "formula", "tex": "W[y_1,y_2]=y_1y_2'-y_1'y_2", "nota": "el caso 2×2, el que más se usa"}, {"tipo": "definicion", "etiqueta": "Teorema", "nombre": "Criterio de independencia y solución general", "md": "Si $y_1,\\dots,y_n$ son **soluciones** de la homogénea $L(y)=0$ en $I$, entonces son LI en $I$ **si y solo si** $W[y_1,\\dots,y_n](x)\\neq 0$ en $I$. En ese caso $\\{y_1,\\dots,y_n\\}$ es un **conjunto fundamental** y la solución general es\n$$y(x)=c_1y_1(x)+c_2y_2(x)+\\dots+c_ny_n(x).$$"}, {"tipo": "lapiz", "texto": "W ≠ 0 → LI → conjunto fundamental"}, {"tipo": "gadget", "id": "g_wronskiano", "titulo": "Calculadora de wronskianos", "instrucciones": "Elige un par de funciones. Verás $y_1$, $y_2$ y el gráfico de $W(x)$. Si $W$ nunca se anula en el intervalo, el par sirve como conjunto fundamental.", "figura": "Curva morada: $W(x)$. Las otras dos: $y_1$ y $y_2$."}, {"tipo": "ejemplo", "titulo": "Wronskiano y LD (Clase 10 y Guía 3)", "enunciado": "a) Calcule $W[e^x, xe^x]$. b) ¿Es $\\{1,\\cos 2x,\\cos^2x\\}$ LI en $\\mathbb R$?", "pasos": [{"titulo": "a) Derivadas", "md": "$y_1=e^x$, $y_1'=e^x$; $y_2=xe^x$, $y_2'=(1+x)e^x$."}, {"titulo": "a) Determinante", "md": "$W=e^x(1+x)e^x-e^x\\cdot xe^x=e^{2x}\\neq 0$ → LI en $\\mathbb R$."}, {"titulo": "b) Buscar una relación", "md": "Por la identidad $\\cos^2x=\\frac{1+\\cos 2x}{2}$: $\\ \\tfrac12\\cdot 1+\\tfrac12\\cos 2x-1\\cdot\\cos^2x=0$ con constantes no todas nulas."}], "respuesta": "a) $W=e^{2x}$. b) No: el conjunto es **LD**."}, {"tipo": "texto", "titulo": "Ecuaciones no homogéneas", "md": "La solución general de $L(y)=g(x)$ es\n$$y=y_h+y_p$$\ndonde $y_h$ es la solución general de la homogénea asociada y $y_p$ es **una** solución particular cualquiera de la no homogénea.\n\n**Superposición para no homogéneas:** si $L(y_{p1})=g_1$ y $L(y_{p2})=g_2$, entonces $L(y_{p1}+y_{p2})=g_1+g_2$. Por eso, ante $g(t)=t^2+1-e^t$ se buscan por separado la particular de $t^2+1$ y la de $-e^t$, y se suman (así lo hace la pauta del control de 60 min).\n\nOjo: cualquier pedazo de $y_p$ que sea solución de la homogénea se puede \"absorber\" en las constantes de $y_h$."}, {"tipo": "ojo", "items": ["Decir \"$W(0)=0$, entonces son LD\" con funciones que **no** son soluciones de una misma EDO regular: $x$ y $x^2$ tienen $W=x^2$, que se anula en 0, y aun así son LI.", "Aplicar el teorema en un punto donde $a_n(x_0)=0$: ahí no garantiza nada.", "Calcular $c_1, c_2$ del PVI con $y_h$ en vez de $y_h+y_p$.", "Contar mal: una EDO de orden $n$ necesita exactamente $n$ funciones LI en $y_h$."]}]}, {"id": "t2", "titulo": "Reducción de orden y fórmula de Abel", "peso": 2, "intro": "Cuando te regalan una solución $y_1$ (o te piden mostrar que algo es solución), la segunda sale con una fórmula. Salió como pregunta completa de 20 pts en 2025-2 y como parte b) de 10 pts en 2026-1.", "bloques": [{"tipo": "definicion", "etiqueta": "Teorema", "nombre": "Fórmula de Abel para el wronskiano", "md": "Si $\\{y_1,\\dots,y_n\\}$ es un conjunto fundamental de la EDO **normalizada** $y^{(n)}+a_{n-1}(x)y^{(n-1)}+\\dots+a_0(x)y=0$, entonces existe $c\\in\\mathbb R$ con\n$$W[y_1,\\dots,y_n](x)=c\\,e^{-\\int a_{n-1}(x)\\,dx}.$$\nEn orden 2 ($y''+a_1y'+a_0y=0$): $W=c\\,e^{-\\int a_1(x)dx}$. Consecuencia: el wronskiano de dos soluciones **o nunca se anula o es idénticamente 0**."}, {"tipo": "definicion", "etiqueta": "Teorema", "nombre": "Fórmula de Abel para una segunda solución", "md": "Si $y_1$ es una solución no trivial de $y''+P(x)y'+Q(x)y=0$, entonces una segunda solución LI con $y_1$ es"}, {"tipo": "formula", "tex": "y_2(x)=y_1(x)\\int\\frac{e^{-\\int P(x)\\,dx}}{\\big(y_1(x)\\big)^2}\\,dx", "nota": "en clase $P=a_1(x)$; en la pauta 2025 se llama $P(x)$"}, {"tipo": "lapiz", "texto": "¡primero normalizar! (4 pts)"}, {"tipo": "texto", "titulo": "Receta en 5 pasos", "md": "1. **Normalizar:** dividir por el coeficiente de $y''$ y leer $P(x)$ (lo que acompaña a $y'$).\n2. Calcular $\\int P\\,dx$ y luego $e^{-\\int P\\,dx}$ (sin constante de integración).\n3. Dividir por $y_1^2$ y simplificar antes de integrar.\n4. Integrar y multiplicar por $y_1$. Las constantes multiplicativas se pueden botar.\n5. Escribir $y=C_1y_1+C_2y_2$.\n\n**Vía alternativa (la de la pauta de abril 2026):** proponer $y_2=u(x)\\,y_1$, reemplazar, cancelar los términos con $u$ (se cancelan porque $y_1$ es solución) y llamar $v=u'$. Queda una EDO de **primer orden** separable en $v$. Integrando $v$ se obtiene $u$ y luego $y_2$."}, {"tipo": "ejemplo", "titulo": "Clase 10: $x^2y''-xy'+y=0$, $y_1=x$", "enunciado": "Determine la solución general de $x^2y''-xy'+y=0$, $x>0$, sabiendo que $y_1=x$ es solución.", "pasos": [{"titulo": "Normalizar", "md": "$y''-\\frac1x y'+\\frac1{x^2}y=0\\ \\Rightarrow\\ P(x)=-\\frac1x$."}, {"titulo": "Exponencial", "md": "$-\\int P\\,dx=\\ln x\\ \\Rightarrow\\ e^{-\\int P}=x$."}, {"titulo": "Integrar", "md": "$y_2=x\\int\\frac{x}{x^2}dx=x\\int\\frac{dx}{x}=x\\ln x$."}], "respuesta": "$y=C_1x+C_2x\\ln x$"}, {"tipo": "ejemplo", "titulo": "Clase 10: adivinar $y_1=e^{mx}$", "enunciado": "Para $x>0$, halle la solución general de $xy''-2(x+1)y'+(x+2)y=0$ suponiendo una solución $y=e^{mx}$.", "pasos": [{"titulo": "Encontrar $m$", "md": "Reemplazando: $e^{mx}[xm^2-2(x+1)m+x+2]=e^{mx}[x(m-1)^2+2(1-m)]=0$ para todo $x$ ⇒ $m=1$. Entonces $y_1=e^x$."}, {"titulo": "Normalizar", "md": "$P(x)=-\\frac{2(x+1)}{x}=-2-\\frac2x$, así $-\\int P=2x+2\\ln x$ y $e^{-\\int P}=x^2e^{2x}$."}, {"titulo": "Abel", "md": "$y_2=e^x\\int\\frac{x^2e^{2x}}{e^{2x}}dx=e^x\\frac{x^3}{3}$ → se toma $y_2=x^3e^x$."}], "respuesta": "$y=C_1e^x+C_2x^3e^x$"}, {"tipo": "gadget", "id": "g_abel", "titulo": "Reducción de orden paso a paso", "instrucciones": "Elige un ejercicio (clases, guía y controles). Antes de apretar \"Siguiente paso\", intenta escribir tú el paso en tu hoja; después compara."}, {"tipo": "ojo", "items": ["Leer $P(x)$ sin normalizar: en $(x-1)y''-xy'+y=0$ el $P$ es $-\\frac{x}{x-1}$, no $-x$.", "Equivocarse en el signo del exponente: es $e^{-\\int P}$.", "Olvidar el $y_1$ de afuera de la integral: $y_2=y_1\\int\\cdots$.", "Dejar la respuesta como solo $y_2$: piden la solución general $C_1y_1+C_2y_2$ (4 pts en 2025).", "Si la integral tiene la forma $\\int\\frac{d}{dx}\\big(\\tfrac{e^x}{x}\\big)dx$, reconócela: $\\frac{e^x}{x}-\\frac{e^x}{x^2}$ es la derivada de $\\frac{e^x}{x}$ (pauta 2025)."]}]}, {"id": "t3", "titulo": "Coeficientes constantes: ecuación auxiliar", "peso": 3, "intro": "Aparece en **todas** las preguntas del control: es el primer paso para la homogénea, para coeficientes indeterminados, para variación de parámetros y para masa-resorte. Tiene que salirte automático.", "bloques": [{"tipo": "texto", "titulo": "La idea: probar con una exponencial", "md": "En $a_ny^{(n)}+\\dots+a_1y'+a_0y=0$ con $a_i$ constantes, se prueba $y=e^{mx}$. Como $(e^{mx})^{(k)}=m^ke^{mx}$, todo queda multiplicado por $e^{mx}\\neq 0$ y sobrevive solo el polinomio:"}, {"tipo": "formula", "tex": "a_nm^n+a_{n-1}m^{n-1}+\\dots+a_1m+a_0=0", "nota": "ecuación auxiliar o característica"}, {"tipo": "texto", "titulo": "Los tres casos de orden 2", "md": "Para $a_2y''+a_1y'+a_0y=0$ las raíces de $a_2m^2+a_1m+a_0=0$ caen en uno de tres casos:"}, {"tipo": "tabla", "columnas": ["Raíces", "Conjunto fundamental", "Solución general"], "filas": [["Reales distintas $m_1\\neq m_2$", "$e^{m_1x},\\ e^{m_2x}$", "$c_1e^{m_1x}+c_2e^{m_2x}$"], ["Real doble $m$", "$e^{mx},\\ xe^{mx}$", "$(c_1+c_2x)e^{mx}$"], ["Complejas $\\alpha\\pm\\beta i$", "$e^{\\alpha x}\\cos\\beta x,\\ e^{\\alpha x}\\sin\\beta x$", "$e^{\\alpha x}(c_1\\cos\\beta x+c_2\\sin\\beta x)$"]]}, {"tipo": "nota", "md": "El $xe^{mx}$ del caso doble sale de Abel: $y_2=e^{mx}\\int\\frac{e^{2mx}}{e^{2mx}}dx=xe^{mx}$. Y el caso complejo usa $e^{i\\theta}=\\cos\\theta+i\\sin\\theta$."}, {"tipo": "gadget", "id": "g_raices", "titulo": "Mueve a, b, c y mira qué caso te toca", "instrucciones": "Ajusta los coeficientes de $ay''+by'+cy=0$. Se muestran el discriminante, las raíces, la $y_h$ y la solución con $y(0)=1$, $y'(0)=0$. Busca: ¿qué pasa en el gráfico cuando las raíces son complejas? ¿Y cuando son positivas?"}, {"tipo": "texto", "titulo": "Orden mayor que 2: multiplicidades", "md": "Se factoriza la auxiliar (agrupando, Ruffini o reconociendo cuadrados). Si $m_1$ tiene **multiplicidad $k$**, aporta\n$$c_1e^{m_1x}+c_2xe^{m_1x}+\\dots+c_kx^{k-1}e^{m_1x}.$$\nSi $\\alpha+\\beta i$ tiene multiplicidad $k$, su conjugada también, y aportan $x^je^{\\alpha x}\\cos\\beta x$ y $x^je^{\\alpha x}\\sin\\beta x$ para $j=0,\\dots,k-1$ ($2k$ funciones).\n\nRegla de control: el total de funciones es **igual al orden** de la EDO."}, {"tipo": "gadget", "id": "g_constructor", "titulo": "Constructor de $y_h$ a partir de las raíces", "instrucciones": "Agrega raíces con su multiplicidad (o usa un ejemplo de clase o control) y mira cómo se arma $y_h$. Revisa que el número de funciones coincida con el orden."}, {"tipo": "ejemplo", "titulo": "Control 2 · 2026-1 (30/04), parte a)", "enunciado": "Encuentre la solución de la homogénea asociada a $y'''-3y''+4y'-12y=e^{3x}$.", "pasos": [{"titulo": "Auxiliar", "md": "$r^3-3r^2+4r-12=0$"}, {"titulo": "Agrupar", "md": "$r^2(r-3)+4(r-3)=0\\Rightarrow(r^2+4)(r-3)=0$"}, {"titulo": "Raíces", "md": "$r_1=3$, $r=\\pm 2i$ (aquí $\\alpha=0$, $\\beta=2$)"}], "respuesta": "$y_h=C_1e^{3x}+C_2\\cos 2x+C_3\\sin 2x$", "lapiz": "raíces: 4 de los 9 pts de la parte a)"}, {"tipo": "ejemplo", "titulo": "Clase 11: PVI con raíz doble", "enunciado": "Resuelva $y''-2\\sqrt5\\,y'+5y=0$, $y(0)=0$, $y'(0)=3$.", "pasos": [{"titulo": "Auxiliar", "md": "$m^2-2\\sqrt5m+5=(m-\\sqrt5)^2=0$ → $m=\\sqrt5$ doble."}, {"titulo": "General", "md": "$y=(c_1+c_2x)e^{\\sqrt5x}$"}, {"titulo": "Condiciones", "md": "$y(0)=c_1=0$. $y'=c_2e^{\\sqrt5x}+\\sqrt5(c_1+c_2x)e^{\\sqrt5x}$ ⇒ $y'(0)=c_2=3$."}], "respuesta": "$y=3xe^{\\sqrt5x}$"}, {"tipo": "ejemplo", "titulo": "Clase 11: orden 7", "enunciado": "Determine la solución general de $y^{(7)}-2y^{(5)}+y'''=0$.", "pasos": [{"titulo": "Factorizar", "md": "$m^7-2m^5+m^3=m^3(m^4-2m^2+1)=m^3(m^2-1)^2=m^3(m-1)^2(m+1)^2$"}, {"titulo": "Multiplicidades", "md": "$m=0$ triple, $m=1$ doble, $m=-1$ doble: $3+2+2=7$ funciones ✓."}], "respuesta": "$y=c_1+c_2x+c_3x^2+(c_4+c_5x)e^x+(c_6+c_7x)e^{-x}$"}, {"tipo": "texto", "titulo": "Al revés: de las soluciones a la ecuación", "md": "Pregunta típica de V/F (Control 2026-1, P1b, 10 pts): *¿existe una EDO lineal homogénea de orden 2 con coeficientes constantes que tenga como soluciones LI a $e^x$ y $\\sin x$?*\n\n- $e^x$ obliga a que $r=1$ sea raíz.\n- $\\sin x$ obliga a que $\\pm i$ sean raíces (factor $r^2+1$), y entonces $\\cos x$ también es solución.\n- Eso son 3 raíces: el polinomio tendría grado $\\ge 3$. Una EDO de orden 2 tiene auxiliar de grado 2.\n\n**Falso.** La menor sería de orden 3: $(r-1)(r^2+1)=r^3-r^2+r-1$, es decir $y'''-y''+y'-y=0$."}, {"tipo": "ojo", "items": ["Con raíces $\\pm\\beta i$ (sin parte real) poner $e^{x}$: si $\\alpha=0$ la exponencial es $e^{0}=1$.", "En la raíz doble escribir $c_1e^{mx}+c_2e^{mx}$ (son la misma función: falta la $x$).", "Usar $\\cos(\\beta x)$ con el $\\beta$ mal: para $r=-\\frac12\\pm\\frac{\\sqrt3}{2}i$ es $\\cos\\frac{\\sqrt3}{2}x$.", "En orden 3 o más, no revisar que el número de funciones sea igual al orden."]}]}, {"id": "t4", "titulo": "Coeficientes indeterminados y variación de parámetros", "peso": 3, "intro": "Es el tema con más puntos en los controles anteriores: casi todos piden una $y_p$. La clave es reconocer rápido **qué método** usar y escribir bien la propuesta (la propuesta sola vale entre 3 y 12 pts según la pauta).", "bloques": [{"tipo": "texto", "titulo": "Coeficientes indeterminados: cuándo y cómo", "md": "Sirve **solo** si la EDO tiene coeficientes constantes y el lado derecho es de la forma\n$$g(x)=\\sum e^{r_ix}\\big[P_i(x)\\cos(q_ix)+Q_i(x)\\sin(q_ix)\\big]$$\n(polinomios, exponenciales, senos y cosenos, y sus productos y sumas). La idea: $y_p$ \"se parece\" a $g$, con coeficientes por determinar.\n\nPasos (clase 12): 1) resolver $L(y)=0$; 2) proponer $y_p$; 3) reemplazar en la EDO e igualar coeficientes; 4) $y=y_h+y_p$."}, {"tipo": "tabla", "columnas": ["Si $g(x)$ es…", "se propone $y_p$ =", "número de prueba"], "filas": [["$x^m$ (o polinomio de grado $m$)", "$A_mx^m+\\dots+A_1x+A_0$", "$0$"], ["$x^me^{kx}$", "$e^{kx}(A_mx^m+\\dots+A_0)$", "$k$"], ["$\\cos\\beta x$ o $\\sin\\beta x$", "$A\\cos\\beta x+B\\sin\\beta x$", "$\\beta i$"], ["$x^me^{kx}\\cos\\beta x$ o $x^me^{kx}\\sin\\beta x$", "$e^{kx}[(A_mx^m+\\dots)\\cos\\beta x+(B_mx^m+\\dots)\\sin\\beta x]$", "$k+\\beta i$"], ["suma $g_1+g_2$", "$y_{p1}+y_{p2}$ (cada una por separado)", "uno por cada término"]]}, {"tipo": "definicion", "etiqueta": "Regla", "nombre": "Corrección por duplicación", "md": "Si el **número de prueba** $k+\\beta i$ es raíz de la ecuación auxiliar con multiplicidad $s$, la propuesta se multiplica por $x^s$:\n$$y_p=x^s\\,e^{kx}\\big[P_m(x)\\cos\\beta x+Q_m(x)\\sin\\beta x\\big].$$\nEn palabras: si algún término de la propuesta ya está en $y_h$, multiplica por $x$ (y otra vez por $x$ si sigue estando)."}, {"tipo": "lapiz", "texto": "seno Y coseno, aunque g tenga solo uno"}, {"tipo": "gadget", "id": "g_propuesta", "titulo": "Generador de propuestas $y_p$", "instrucciones": "Elige la parte homogénea (cada una sale de un control o clase) y arma $g(x)=x^m e^{kx}\\cos\\beta x$ o con seno. El gadget te dice el número de prueba, si choca con las raíces y la propuesta correcta. Practica: piensa la respuesta antes de mirar."}, {"tipo": "ejemplo", "titulo": "Clase 12: suma de dos tipos", "enunciado": "Resuelva $y''-3y'+2y=2xe^{3x}+3\\sin x$.", "pasos": [{"titulo": "Homogénea", "md": "$m^2-3m+2=(m-1)(m-2)=0$ ⇒ $y_h=c_1e^x+c_2e^{2x}$."}, {"titulo": "Separar (superposición)", "md": "Para $2xe^{3x}$: número $3$, no es raíz ⇒ $y_{p1}=(Ax+B)e^{3x}$. Para $3\\sin x$: número $i$, no es raíz ⇒ $y_{p2}=C\\cos x+D\\sin x$."}, {"titulo": "Primera", "md": "Reemplazando: $e^{3x}[2Ax+3A+2B]=2xe^{3x}$ ⇒ $A=1$, $B=-\\frac32$."}, {"titulo": "Segunda", "md": "$(C-3D)\\cos x+(3C+D)\\sin x=3\\sin x$ ⇒ $C=3D$, $10D=3$ ⇒ $D=\\frac3{10}$, $C=\\frac9{10}$."}], "respuesta": "$y=c_1e^x+c_2e^{2x}+\\left(x-\\tfrac32\\right)e^{3x}+\\tfrac9{10}\\cos x+\\tfrac3{10}\\sin x$"}, {"tipo": "texto", "titulo": "Variación de parámetros", "md": "Sirve **siempre** que conozcas $y_h$, incluso con coeficientes variables o con $g$ como $\\tan x$, $\\sec x$, $\\ln x$, $1/t$, $t^{-3}e^{3t}$ (donde coef. indeterminados no funciona). Se reemplazan las constantes de $y_h$ por funciones: $y_p=u_1(x)y_1+u_2(x)y_2$, imponiendo\n$$\\begin{cases}u_1'y_1+u_2'y_2=0\\\\u_1'y_1'+u_2'y_2'=f(x)\\end{cases}$$\ny por Cramer se obtiene:"}, {"tipo": "formula", "tex": "W=\\begin{vmatrix}y_1&y_2\\\\y_1'&y_2'\\end{vmatrix},\\quad W_1=\\begin{vmatrix}0&y_2\\\\f&y_2'\\end{vmatrix}=-y_2f,\\quad W_2=\\begin{vmatrix}y_1&0\\\\y_1'&f\\end{vmatrix}=y_1f", "nota": "los \"3 wronskianos\" de la pauta (3 pts)"}, {"tipo": "formula", "tex": "u_1=\\int\\frac{W_1}{W}dx,\\qquad u_2=\\int\\frac{W_2}{W}dx,\\qquad y_p=u_1y_1+u_2y_2", "nota": "constantes de integración: se omiten"}, {"tipo": "lapiz", "texto": "f = lado derecho DESPUÉS de dividir por a₂(x)"}, {"tipo": "nota", "md": "Para orden $n$: $c_k=\\int\\frac{V_k(x)h(x)}{W}dx$, con $V_k$ el wronskiano con la columna $k$ cambiada por $(0,\\dots,0,1)^T$."}, {"tipo": "gadget", "id": "g_vp", "titulo": "Variación de parámetros paso a paso", "instrucciones": "Elige un ejercicio y avanza paso a paso. La secuencia es siempre la misma: normalizar → $y_1,y_2$ → $W,W_1,W_2$ → $u_1',u_2'$ → integrar → $y_p$."}, {"tipo": "ejemplo", "titulo": "Clase 12: $y''+y=\\tan x$", "enunciado": "Resuelva $y''+y=\\tan x$.", "pasos": [{"titulo": "Homogénea", "md": "$m=\\pm i$ ⇒ $y_1=\\cos x$, $y_2=\\sin x$, $W=\\cos^2x+\\sin^2x=1$."}, {"titulo": "$u_1$", "md": "$u_1'=-\\sin x\\tan x=-\\frac{\\sin^2x}{\\cos x}=\\cos x-\\sec x$ ⇒ $u_1=\\sin x-\\ln|\\sec x+\\tan x|$."}, {"titulo": "$u_2$", "md": "$u_2'=\\cos x\\tan x=\\sin x$ ⇒ $u_2=-\\cos x$."}, {"titulo": "Armar", "md": "$y_p=\\cos x\\sin x-\\cos x\\ln|\\sec x+\\tan x|-\\sin x\\cos x$"}], "respuesta": "$y=c_1\\cos x+c_2\\sin x-\\cos x\\ln|\\sec x+\\tan x|$"}, {"tipo": "tabla", "columnas": ["Situación", "Método recomendado"], "filas": [["Coef. constantes y $g$ = polinomio/exp/sen/cos", "Coef. indeterminados (más rápido)"], ["$g$ con $\\tan$, $\\sec$, $\\ln$, potencias negativas", "Variación de parámetros"], ["Coeficientes variables (te dan $y_1$, o es Cauchy-Euler)", "Variación de parámetros (normalizando)"], ["El enunciado nombra el método", "El que piden: el otro puede valer 0"]]}, {"tipo": "ojo", "items": ["Proponer $Ae^{3x}$ cuando $e^{3x}\\in y_h$: al reemplazar da $0=1$ (hay que usar $Axe^{3x}$).", "Raíz doble y $g=e^{rx}$ con esa misma $r$: se multiplica por $x^2$, no por $x$ (control 60 min: $Dt^2e^t$).", "Polinomio incompleto: para $g=t^2+1$ se propone $At^2+Bt+C$, no $At^2+C$.", "En VP olvidar normalizar: en $x^2y''-2xy'+2y=x^2\\ln x$ la $f$ es $\\ln x$, no $x^2\\ln x$.", "Confundir el orden de $W_1$ y el signo: $u_1'=-y_2f/W$."]}]}, {"id": "t5", "titulo": "Ecuación de Cauchy-Euler", "peso": 3, "intro": "Salió en los cuatro controles anteriores, homogénea y no homogénea. Se reconoce porque la potencia de $x$ coincide con el orden de la derivada: $x^2y''$, $xy'$, $y$.", "bloques": [{"tipo": "definicion", "etiqueta": "Definición", "nombre": "Ecuación de Euler-Cauchy", "md": "$$a_nx^n\\frac{d^ny}{dx^n}+a_{n-1}x^{n-1}\\frac{d^{n-1}y}{dx^{n-1}}+\\dots+a_1x\\frac{dy}{dx}+a_0y=g(x),\\qquad a_i\\in\\mathbb R.$$\nEl caso típico de control es $ax^2y''+bxy'+cy=g(x)$, con $x>0$."}, {"tipo": "texto", "titulo": "Probar con $y=x^m$", "md": "Con $y=x^m$: $y'=mx^{m-1}$, $y''=m(m-1)x^{m-2}$. Al reemplazar en $ax^2y''+bxy'+cy=0$, **todas las potencias quedan $x^m$**:\n$$[am(m-1)+bm+c]\\,x^m=0$$\nEscribir esta línea vale puntos (\"calcular $y'$ e $y''$\" y \"obtener la ecuación indicial\" en la pauta 29/04). Simplificando:"}, {"tipo": "formula", "tex": "am^2+(b-a)m+c=0", "nota": "ecuación indicial (auxiliar)"}, {"tipo": "tabla", "columnas": ["Raíces de la indicial", "Solución general ($x>0$)"], "filas": [["Reales distintas $m_1\\neq m_2$", "$c_1x^{m_1}+c_2x^{m_2}$"], ["Real doble $m$", "$c_1x^m+c_2x^m\\ln x$"], ["Complejas $\\alpha\\pm\\beta i$", "$x^\\alpha\\big[c_1\\cos(\\beta\\ln x)+c_2\\sin(\\beta\\ln x)\\big]$"]]}, {"tipo": "nota", "md": "Es la misma tabla de coeficientes constantes cambiando $e^{mx}\\to x^m$ y $x\\to\\ln x$. El caso doble se deduce con Abel: $y_2=x^m\\int\\frac{e^{-\\frac ba\\ln x}}{x^{2m}}dx=x^m\\ln x$."}, {"tipo": "gadget", "id": "g_euler", "titulo": "Laboratorio Cauchy-Euler", "instrucciones": "Mueve $a$, $b$, $c$ de $ax^2y''+bxy'+cy=0$. Mira la indicial, las raíces y la $y_h$, junto con la EDO equivalente en $t=\\ln x$. El botón \"Control 29/04\" carga $x^2y''-3xy'+\\alpha y$: busca el valor de $\\alpha$ que da raíz doble $m=2$."}, {"tipo": "texto", "titulo": "El cambio de variable $x=e^t$", "md": "Con $t=\\ln x$ y $y(x)=Y(t)$:\n$$\\frac{dy}{dx}=\\frac1x\\frac{dY}{dt},\\qquad\\frac{d^2y}{dx^2}=\\frac1{x^2}\\left(\\frac{d^2Y}{dt^2}-\\frac{dY}{dt}\\right)$$\nReemplazando, $ax^2y''+bxy'+cy=g(x)$ se transforma en\n$$aY''+(b-a)Y'+cY=g(e^t),$$\nuna EDO de **coeficientes constantes** en $t$ (su auxiliar es justo la indicial). Al final se vuelve con $t=\\ln x$, $e^t=x$."}, {"tipo": "texto", "titulo": "Cauchy-Euler no homogénea: tres caminos", "md": "1. **Variación de parámetros** (pauta 30/04): dividir por $ax^2$ para normalizar; ojo que $f=g(x)/(ax^2)$.\n2. **Propuesta directa** (pauta 29/04): si $g=x^p$ y $p$ no es raíz de la indicial, $y_p=Ax^p$ funciona porque $x^2(Ax^p)''$, $x(Ax^p)'$ y $Ax^p$ son todas múltiplos de $x^p$.\n3. **Cambio $x=e^t$** y coeficientes indeterminados en $t$ (clase 13): sirve para $g$ con $x^p$ y potencias de $\\ln x$."}, {"tipo": "ejemplo", "titulo": "Clase 13: no homogénea con el cambio $x=e^t$", "enunciado": "Determine la solución general de $x^2y''+5xy'+4y=x^2+16(\\ln x)^2$.", "pasos": [{"titulo": "Transformar", "md": "$a=1,b=5,c=4$: $Y''+4Y'+4Y=e^{2t}+16t^2$."}, {"titulo": "Homogénea", "md": "$r^2+4r+4=(r+2)^2$ ⇒ $Y_h=(c_1+c_2t)e^{-2t}$."}, {"titulo": "Particular de $e^{2t}$", "md": "$2$ no es raíz: $Ae^{2t}$ ⇒ $(4+8+4)A=1$ ⇒ $A=\\frac1{16}$."}, {"titulo": "Particular de $16t^2$", "md": "$Bt^2+Ct+D$: $4B=16$, $8B+4C=0$, $2B+4C+4D=0$ ⇒ $B=4$, $C=-8$, $D=6$."}, {"titulo": "Volver a $x$", "md": "$t=\\ln x$, $e^{-2t}=x^{-2}$, $e^{2t}=x^2$."}], "respuesta": "$y=c_1x^{-2}+c_2x^{-2}\\ln x+\\frac{x^2}{16}+4\\ln^2x-8\\ln x+6$"}, {"tipo": "ejemplo", "titulo": "Guía 3, ejercicio 5", "enunciado": "Resuelva $x^2y''+10xy'+8y=0$ con el cambio $x=e^t$.", "pasos": [{"titulo": "Transformar", "md": "$Y''+(10-1)Y'+8Y=Y''+9Y'+8Y=0$"}, {"titulo": "Resolver", "md": "$r^2+9r+8=(r+1)(r+8)$ ⇒ $Y=C_1e^{-t}+C_2e^{-8t}$"}, {"titulo": "Volver", "md": "$e^{-t}=x^{-1}$, $e^{-8t}=x^{-8}$"}], "respuesta": "$y=\\dfrac{C_1}{x}+\\dfrac{C_2}{x^8}$", "lapiz": "volver a x: si queda en t, no está terminada"}, {"tipo": "ojo", "items": ["Indicial mal: $am^2+bm+c$ en vez de $am^2+(b-a)m+c$. Para $x^2y''-2xy'+2y$ es $m^2-3m+2$, no $m^2-2m+2$.", "Complejas con $\\cos(\\beta x)$: en Cauchy-Euler el argumento es $\\beta\\ln x$ (Guía 3, 6a es **falso** por eso).", "Raíz doble con $x\\cdot x^m$: lo correcto es $x^m\\ln x$.", "En VP no dividir por $x^2$: $f$ debe ser el lado derecho de $y''+\\frac bax y'+\\dots$", "Un término de $y_p$ que ya está en $y_h$ (como el $x^2$ de la pauta 30/04) se absorbe en $C_2$."]}]}, {"id": "t6", "titulo": "Sistemas masa-resorte", "peso": 3, "intro": "La aplicación del control: siempre vale una pregunta entera (20 pts). Los puntos están en plantear bien (Hooke, la EDO, los signos de las condiciones iniciales) más que en resolver, que ya sabes hacer por el capítulo 3.", "bloques": [{"tipo": "texto", "titulo": "Ley de Hooke y la constante k", "md": "El resorte ejerce una fuerza restauradora proporcional al estiramiento: $F=ks$. Al colgar la masa, llega al **equilibrio** cuando el peso iguala a esa fuerza:\n$$mg=ks.$$\nDe aquí sale $k$ (o $m$). Ojo con las unidades: si te dan el **peso** en libras, la masa es $m=W/g=W/32$ slug; si te dan la masa en kg, el peso es $W=9{,}8\\,m$ N."}, {"tipo": "tabla", "columnas": ["Sistema", "Masa", "Fuerza", "$g$"], "filas": [["Inglés", "slug", "libra (lb)", "$32$ pie/s²"], ["SI", "kg", "newton (N)", "$9{,}8$ m/s²"], ["CGS", "g", "dina", "$980$ cm/s²"]]}, {"tipo": "ejemplo", "titulo": "Clase 15, ejemplo 3: sacar m y k", "enunciado": "Una masa que pesa 16 lb se une a un resorte de 5 pies de largo. En equilibrio el resorte mide 8,2 pies. ¿Cuánto valen $m$ y $k$?", "pasos": [{"titulo": "Masa", "md": "$m=\\frac{W}{g}=\\frac{16}{32}=\\frac12$ slug"}, {"titulo": "Estiramiento", "md": "$s=8{,}2-5=3{,}2$ pies"}, {"titulo": "Hooke", "md": "$k=\\frac{W}{s}=\\frac{16}{3{,}2}=5$ lb/pie"}], "respuesta": "$m=\\tfrac12$ slug, $k=5$ lb/pie"}, {"tipo": "texto", "titulo": "La ecuación de movimiento", "md": "Si $x(t)$ es el desplazamiento medido **desde el equilibrio**, la segunda ley de Newton da (el peso se cancela con $ks$):\n$$m\\frac{d^2x}{dt^2}+c\\frac{dx}{dt}+kx=f(t)$$\n- $c\\ge 0$: constante de amortiguamiento (roce $=c\\,x'$). \"Fuerza amortiguadora igual a 2 veces la velocidad\" ⇒ $c=2$.\n- $f(t)$: fuerza externa (si no hay, movimiento **libre**).\n\n**Convención de clase: abajo es positivo.** Si el enunciado fija otra (la pauta 29/04 toma arriba positivo), úsala y dilo explícitamente."}, {"tipo": "tabla", "columnas": ["El enunciado dice…", "con abajo positivo"], "filas": [["\"se suelta / se libera desde el reposo\"", "$x'(0)=0$"], ["\"3 m bajo la posición de equilibrio\"", "$x(0)=3$"], ["\"1 pie sobre / arriba del equilibrio\"", "$x(0)=-1$"], ["\"desde la posición de equilibrio\"", "$x(0)=0$"], ["\"velocidad de 10 pie/s hacia arriba\" / \"ascendente\"", "$x'(0)=-10$"], ["\"velocidad hacia abajo de 2 m/s\"", "$x'(0)=2$"]]}, {"tipo": "lapiz", "texto": "condiciones iniciales: 2 a 3 pts por pregunta"}, {"tipo": "gadget", "id": "g_signos", "titulo": "Traductor de condiciones iniciales", "instrucciones": "Lee el enunciado generado al azar, escribe $x(0)$ y $x'(0)$ con la convención indicada y revisa. Repite hasta que no te equivoques nunca."}, {"tipo": "texto", "titulo": "Movimiento libre no amortiguado", "md": "Con $c=0$ y $f=0$: $x''+\\omega^2x=0$, $\\omega^2=\\frac km$. La auxiliar $r^2+\\omega^2=0$ da $r=\\pm\\omega i$:\n$$x(t)=c_1\\cos\\omega t+c_2\\sin\\omega t$$\n- **Frecuencia circular** $\\omega=\\sqrt{k/m}$ (rad/s)\n- **Periodo** $T=\\frac{2\\pi}{\\omega}$ (tiempo de un ciclo)\n- **Frecuencia** $f=\\frac1T=\\frac{\\omega}{2\\pi}$ (ciclos por segundo)\n- **Amplitud** $A=\\sqrt{c_1^2+c_2^2}$"}, {"tipo": "definicion", "etiqueta": "Propiedad", "nombre": "Forma sinusoidal", "md": "$c_1\\cos\\omega t+c_2\\sin\\omega t=A\\sin(\\omega t+\\varphi)$ con $A=\\sqrt{c_1^2+c_2^2}$ y\n$$\\sin\\varphi=\\frac{c_1}{A},\\qquad\\cos\\varphi=\\frac{c_2}{A},\\qquad\\tan\\varphi=\\frac{c_1}{c_2}.$$\nEl ángulo de fase $\\varphi$ debe quedar en el **cuadrante correcto** según los signos de $c_1$ y $c_2$: si $c_2<0$, hay que sumar $\\pi$ al $\\arctan(c_1/c_2)$."}, {"tipo": "gadget", "id": "g_fase", "titulo": "Amplitud y ángulo de fase", "instrucciones": "Mueve $c_1$ y $c_2$. La curva morada es $c_1\\cos\\omega t+c_2\\sin\\omega t$ y la punteada en verde es $A\\sin(\\omega t+\\varphi)$ con el $\\varphi$ correcto (deben coincidir). Si usas solo $\\arctan(c_1/c_2)$ con $c_2<0$, aparece en rojo la curva equivocada."}, {"tipo": "ejemplo", "titulo": "Guía 3, ejercicio 9", "enunciado": "Un cuerpo de 0,25 kg está unido a un resorte que se estira 0,25 m con una fuerza de 9 N. En $t=0$ se estira 1 m por debajo del equilibrio y se libera con velocidad de 5 m/s hacia arriba. Halle $x(t)$, amplitud y periodo.", "pasos": [{"titulo": "Constantes", "md": "$k=\\frac{9}{0{,}25}=36$ N/m, $\\omega=\\sqrt{36/0{,}25}=12$."}, {"titulo": "PVI", "md": "$x''+144x=0$, $x(0)=1$, $x'(0)=-5$."}, {"titulo": "Resolver", "md": "$x=c_1\\cos12t+c_2\\sin12t$: $c_1=1$, $12c_2=-5$ ⇒ $c_2=-\\frac5{12}$."}, {"titulo": "A y T", "md": "$A=\\sqrt{1+\\frac{25}{144}}=\\frac{13}{12}$ m, $T=\\frac{2\\pi}{12}=\\frac\\pi6$ s."}], "respuesta": "$x(t)=\\cos12t-\\frac5{12}\\sin12t$, $A=\\frac{13}{12}$ m, $T=\\frac\\pi6$ s"}, {"tipo": "texto", "titulo": "Movimiento libre amortiguado: los tres casos", "md": "Con roce: $mx''+cx'+kx=0$, o normalizada $x''+\\frac cmx'+\\frac kmx=0$. Las raíces son\n$$\\lambda_{1,2}=-\\frac{c}{2m}\\pm\\frac{1}{2m}\\sqrt{c^2-4mk}$$\ny el signo de $c^2-4mk$ decide el tipo de movimiento. Con $\\alpha=\\frac c{2m}$:"}, {"tipo": "tabla", "columnas": ["Caso", "Condición", "Solución", "Comportamiento"], "filas": [["Sobreamortiguado", "$c^2>4mk$", "$c_1e^{\\lambda_1t}+c_2e^{\\lambda_2t}$ (ambas $\\lambda<0$)", "No oscila; vuelve lento al equilibrio"], ["Crítico", "$c^2=4mk$", "$(c_1+c_2t)e^{-\\alpha t}$", "No oscila; cruza $x=0$ a lo más una vez"], ["Subamortiguado", "$c^2<4mk$", "$e^{-\\alpha t}(c_1\\cos\\omega^*t+c_2\\sin\\omega^*t)$", "Oscila con amplitud que decae como $Ae^{-\\alpha t}$"]]}, {"tipo": "formula", "tex": "\\omega^*=\\frac{1}{2m}\\sqrt{4mk-c^2}=\\sqrt{\\frac km-\\frac{c^2}{4m^2}}", "nota": "frecuencia del caso subamortiguado"}, {"tipo": "gadget", "id": "g_resorte", "titulo": "Simulador masa-resorte", "instrucciones": "Ajusta $m$, $c$, $k$, las condiciones iniciales y la fuerza externa $F_0\\cos\\gamma t$ (abajo positivo). Se clasifica el caso con $c^2$ vs $4mk$ y se cuentan los cruces por el equilibrio. Prueba los botones con los problemas de controles y busca la **resonancia** ($c=0$, $\\gamma=\\omega$)."}, {"tipo": "ejemplo", "titulo": "Clase 15, ejemplo 2 (amortiguamiento crítico)", "enunciado": "Una masa que pesa 8 lb alarga 2 pies un resorte. Una fuerza amortiguadora igual a dos veces la velocidad actúa sobre el sistema. Determine la ecuación de movimiento si se libera desde el equilibrio con velocidad ascendente de 3 pie/s.", "pasos": [{"titulo": "Datos", "md": "$m=\\frac8{32}=\\frac14$ slug, $k=\\frac82=4$ lb/pie, $c=2$."}, {"titulo": "EDO", "md": "$\\frac14x''+2x'+4x=0\\Rightarrow x''+8x'+16x=0$. Como $c^2=4=4mk=4$: **crítico**."}, {"titulo": "Resolver", "md": "$(r+4)^2=0$ ⇒ $x=(c_1+c_2t)e^{-4t}$. $x(0)=0$ ⇒ $c_1=0$; $x'(0)=c_2=-3$."}], "respuesta": "$x(t)=-3te^{-4t}$"}, {"tipo": "texto", "titulo": "Movimiento forzado y resonancia", "md": "Con fuerza externa: $mx''+cx'+kx=f(t)$. Es una no homogénea de coeficientes constantes: $x=x_h+x_p$ con coef. indeterminados o VP.\n\n- **Con amortiguamiento:** $x_h\\to 0$ (parte **transitoria**) y queda $x_p$ (parte **estacionaria**).\n- **Sin amortiguamiento y $f=F_0\\cos\\omega t$ con la misma $\\omega=\\sqrt{k/m}$:** el número de prueba $\\omega i$ es raíz, así que $x_p=t(A\\cos\\omega t+B\\sin\\omega t)$: la amplitud crece sin límite (**resonancia**). Ejemplo: $x''+x=2\\cos t$, $x(0)=x'(0)=0$ ⇒ $x=t\\sin t$ (Control 2025-2, P3)."}, {"tipo": "ejemplo", "titulo": "Clase 15, ejemplo 4 (forzado con amortiguamiento)", "enunciado": "Un objeto que pesa 32 lb alarga un resorte $\\frac{32}{9}$ pies. Se sumerge en un líquido con resistencia de 6 lb por pie/s y se aplica $f(t)=\\sin 4t$. Halle $x(t)$ si $x(0)=x'(0)=0$.", "pasos": [{"titulo": "Datos", "md": "$m=1$, $k=\\frac{32}{32/9}=9$, $c=6$: $x''+6x'+9x=\\sin4t$ (crítico, $r=-3$ doble)."}, {"titulo": "Particular", "md": "$x_p=A\\cos4t+B\\sin4t$: $(-7A+24B)\\cos4t+(-24A-7B)\\sin4t=\\sin4t$ ⇒ $A=-\\frac{24}{625}$, $B=-\\frac{7}{625}$."}, {"titulo": "Condiciones", "md": "$x=(c_1+c_2t)e^{-3t}+x_p$: $x(0)=0$ ⇒ $c_1=\\frac{24}{625}$; $x'(0)=-3c_1+c_2-\\frac{28}{625}=0$ ⇒ $c_2=\\frac{4}{25}$."}], "respuesta": "$x(t)=\\left(\\frac{24}{625}+\\frac{4}{25}t\\right)e^{-3t}-\\frac{24}{625}\\cos4t-\\frac{7}{625}\\sin4t$"}, {"tipo": "ojo", "items": ["Usar el peso (lb) como si fuera masa: 8 lb ⇒ $m=8/32$ slug.", "Signo de las condiciones iniciales: \"sobre\" y \"hacia arriba\" son negativos con abajo positivo.", "Contar cruces por el equilibrio con $t<0$: en $(2+4t)e^{-2t}=0$ la raíz $t=-\\frac12$ no cuenta → 0 cruces.", "Ángulo de fase en el cuadrante equivocado (revisa los signos de $c_1$ y $c_2$).", "Clasificar con $c^2$ vs $4k$ olvidando la $m$: es $c^2$ vs $4mk$."]}]}], "quiz": [{"tema": "t1", "dif": 1, "q": "¿Cuál de estas EDO es lineal?", "op": ["$x^2y''+e^xy'-y=\\sin x$", "$yy''+y'=0$", "$y''+\\sin y=0$", "$(y')^2+y=x$"], "ok": 0, "exp": "Es lineal si $y$ y sus derivadas aparecen a la primera potencia, multiplicadas solo por funciones de $x$. $yy''$, $\\sin y$ y $(y')^2$ rompen la linealidad."}, {"tema": "t1", "dif": 2, "q": "Para $(x-1)y''-xy'+y=0$ con $y(3)=1$, $y'(3)=0$, ¿en qué intervalo garantiza el teorema una solución única?", "op": ["$(1,\\infty)$", "$\\mathbb R$", "$(-\\infty,1)$", "$(0,\\infty)$"], "ok": 0, "exp": "$a_2(x)=x-1$ se anula en $x=1$. El intervalo más grande que contiene a $x_0=3$ sin ese punto es $(1,\\infty)$."}, {"tema": "t1", "dif": 1, "q": "$W[e^x,xe^x]$ es:", "op": ["$e^{2x}$", "$0$", "$xe^{2x}$", "$-e^{2x}$"], "ok": 0, "exp": "$W=e^x(1+x)e^x-e^x\\cdot xe^x=e^{2x}$. El error típico es derivar $xe^x$ como $e^x$ (olvidar la regla del producto)."}, {"tema": "t1", "dif": 2, "q": "El conjunto $\\{1,\\cos 2x,\\cos^2x\\}$ en $\\mathbb R$ es:", "op": ["LD, porque $\\cos^2x=\\frac{1+\\cos2x}{2}$", "LI, porque son tres funciones distintas", "LI, porque su wronskiano es 1", "LD, porque $\\cos 2x$ se anula en algunos puntos"], "ok": 0, "exp": "Basta mostrar una combinación nula con constantes no todas cero: $\\frac12\\cdot1+\\frac12\\cos2x-\\cos^2x=0$. Ser \"distintas\" no implica LI."}, {"tema": "t1", "dif": 2, "q": "Si $y_1$, $y_2$ son soluciones de $y''+P(x)y'+Q(x)y=0$ en $I$ (con $P,Q$ continuas) y $W[y_1,y_2](x_0)=0$ para algún $x_0\\in I$, entonces:", "op": ["Son LD en $I$ (por Abel, $W\\equiv0$)", "Son LI en $I$", "No se puede concluir nada", "$y_1=y_2$"], "ok": 0, "exp": "Por la fórmula de Abel $W=ce^{-\\int P}$: si se anula en un punto, $c=0$ y $W\\equiv0$, así que son LD (Guía 3, ej. 7). Ser LD no significa que sean iguales: pueden ser múltiplos."}, {"tema": "t1", "dif": 1, "q": "Si $y_h=c_1e^x+c_2e^{2x}$ y $y_p=3x$ es una solución particular, la solución general de la no homogénea es:", "op": ["$c_1e^x+c_2e^{2x}+3x$", "$3x$", "$c_1e^x+c_2e^{2x}$", "$c_1(e^x+3x)+c_2e^{2x}$"], "ok": 0, "exp": "Siempre $y=y_h+y_p$. La particular no lleva constante."}, {"tema": "t1", "dif": 2, "q": "Si $y_{p1}$ resuelve $L(y)=t^2+1$ y $y_{p2}$ resuelve $L(y)=e^t$, ¿qué resuelve $y_{p1}-y_{p2}$?", "op": ["$L(y)=t^2+1-e^t$", "$L(y)=t^2+1+e^t$", "$L(y)=0$", "Nada: no se pueden restar"], "ok": 0, "exp": "Por linealidad $L(y_{p1}-y_{p2})=L(y_{p1})-L(y_{p2})$. Es el principio de superposición para no homogéneas."}, {"tema": "t1", "dif": 3, "q": "¿Cuántas condiciones iniciales necesita un PVI de $y'''-3y''+4y'-12y=e^{3x}$ para tener solución única?", "op": ["3, todas en el mismo $x_0$", "2", "1", "3, en puntos distintos"], "ok": 0, "exp": "Orden $n=3$ ⇒ $y(x_0)$, $y'(x_0)$ e $y''(x_0)$. Si son en puntos distintos ya es un problema de frontera, no un PVI."}, {"tema": "t2", "dif": 1, "q": "En la fórmula $y_2=y_1\\int\\frac{e^{-\\int P\\,dx}}{y_1^2}dx$, $P(x)$ es:", "op": ["El coeficiente de $y'$ después de dividir por el de $y''$", "El coeficiente de $y'$ en la ecuación original", "El coeficiente de $y$", "El lado derecho"], "ok": 0, "exp": "La fórmula vale para la forma normalizada $y''+P(x)y'+Q(x)y=0$. Leer $P$ sin normalizar es el error más común."}, {"tema": "t2", "dif": 2, "q": "Para $(x-1)y''-xy'+y=0$, $e^{-\\int P\\,dx}$ es:", "op": ["$e^x(x-1)$", "$e^{-x}(x-1)$", "$e^{x^2/2}$", "$\\frac{e^x}{x-1}$"], "ok": 0, "exp": "$P=-\\frac{x}{x-1}=-1-\\frac1{x-1}$, así $\\int P=-x-\\ln|x-1|$ y $e^{-\\int P}=e^{x}(x-1)$ (pauta 2025-2)."}, {"tema": "t2", "dif": 2, "q": "Sabiendo que $y_1=x$ resuelve $x^2y''-xy'+y=0$, la segunda solución es:", "op": ["$x\\ln x$", "$x^2$", "$\\ln x$", "$\\frac1x$"], "ok": 0, "exp": "$P=-\\frac1x$, $e^{-\\int P}=x$, $y_2=x\\int\\frac{x}{x^2}dx=x\\ln x$. Coincide con Cauchy-Euler de raíz doble $m=1$."}, {"tema": "t2", "dif": 2, "q": "Para $xy''+3y'=0$ con $y_1=1$, la solución general es:", "op": ["$C_1+\\dfrac{C_2}{x^2}$", "$C_1+C_2x^3$", "$C_1+C_2\\ln x$", "$C_1+C_2e^{-3x}$"], "ok": 0, "exp": "$P=\\frac3x$ ⇒ $e^{-\\int P}=x^{-3}$ ⇒ $y_2=\\int x^{-3}dx=-\\frac1{2x^2}$; la constante se absorbe (Guía 3, ej. 1)."}, {"tema": "t2", "dif": 3, "q": "Sea $y''+a_1(x)y'+a_0(x)y=0$ con $a_1(x)=\\frac2x$. Por la fórmula de Abel, el wronskiano de dos soluciones es:", "op": ["$\\dfrac{c}{x^2}$", "$cx^2$", "$c\\,e^{2x}$", "$c\\ln x$"], "ok": 0, "exp": "$W=ce^{-\\int\\frac2x dx}=ce^{-2\\ln x}=cx^{-2}$."}, {"tema": "t2", "dif": 2, "q": "En la vía \"$y_2=u\\,y_1$\" para $xy''-(x+1)y'+y=0$ con $y_1=e^x$, ¿qué ecuación resulta para $v=u'$?", "op": ["$v'+\\left(1-\\frac1x\\right)v=0$", "$v'-v=0$", "$xv''+v=0$", "$v'+\\frac{v}{x}=x$"], "ok": 0, "exp": "Al reemplazar se cancelan los términos en $u$ y queda $xu''e^x+(x-1)u'e^x=0$ ⇒ $v'+(1-\\frac1x)v=0$, separable: $v=xe^{-x}$ (pauta abril 2026)."}, {"tema": "t2", "dif": 1, "q": "Si $y_1=x^4$ resuelve $x^2y''-7xy'+16y=0$, la segunda solución es:", "op": ["$x^4\\ln x$", "$x^{-4}$", "$x^8$", "$x^3$"], "ok": 0, "exp": "$P=-\\frac7x$, $e^{-\\int P}=x^7$, $y_2=x^4\\int\\frac{x^7}{x^8}dx=x^4\\ln x$ (Guía 3, ej. 13a). Es Cauchy-Euler con raíz doble $m=4$."}, {"tema": "t3", "dif": 1, "q": "La solución general de $y''+y'-6y=0$ es:", "op": ["$C_1e^{-3x}+C_2e^{2x}$", "$C_1e^{3x}+C_2e^{-2x}$", "$e^{-x/2}(C_1\\cos x+C_2\\sin x)$", "$(C_1+C_2x)e^{2x}$"], "ok": 0, "exp": "$m^2+m-6=(m+3)(m-2)$ ⇒ $m=-3,\\,2$. El distractor con signos cambiados es leer las raíces de los factores al revés."}, {"tema": "t3", "dif": 1, "q": "La solución general de $y''-2y'+y=0$ es:", "op": ["$C_1e^x+C_2xe^x$", "$C_1e^x+C_2e^x$", "$C_1e^x+C_2e^{-x}$", "$C_1\\cos x+C_2\\sin x$"], "ok": 0, "exp": "$(r-1)^2=0$: raíz doble $r=1$. La segunda función lleva una $x$ (pauta 29/04: 2 pts por reconocer la raíz doble)."}, {"tema": "t3", "dif": 2, "q": "La solución general de $2y''-4y'+8y=0$ es:", "op": ["$e^x(C_1\\cos\\sqrt3x+C_2\\sin\\sqrt3x)$", "$e^{2x}(C_1\\cos2x+C_2\\sin2x)$", "$C_1e^{x}+C_2e^{\\sqrt3x}$", "$e^x(C_1\\cos3x+C_2\\sin3x)$"], "ok": 0, "exp": "Divide por 2: $m^2-2m+4=0$ ⇒ $m=1\\pm\\sqrt3\\,i$ (Guía 3, ej. 3b). El $\\beta$ es $\\sqrt3$, no $3$."}, {"tema": "t3", "dif": 2, "q": "La ecuación $y'''-3y''+4y'-12y=0$ tiene solución general:", "op": ["$C_1e^{3x}+C_2\\cos2x+C_3\\sin2x$", "$C_1e^{3x}+C_2e^{2x}+C_3e^{-2x}$", "$C_1e^{-3x}+C_2\\cos2x+C_3\\sin2x$", "$C_1e^{3x}+e^{2x}(C_2\\cos x+C_3\\sin x)$"], "ok": 0, "exp": "$(r^2+4)(r-3)=0$ ⇒ $r=3$ y $r=\\pm2i$. $r^2+4$ da raíces imaginarias, no $\\pm2$ (pauta 30/04)."}, {"tema": "t3", "dif": 3, "q": "¿Cuál es la menor orden de una EDO lineal homogénea de coeficientes constantes reales que tenga a $e^x$ y $\\sin x$ como soluciones?", "op": ["3", "2", "4", "1"], "ok": 0, "exp": "Necesita las raíces $1$ y $\\pm i$ ($\\sin x$ arrastra a $\\cos x$): $(r-1)(r^2+1)$, grado 3. Por eso el V/F del Control 29/04 es **falso** para orden 2."}, {"tema": "t3", "dif": 2, "q": "Si la auxiliar es $m^3(m-1)^2(m+1)^2=0$, ¿cuántas constantes tiene $y_h$?", "op": ["7", "3", "5", "6"], "ok": 0, "exp": "La suma de multiplicidades es $3+2+2=7$, igual al orden (Clase 11)."}, {"tema": "t3", "dif": 2, "q": "La solución general de $y'''+y=0$ es:", "op": ["$C_1e^{-x}+e^{x/2}\\left(C_2\\cos\\frac{\\sqrt3}2x+C_3\\sin\\frac{\\sqrt3}2x\\right)$", "$C_1e^{-x}+C_2\\cos x+C_3\\sin x$", "$C_1e^{x}+e^{-x/2}\\left(C_2\\cos\\frac{\\sqrt3}2x+C_3\\sin\\frac{\\sqrt3}2x\\right)$", "$(C_1+C_2x+C_3x^2)e^{-x}$"], "ok": 0, "exp": "$m^3+1=(m+1)(m^2-m+1)$ ⇒ $m=-1$ y $m=\\frac12\\pm\\frac{\\sqrt3}2i$ (Clase 11)."}, {"tema": "t3", "dif": 3, "tipo": "num", "q": "Resuelve $y''-6y'+5y=0$, $y(0)=3$, $y'(0)=11$. ¿Cuánto vale el coeficiente de $e^{5x}$?", "ok": 2, "tol": 0.001, "exp": "$y=C_1e^x+C_2e^{5x}$: $C_1+C_2=3$, $C_1+5C_2=11$ ⇒ $C_2=2$, $C_1=1$ (Guía 3, ej. 4a)."}, {"tema": "t4", "dif": 1, "q": "Para $y''-2y'+y=\\sin x$ la propuesta correcta es:", "op": ["$A\\sin x+B\\cos x$", "$A\\sin x$", "$Ax\\sin x+Bx\\cos x$", "$Ae^x\\sin x$"], "ok": 0, "exp": "El número de prueba es $i$, que no es raíz de $(r-1)^2$. Hay que poner seno **y** coseno: al derivar se mezclan (pauta 29/04)."}, {"tema": "t4", "dif": 2, "q": "Para $y'''-3y''+4y'-12y=e^{3x}$, la propuesta es:", "op": ["$Axe^{3x}$", "$Ae^{3x}$", "$Ax^2e^{3x}$", "$(Ax+B)e^{3x}$"], "ok": 0, "exp": "$3$ es raíz simple de la auxiliar, así que se multiplica por $x^1$. Con $Ae^{3x}$ se obtiene $0=1$ (pauta 30/04, 3 pts)."}, {"tema": "t4", "dif": 2, "q": "Para $y''-2y'+y=-e^t$ (variable $t$), la propuesta es:", "op": ["$Dt^2e^t$", "$Dte^t$", "$De^t$", "$(Dt+E)e^t$"], "ok": 0, "exp": "$r=1$ es raíz **doble**: $s=2$ ⇒ $Dt^2e^t$. Así lo hace la pauta del control de 60 min."}, {"tema": "t4", "dif": 2, "q": "Para $y''+2y'+y=x+\\cos x$, ¿cuál es la forma de $y_p$?", "op": ["$a+bx+c\\sin x+d\\cos x$", "$bx+d\\cos x$", "$x(a+bx)+c\\sin x+d\\cos x$", "$(a+bx)e^{-x}+c\\cos x$"], "ok": 0, "exp": "Polinomio de grado 1 completo (número 0, no es raíz) más seno y coseno (número $i$, no es raíz). La forma vale 8 de 15 pts en esa pauta."}, {"tema": "t4", "dif": 1, "q": "¿Para cuál de estas EDO **no** sirve coeficientes indeterminados?", "op": ["$y''+y=\\tan x$", "$y''+y=x^2e^x$", "$y''-4y=\\cos 3x$", "$y''+y'=10x^4+2$"], "ok": 0, "exp": "$\\tan x$ no es de la familia polinomio·exponencial·seno/coseno: sus derivadas no se \"cierran\". Hay que usar variación de parámetros."}, {"tema": "t4", "dif": 2, "q": "En variación de parámetros, para $x^2y''-2xy'+2y=x^2\\ln x$ la función $f$ que va en $W_1,W_2$ es:", "op": ["$\\ln x$", "$x^2\\ln x$", "$\\frac{\\ln x}{x^2}$", "$x\\ln x$"], "ok": 0, "exp": "Primero se normaliza dividiendo por $x^2$: $y''-\\frac2xy'+\\frac2{x^2}y=\\ln x$ (2 pts en la pauta 30/04)."}, {"tema": "t4", "dif": 2, "q": "Con $y_1=e^{3t}$, $y_2=te^{3t}$, el wronskiano vale:", "op": ["$e^{6t}$", "$te^{6t}$", "$3e^{6t}$", "$0$"], "ok": 0, "exp": "$W=e^{3t}(1+3t)e^{3t}-3e^{3t}\\cdot te^{3t}=e^{6t}$ (control de 60 min, P2)."}, {"tema": "t4", "dif": 3, "q": "Una solución particular de $y''-6y'+9y=t^{-3}e^{3t}$ es:", "op": ["$\\dfrac{e^{3t}}{2t}$", "$\\dfrac{e^{3t}}{t}$", "$-\\dfrac{e^{3t}}{2t^2}$", "$At^{-3}e^{3t}$"], "ok": 0, "exp": "$u_1'=-t^{-2}$ ⇒ $u_1=\\frac1t$; $u_2'=t^{-3}$ ⇒ $u_2=-\\frac1{2t^2}$; $y_p=\\frac{e^{3t}}t-\\frac{e^{3t}}{2t}=\\frac{e^{3t}}{2t}$."}, {"tema": "t4", "dif": 2, "tipo": "num", "q": "En $y'''-3y''+4y'-12y=e^{3x}$ con $y_p=Axe^{3x}$, ¿cuánto vale $A$? (usa coma o punto)", "ok": 0.0769231, "tol": 0.001, "exp": "Al reemplazar queda $13Ae^{3x}=e^{3x}$ ⇒ $A=\\frac1{13}\\approx0{,}0769$. Truco: $L(xe^{rx})=p'(r)e^{rx}$ con $p'(3)=27-18+4=13$."}, {"tema": "t4", "dif": 3, "tipo": "num", "q": "Para $y''-10y'+25y=30x+3$ con $y_p=Ax+B$, ¿cuánto vale $B$?", "ok": 0.6, "tol": 0.001, "exp": "$-10A+25(Ax+B)=30x+3$ ⇒ $A=\\frac65$ y $25B-12=3$ ⇒ $B=\\frac35=0{,}6$ (Clase 12)."}, {"tema": "t5", "dif": 1, "q": "La ecuación indicial de $x^2y''-2xy'+2y=0$ es:", "op": ["$m^2-3m+2=0$", "$m^2-2m+2=0$", "$m^2+2m+2=0$", "$m^2-m+2=0$"], "ok": 0, "exp": "$am^2+(b-a)m+c$ con $a=1$, $b=-2$, $c=2$: $m^2-3m+2$. Olvidar el $-a$ da el distractor $m^2-2m+2$."}, {"tema": "t5", "dif": 2, "q": "La solución general de $x^2y''-xy'+2y=0$ ($x>0$) es:", "op": ["$x[C_1\\cos(\\ln x)+C_2\\sin(\\ln x)]$", "$e^x(C_1\\cos x+C_2\\sin x)$", "$e^{-x}(C_1\\cos x+C_2\\sin x)$", "$C_1x+C_2x\\ln x$"], "ok": 0, "exp": "$m^2-2m+2=0$ ⇒ $m=1\\pm i$ ⇒ $x^1[\\cos(1\\cdot\\ln x),\\ \\sin(\\ln x)]$ (Control 2025-2 P2; la opción con $e^{-x}$ es la de la Guía 3, 6a, que es falsa)."}, {"tema": "t5", "dif": 1, "q": "La solución general de $x^2y''+3xy'+y=0$ es:", "op": ["$\\alpha x^{-1}+\\beta x^{-1}\\ln x$", "$\\alpha x^{-1}+\\beta x$", "$(\\alpha+\\beta x)e^{-x}$", "$\\alpha x^{-1}+\\beta x^{-2}$"], "ok": 0, "exp": "$m^2+2m+1=(m+1)^2$ ⇒ $m=-1$ doble ⇒ $x^{-1}$ y $x^{-1}\\ln x$ (pauta abril 2026, P3)."}, {"tema": "t5", "dif": 3, "tipo": "num", "q": "En $x^2y''-3xy'+ay=0$, ¿para qué valor de $a$ existe una solución del tipo $x^2\\ln x$?", "ok": 4, "tol": 0.001, "exp": "Indicial $m^2-4m+a=0$; $x^2\\ln x$ requiere $m=2$ raíz doble: $p(2)=a-4=0$ y $p'(2)=0$ ⇒ $a=4$ (pauta 29/04, P2b)."}, {"tema": "t5", "dif": 2, "q": "Con el cambio $x=e^t$, la ecuación $x^2y''+10xy'+8y=0$ se transforma en:", "op": ["$Y''+9Y'+8Y=0$", "$Y''+10Y'+8Y=0$", "$Y''+11Y'+8Y=0$", "$Y''-9Y'+8Y=0$"], "ok": 0, "exp": "$aY''+(b-a)Y'+cY=0$ con $a=1$, $b=10$, $c=8$ (Guía 3, ej. 5)."}, {"tema": "t5", "dif": 2, "q": "Para $x^2y''-3xy'+3y=x^2$, ¿qué propuesta directa funciona?", "op": ["$y_p=Ax^2$, y da $A=-1$", "$y_p=Ax^2\\ln x$", "$y_p=Ae^{2x}$", "$y_p=Ax^2$, y da $A=1$"], "ok": 0, "exp": "Raíces $m=1,3$; $2$ no es raíz, así que $Ax^2$ sirve: $2A-6A+3A=-A=1$ ⇒ $A=-1$ (pauta 29/04)."}, {"tema": "t5", "dif": 2, "q": "La derivada $\\frac{d^2y}{dx^2}$ con $t=\\ln x$ es:", "op": ["$\\frac1{x^2}\\left(Y''-Y'\\right)$", "$\\frac1{x^2}Y''$", "$\\frac1xY''$", "$\\frac1{x^2}\\left(Y''+Y'\\right)$"], "ok": 0, "exp": "$\\frac{dy}{dx}=\\frac1xY'$ y derivando de nuevo (regla del producto) aparece $-\\frac1{x^2}Y'$. Vale 12 pts en la segunda vía de la pauta 2025-2."}, {"tema": "t5", "dif": 3, "q": "La solución de $x^2y''+xy'+9y=0$ es:", "op": ["$C_1\\cos(3\\ln x)+C_2\\sin(3\\ln x)$", "$C_1\\cos3x+C_2\\sin3x$", "$x^3(C_1+C_2\\ln x)$", "$C_1x^3+C_2x^{-3}$"], "ok": 0, "exp": "$m^2+9=0$ ⇒ $m=\\pm3i$ ($\\alpha=0$): $\\cos(3\\ln x)$, $\\sin(3\\ln x)$ (Guía 3, 3l)."}, {"tema": "t6", "dif": 1, "q": "Una masa que pesa 8 lb alarga un resorte 2 pies. ¿Cuánto valen $m$ y $k$?", "op": ["$m=\\frac14$ slug, $k=4$ lb/pie", "$m=8$ slug, $k=4$ lb/pie", "$m=\\frac14$ slug, $k=16$ lb/pie", "$m=8$ slug, $k=16$ lb/pie"], "ok": 0, "exp": "8 lb es **peso**: $m=8/32$. Hooke: $k=W/s=8/2=4$ (Clase 15, ej. 2)."}, {"tema": "t6", "dif": 1, "q": "Con abajo positivo, \"se libera 2 m arriba del equilibrio, desde el reposo\" se traduce como:", "op": ["$x(0)=-2$, $x'(0)=0$", "$x(0)=2$, $x'(0)=0$", "$x(0)=0$, $x'(0)=-2$", "$x(0)=-2$, $x'(0)=-2$"], "ok": 0, "exp": "Arriba es negativo y \"reposo\" significa velocidad inicial cero."}, {"tema": "t6", "dif": 2, "q": "$m=1$, $k=4$ y $c=4$. El movimiento es:", "op": ["Críticamente amortiguado", "Sobreamortiguado", "Subamortiguado", "Armónico simple"], "ok": 0, "exp": "$c^2=16=4mk=16$ ⇒ crítico, $r=-2$ doble (pauta 29/04, P3b)."}, {"tema": "t6", "dif": 2, "q": "$x(t)=-\\cos4t-\\frac52\\sin4t$. La amplitud es:", "op": ["$\\frac{\\sqrt{29}}2\\approx2{,}69$", "$\\frac72$", "$\\frac32$", "$\\sqrt{29}$"], "ok": 0, "exp": "$A=\\sqrt{(-1)^2+(-\\frac52)^2}=\\sqrt{\\frac{29}4}$ (pauta 30/04). Sumar los coeficientes no da la amplitud."}, {"tema": "t6", "dif": 3, "tipo": "num", "q": "Para $x(t)=-\\cos4t-\\frac52\\sin4t=A\\sin(4t+\\varphi)$, ¿cuánto vale $\\varphi$ en $(0,2\\pi)$? (en radianes, 2 decimales)", "ok": 3.522, "tol": 0.01, "exp": "$\\sin\\varphi=c_1/A<0$ y $\\cos\\varphi=c_2/A<0$: tercer cuadrante. $\\varphi=\\pi+\\arctan\\frac{c_1}{c_2}=\\pi+\\arctan0{,}4\\approx3{,}52$. Solo $\\arctan0{,}4\\approx0{,}38$ es el cuadrante equivocado."}, {"tema": "t6", "dif": 2, "q": "¿Cuántas veces puede pasar por el equilibrio una masa críticamente amortiguada?", "op": ["A lo más una vez", "Nunca", "Infinitas veces", "Exactamente dos veces"], "ok": 0, "exp": "$x=(c_1+c_2t)e^{-\\alpha t}$ y $c_1+c_2t$ tiene a lo más un cero (Clase 15). En el control 29/04 ese cero estaba en $t<0$, así que fueron 0 veces."}, {"tema": "t6", "dif": 2, "q": "Un sistema sin amortiguamiento $x''+x=2\\cos t$ presenta:", "op": ["Resonancia: $x_p=t\\sin t$ crece sin límite", "Amortiguamiento crítico", "Movimiento acotado de amplitud 2", "Pulsaciones que decaen"], "ok": 0, "exp": "$\\omega=1$ coincide con la frecuencia de la fuerza: el número $i$ es raíz y $x_p=t(\\dots)$ (Control 2025-2, P3)."}, {"tema": "t6", "dif": 1, "tipo": "num", "q": "Una masa de 2 slug estira un resorte 2 pies ($g=32$). ¿Cuánto vale $k$ en lb/pie?", "ok": 32, "tol": 0.001, "exp": "$mg=ks$ ⇒ $2\\cdot32=k\\cdot2$ ⇒ $k=32$ (pauta 30/04, 3 pts)."}, {"tema": "t6", "dif": 2, "tipo": "num", "q": "$m=0{,}25$ kg y $k=36$ N/m sin roce. ¿Cuál es el periodo $T$ en segundos? (3 decimales)", "ok": 0.5236, "tol": 0.002, "exp": "$\\omega=\\sqrt{36/0{,}25}=12$ ⇒ $T=\\frac{2\\pi}{12}=\\frac\\pi6\\approx0{,}524$ s (Guía 3, ej. 9)."}, {"tema": "t6", "dif": 3, "q": "$x''+2x'+2x=0$, $x(0)=3$, $x'(0)=0$ da $x=3e^{-t}(\\cos t+\\sin t)$. ¿Cuándo pasa por primera vez por el equilibrio?", "op": ["$t=\\frac{3\\pi}{4}$", "$t=\\frac\\pi4$", "$t=\\frac\\pi2$", "Nunca"], "ok": 0, "exp": "$\\cos t+\\sin t=0$ ⇒ $\\tan t=-1$; el primer $t>0$ es $\\frac{3\\pi}4$ (Guía 3, ej. 8). $\\frac\\pi4$ es donde $\\tan t=+1$."}], "evaluaciones": [{"fuente": "Control 2 · 2025-2 (Sec. 3, 15/10)", "pregunta": "P1", "tema": "t2", "puntaje": "20 pts", "enunciado": "Resolver la ecuación $(x-1)y''-xy'+y=0$, sabiendo que $y_1(x)=x$.", "estrategia": "Te dan $y_1$ y es homogénea con coeficientes variables: reducción de orden con la fórmula de Abel. Lo primero, normalizar.", "pasos": [{"titulo": "Forma normal", "md": "$y''-\\frac{x}{x-1}y'+\\frac1{x-1}y=0$, con $P(x)=-\\frac{x}{x-1}$."}, {"titulo": "Exponencial", "md": "$\\int P\\,dx=\\int-\\frac{x}{x-1}dx=-x-\\ln|x-1|$ ⇒ $e^{-\\int P}=e^x(x-1)$."}, {"titulo": "Integral", "md": "$y_2=x\\int\\frac{e^x(x-1)}{x^2}dx=x\\int\\left(\\frac{e^x}x-\\frac{e^x}{x^2}\\right)dx=x\\int\\frac{d}{dx}\\left(\\frac{e^x}x\\right)dx=x\\cdot\\frac{e^x}x=e^x$"}], "respuesta": "$y(x)=C_1x+C_2e^x$", "tiempo": "15 min", "rubrica": [{"criterio": "Paso a forma normal e identificación correcta de $P(x)$", "pts": "4"}, {"criterio": "Aplicación de la fórmula $y_2=y_1\\int e^{-\\int P}/y_1^2\\,dx$", "pts": "4"}, {"criterio": "Cálculo de la integral y obtención de $y_2=e^x$", "pts": "8"}, {"criterio": "Solución general $C_1x+C_2e^x$", "pts": "4"}], "descuentos": ["La integral vale 8 de 20: si no ves la derivada de $e^x/x$, prueba integrar $\\int\\frac{e^x}{x}dx$ por partes y se cancela."], "confianza": "pauta", "variantes": ["Guía 3, ej. 2a (misma EDO normalizada)"]}, {"fuente": "Control 2 · 2025-2 (Sec. 3, 15/10)", "pregunta": "P2", "tema": "t5", "puntaje": "20 pts", "enunciado": "Resolver $x^2y''-xy'+2y=0$.", "estrategia": "Potencia de $x$ igual al orden de la derivada: Cauchy-Euler. Dos vías aceptadas: $y=x^m$ directo o el cambio $z=\\ln x$.", "pasos": [{"titulo": "Probar $y=x^m$", "md": "$x^2m(m-1)x^{m-2}-x\\,mx^{m-1}+2x^m=[m(m-1)-m+2]x^m=(m^2-2m+2)x^m=0$"}, {"titulo": "Raíces", "md": "$m^2-2m+2=0$ ⇒ $m=1\\pm i$ ($\\alpha=1$, $\\beta=1$)."}, {"titulo": "Base real", "md": "$x\\cos(\\ln x)$ y $x\\sin(\\ln x)$."}, {"titulo": "Vía 2 (opcional)", "md": "Con $z=\\ln x$: $\\frac{dy}{dx}=\\frac1x\\frac{dY}{dz}$, $\\frac{d^2y}{dx^2}=\\frac1{x^2}(Y''-Y')$ ⇒ $Y''-2Y'+2Y=0$, $Y=e^z(C_1\\cos z+C_2\\sin z)$ y se vuelve con $e^z=x$."}], "respuesta": "$y(x)=C_1x\\cos(\\ln x)+C_2x\\sin(\\ln x)$", "tiempo": "10 min", "rubrica": [{"criterio": "Planteamiento $y=x^m$ y ecuación auxiliar correcta", "pts": "12"}, {"criterio": "Raíces complejas, base real y solución general", "pts": "8"}, {"criterio": "(Vía 2) Derivadas en $z$ y EDO $Y''-2Y'+2Y=0$", "pts": "12"}, {"criterio": "(Vía 2) Resolver en $z$", "pts": "4"}, {"criterio": "(Vía 2) Volver a $x$", "pts": "4"}], "confianza": "pauta", "variantes": ["Guía 3, ej. 6a (V/F con la misma EDO)"]}, {"fuente": "Control 2 · 2025-2 (Sec. 3, 15/10)", "pregunta": "P3", "tema": "t6", "puntaje": "20 pts", "enunciado": "Sistema masa-resorte con $m=1$ kg, $k=1$ N/m, fuerza $F(t)=2\\cos t$ N, sin amortiguamiento. (a) EDO del modelo. (b) Solución con $x(0)=0$, $x'(0)=0$.", "estrategia": "Forzado sin roce con la misma frecuencia natural ($\\omega=1$): **resonancia**. La propuesta lleva un factor $t$. Se acepta coef. indeterminados o variación de parámetros.", "pasos": [{"titulo": "(a) Modelo", "md": "$mx''=F(t)-kx$ ⇒ $x''+x=2\\cos t$."}, {"titulo": "Homogénea", "md": "$r=\\pm i$ ⇒ $x_h=A\\cos t+B\\sin t$."}, {"titulo": "Particular (resonancia)", "md": "$2\\cos t$ resuena: $x_p=t(C\\cos t+D\\sin t)$; al reemplazar sale $C=0$, $D=1$ ⇒ $x_p=t\\sin t$."}, {"titulo": "Condiciones", "md": "$x=A\\cos t+B\\sin t+t\\sin t$: $x(0)=0$ ⇒ $A=0$; $x'(0)=B=0$."}, {"titulo": "Vía VP (alternativa)", "md": "$W=1$, $u_1'=-\\sin2t$, $u_2'=2\\cos^2t=1+\\cos2t$ ⇒ $u_1=\\frac12\\cos2t$, $u_2=t+\\frac12\\sin2t$ ⇒ $x_p=t\\sin t+\\frac12\\cos t$ (el $\\frac12\\cos t$ se absorbe)."}], "respuesta": "$x(t)=t\\sin t$", "tiempo": "15 min", "rubrica": [{"criterio": "Plantea y obtiene la ecuación del movimiento", "pts": "4"}, {"criterio": "Resuelve el problema homogéneo", "pts": "2"}, {"criterio": "Particular por coef. indeterminados ($Ct\\sin t$, $C=1$) o por VP con $W,W_1,W_2$", "pts": "10"}, {"criterio": "Aplica C.I. y responde $x=t\\sin t$", "pts": "4"}], "confianza": "pauta", "variantes": ["Guía 3, ej. 11 (idéntico)"]}, {"fuente": "Control 2 · 2026-1 (29/04)", "pregunta": "P1 a)", "tema": "t4", "puntaje": "10 pts", "enunciado": "Resolver $y''-2y'+y=\\sin(x)$.", "estrategia": "Coeficientes constantes y lado derecho seno: coef. indeterminados. El número de prueba $i$ no es raíz de $(r-1)^2$, así que no hay corrección.", "pasos": [{"titulo": "Homogénea", "md": "$r^2-2r+1=(r-1)^2=0$, raíz doble $r=1$ ⇒ $y_h=C_1e^x+C_2xe^x$."}, {"titulo": "Propuesta", "md": "$y_p=A\\sin x+B\\cos x$; $y_p'=A\\cos x-B\\sin x$; $y_p''=-A\\sin x-B\\cos x$."}, {"titulo": "Reemplazar", "md": "$(-A\\sin x-B\\cos x)-2(A\\cos x-B\\sin x)+A\\sin x+B\\cos x=2B\\sin x-2A\\cos x$."}, {"titulo": "Igualar", "md": "$2B=1$, $-2A=0$ ⇒ $B=\\frac12$, $A=0$ ⇒ $y_p=\\frac12\\cos x$."}], "respuesta": "$y(x)=C_1e^x+C_2xe^x+\\frac12\\cos x$", "tiempo": "8 min", "rubrica": [{"criterio": "Plantear la homogénea asociada", "pts": "1"}, {"criterio": "Ecuación característica", "pts": "1"}, {"criterio": "Reconocer la raíz doble $r=1$", "pts": "2"}, {"criterio": "Solución homogénea", "pts": "2"}, {"criterio": "Proponer una particular adecuada", "pts": "1"}, {"criterio": "Sustituir y comparar coeficientes", "pts": "2"}, {"criterio": "Solución general completa", "pts": "1"}], "confianza": "pauta"}, {"fuente": "Control 2 · 2026-1 (29/04)", "pregunta": "P1 b)", "tema": "t3", "puntaje": "10 pts", "enunciado": "Determinar si es verdadera o falsa: existe una ecuación diferencial lineal homogénea de orden 2, a coeficientes constantes, que tiene como soluciones linealmente independientes a $y_1=e^x$, $y_2=\\sin(x)$.", "estrategia": "Pregunta \"al revés\": de cada solución deduce qué raíces exige la auxiliar y cuenta el grado.", "pasos": [{"titulo": "$e^x$", "md": "Exige que $r=1$ sea raíz del polinomio característico."}, {"titulo": "$\\sin x$", "md": "Con coeficientes reales, $\\sin x$ viene de las raíces $\\pm i$ (factor $r^2+1$), y entonces $\\cos x$ también es solución."}, {"titulo": "Contar", "md": "Hacen falta las raíces $1$, $i$, $-i$: grado $\\ge3$. Una EDO de orden 2 tiene polinomio de grado 2."}], "respuesta": "**Falsa**: no existe tal EDO de orden 2 (la menor es de orden 3).", "tiempo": "6 min", "rubrica": [{"criterio": "$e^x$ exige la raíz $r=1$", "pts": "2"}, {"criterio": "$\\sin x$ asociado a raíces $\\pm i$", "pts": "3"}, {"criterio": "$\\sin x$ y $\\cos x$ aparecen juntas", "pts": "2"}, {"criterio": "Orden 2 no puede contener a la vez $r=1$ y $\\pm i$", "pts": "2"}, {"criterio": "Concluir que es falsa", "pts": "1"}], "descuentos": ["Responder solo \"Falso\" sin argumento: 1 de 10 pts."], "confianza": "pauta"}, {"fuente": "Control 2 · 2026-1 (29/04)", "pregunta": "P2 a)", "tema": "t5", "puntaje": "10 pts", "enunciado": "Considere la ecuación de Cauchy-Euler $x^2y''-3xy'+ay=x^2$. Resolver para $a=3$.", "estrategia": "Cauchy-Euler no homogénea con lado derecho potencia de $x$: homogénea con $y=x^m$ y luego proponer $y_p=Ax^2$ (porque $2$ no es raíz de la indicial).", "pasos": [{"titulo": "Homogénea", "md": "$y=x^m$: $[m(m-1)-3m+3]x^m=0$ ⇒ $m^2-4m+3=(m-1)(m-3)=0$ ⇒ $y_h=C_1x+C_2x^3$."}, {"titulo": "Propuesta", "md": "$y_p=Ax^2$, $y_p'=2Ax$, $y_p''=2A$."}, {"titulo": "Reemplazar", "md": "$x^2(2A)-3x(2Ax)+3Ax^2=-Ax^2=x^2$ ⇒ $A=-1$."}], "respuesta": "$y(x)=C_1x+C_2x^3-x^2$", "tiempo": "8 min", "rubrica": [{"criterio": "Sustituir $a=3$", "pts": "1"}, {"criterio": "Reconocer Cauchy-Euler y proponer $y=x^m$", "pts": "2"}, {"criterio": "Calcular $y'$ e $y''$", "pts": "1"}, {"criterio": "Ecuación indicial", "pts": "2"}, {"criterio": "Raíces $m=1$, $m=3$", "pts": "1"}, {"criterio": "Solución homogénea", "pts": "1"}, {"criterio": "Proponer y calcular la particular", "pts": "1,5"}, {"criterio": "Solución general", "pts": "0,5"}], "confianza": "pauta"}, {"fuente": "Control 2 · 2026-1 (29/04)", "pregunta": "P2 b)", "tema": "t5", "puntaje": "10 pts", "enunciado": "Para $x^2y''-3xy'+ay=x^2$, determinar los valores de $a$ para que exista una solución (de la homogénea) del tipo $x^2\\ln(x)$.", "estrategia": "$x^m\\ln x$ solo aparece cuando $m$ es raíz **doble** de la indicial. Impón $p(2)=0$ y verifica $p'(2)=0$.", "pasos": [{"titulo": "Indicial", "md": "$m(m-1)-3m+a=0$ ⇒ $p(m)=m^2-4m+a$."}, {"titulo": "Raíz", "md": "$x^2\\ln x$ exige $m=2$ doble: $p(2)=4-8+a=a-4=0$ ⇒ $a=4$."}, {"titulo": "Verificar doble", "md": "$p'(m)=2m-4$ ⇒ $p'(2)=0$ ✓."}], "respuesta": "$a=4$", "tiempo": "6 min", "rubrica": [{"criterio": "Plantear la homogénea", "pts": "1"}, {"criterio": "Proponer $y=x^m$", "pts": "1"}, {"criterio": "Indicial $m^2-4m+a=0$", "pts": "3"}, {"criterio": "Reconocer que $x^2\\ln x$ exige raíz repetida $m=2$", "pts": "3"}, {"criterio": "Calcular $a=4$", "pts": "1,5"}, {"criterio": "Justificar que la raíz es doble", "pts": "0,5"}], "confianza": "pauta"}, {"fuente": "Control 2 · 2026-1 (29/04)", "pregunta": "P3 a)", "tema": "t6", "puntaje": "6 pts", "enunciado": "Una masa $m=1$ kg está unida a un resorte con $k=4$ N/m y sometida a una fuerza amortiguadora proporcional a la velocidad, con coeficiente $c$. La masa se libera del reposo 2 metros por arriba de la posición de equilibrio. Plantee el PVI.", "estrategia": "Plantear es la mitad del puntaje: modelo $my''+cy'+ky=0$ y traducir bien las condiciones. Esta pauta toma **arriba positivo**: decláralo.", "pasos": [{"titulo": "Modelo", "md": "$my''+cy'+ky=0$ con $m=1$, $k=4$ ⇒ $y''+cy'+4y=0$."}, {"titulo": "Condiciones", "md": "\"Del reposo\" ⇒ $y'(0)=0$. \"2 m arriba\" con arriba positivo ⇒ $y(0)=2$ (con abajo positivo sería $-2$)."}], "respuesta": "$y''+cy'+4y=0,\\ y(0)=2,\\ y'(0)=0$", "tiempo": "4 min", "rubrica": [{"criterio": "Reconocer el modelo $my''+cy'+ky=0$", "pts": "2"}, {"criterio": "Sustituir $m=1$ y $k=4$", "pts": "1"}, {"criterio": "\"Se libera del reposo\" como $y'(0)=0$", "pts": "1,5"}, {"criterio": "Posición inicial $y(0)=2$", "pts": "1,5"}], "confianza": "pauta"}, {"fuente": "Control 2 · 2026-1 (29/04)", "pregunta": "P3 b)", "tema": "t6", "puntaje": "14 pts", "enunciado": "Resolver el PVI anterior para $c=4$ y determinar cuántas veces pasa la masa por la posición de equilibrio.", "estrategia": "$c^2=16=4mk$: amortiguamiento crítico. Resolver y buscar los ceros de $y(t)$ **solo para $t\\ge0$**.", "pasos": [{"titulo": "Raíces", "md": "$r^2+4r+4=(r+2)^2=0$ ⇒ $r=-2$ doble ⇒ $y=(C_1+C_2t)e^{-2t}$."}, {"titulo": "$y(0)=2$", "md": "$C_1=2$."}, {"titulo": "$y'(0)=0$", "md": "$y'=(C_2-4-2C_2t)e^{-2t}$ ⇒ $C_2-4=0$ ⇒ $C_2=4$ ⇒ $y=(2+4t)e^{-2t}$."}, {"titulo": "Cruces", "md": "$e^{-2t}>0$, así que $y=0\\iff2+4t=0\\iff t=-\\frac12$, que no es físico."}], "respuesta": "$y(t)=(2+4t)e^{-2t}$; pasa **0 veces** por el equilibrio para $t\\ge0$.", "tiempo": "10 min", "rubrica": [{"criterio": "Sustituir $c=4$", "pts": "1"}, {"criterio": "Ecuación característica", "pts": "2"}, {"criterio": "Raíz doble $r=-2$", "pts": "2"}, {"criterio": "Solución general del caso crítico", "pts": "2"}, {"criterio": "Usar $y(0)=2$", "pts": "2"}, {"criterio": "Derivar y usar $y'(0)=0$", "pts": "2"}, {"criterio": "Solución particular", "pts": "1"}, {"criterio": "Analizar cruces con $y=0$", "pts": "1,5"}, {"criterio": "Concluir 0 cruces para $t\\ge0$", "pts": "0,5"}], "confianza": "pauta", "variantes": ["Guía 3, ej. 8 c) (primer cruce de un subamortiguado)"]}, {"fuente": "Control 2 · 2026-1 (30/04)", "pregunta": "P1", "tema": "t4", "puntaje": "20 pts", "enunciado": "Dada $y'''-3y''+4y'-12y=e^{3x}$: a) encuentre la solución de la homogénea asociada; b) encuentre una solución particular por coeficientes indeterminados y escriba la solución general.", "estrategia": "Orden 3: factoriza por agrupación. El número de prueba $3$ **es raíz** ⇒ $y_p=Axe^{3x}$.", "pasos": [{"titulo": "Auxiliar", "md": "$r^3-3r^2+4r-12=r^2(r-3)+4(r-3)=(r^2+4)(r-3)=0$ ⇒ $r=3$, $r=\\pm2i$."}, {"titulo": "Homogénea", "md": "$y_h=C_1e^{3x}+C_2\\cos2x+C_3\\sin2x$."}, {"titulo": "Propuesta", "md": "$Ae^{3x}$ ya está en $y_h$ ⇒ $y_p=Axe^{3x}$."}, {"titulo": "Reemplazar", "md": "Derivando y sustituyendo queda $13Ae^{3x}=e^{3x}$ ⇒ $A=\\frac1{13}$. (Atajo: $L(xe^{3x})=p'(3)e^{3x}$, $p'(3)=27-18+4=13$.)"}], "respuesta": "$y(x)=C_1e^{3x}+C_2\\cos2x+C_3\\sin2x+\\frac1{13}xe^{3x}$", "tiempo": "15 min", "rubrica": [{"criterio": "Plantea la ecuación característica", "pts": "2"}, {"criterio": "Encuentra las raíces", "pts": "4"}, {"criterio": "Determina $y_h$", "pts": "3"}, {"criterio": "Propone correctamente la función de prueba", "pts": "3"}, {"criterio": "Deriva, reemplaza y encuentra $A$", "pts": "4"}, {"criterio": "Determina $y_p$", "pts": "2"}, {"criterio": "Escribe la solución general", "pts": "2"}], "confianza": "pauta"}, {"fuente": "Control 2 · 2026-1 (30/04)", "pregunta": "P2", "tema": "t5", "puntaje": "20 pts", "enunciado": "Resuelva la ecuación diferencial $x^2y''-2xy'+2y=x^2\\ln(x)$.", "estrategia": "Cauchy-Euler no homogénea con $\\ln x$: variación de parámetros (la pauta lo hace así). Normalizar antes de calcular los wronskianos.", "pasos": [{"titulo": "Homogénea", "md": "Indicial $m^2-3m+2=(m-1)(m-2)=0$ ⇒ $y_h=C_1x+C_2x^2$."}, {"titulo": "Normalizar", "md": "$y''-\\frac2xy'+\\frac2{x^2}y=\\ln x$ ⇒ $f=\\ln x$, $y_1=x$, $y_2=x^2$."}, {"titulo": "Wronskianos", "md": "$W=\\begin{vmatrix}x&x^2\\\\1&2x\\end{vmatrix}=x^2$, $W_1=\\begin{vmatrix}0&x^2\\\\\\ln x&2x\\end{vmatrix}=-x^2\\ln x$, $W_2=\\begin{vmatrix}x&0\\\\1&\\ln x\\end{vmatrix}=x\\ln x$."}, {"titulo": "$u_1$", "md": "$u_1=\\int\\frac{-x^2\\ln x}{x^2}dx=-\\int\\ln x\\,dx=x-x\\ln x$."}, {"titulo": "$u_2$", "md": "$u_2=\\int\\frac{\\ln x}{x}dx=\\frac{\\ln^2x}{2}$ (sustitución $v=\\ln x$)."}, {"titulo": "Armar", "md": "$y_p=(x-x\\ln x)x+\\frac{\\ln^2x}{2}x^2=x^2-x^2\\ln x+\\frac{x^2\\ln^2x}{2}$; el $x^2$ se absorbe en $C_2$."}], "respuesta": "$y(x)=C_1x+C_2x^2-x^2\\ln x+\\frac{x^2(\\ln x)^2}{2}$", "tiempo": "18 min", "rubrica": [{"criterio": "Plantea la ecuación característica", "pts": "2"}, {"criterio": "Raíces", "pts": "1"}, {"criterio": "Solución homogénea", "pts": "2"}, {"criterio": "Escribe la ecuación en forma estandarizada", "pts": "2"}, {"criterio": "Calcula los 3 wronskianos", "pts": "3"}, {"criterio": "Determina $u_1$", "pts": "3"}, {"criterio": "Determina $u_2$", "pts": "3"}, {"criterio": "Determina $y_p$", "pts": "2"}, {"criterio": "Solución general", "pts": "2"}], "confianza": "pauta", "variantes": ["Guía 3, ej. 3ñ ($x^2y''-3xy'+4y=x^2\\ln x$)"]}, {"fuente": "Control 2 · 2026-1 (30/04)", "pregunta": "P3", "tema": "t6", "puntaje": "20 pts", "enunciado": "Un objeto de masa 2 slug, al unirlo a un resorte, provoca un estiramiento de 2 pie. El medio no ejerce resistencia. a) Determine la constante del resorte ($g=32$ pie/s²). b) Plantee el PVI si inicialmente el objeto está 1 pie sobre la posición de equilibrio y el impulso inicial le genera una velocidad hacia arriba de 10 pie/s. c) Resuelva el PVI. d) ¿Cuál es la amplitud del movimiento?", "estrategia": "Libre no amortiguado. Ojo: aquí te dan **masa** (slug), no peso. Abajo positivo: ambas condiciones son negativas.", "pasos": [{"titulo": "a) Hooke", "md": "$mg=ks$ ⇒ $2\\cdot32=k\\cdot2$ ⇒ $k=32$ lbf/pie."}, {"titulo": "b) PVI", "md": "$2x''+32x=0\\Rightarrow x''+16x=0$, $x(0)=-1$ (sobre), $x'(0)=-10$ (hacia arriba)."}, {"titulo": "c) Resolver", "md": "$r=\\pm4i$ ⇒ $x=C_1\\cos4t+C_2\\sin4t$. $x(0)=C_1=-1$; $x'(0)=4C_2=-10$ ⇒ $C_2=-\\frac52$."}, {"titulo": "d) Amplitud", "md": "$A=\\sqrt{C_1^2+C_2^2}=\\sqrt{1+\\frac{25}4}=\\frac{\\sqrt{29}}2\\approx2{,}69$ pie."}, {"titulo": "Extra: fase", "md": "Si piden la forma $A\\sin(4t+\\varphi)$: $\\sin\\varphi<0$, $\\cos\\varphi<0$ ⇒ $\\varphi=\\pi+\\arctan0{,}4\\approx3{,}52$ rad."}], "respuesta": "$x(t)=-\\cos4t-\\frac52\\sin4t$, $A=\\frac{\\sqrt{29}}2\\approx2{,}69$ pie", "tiempo": "15 min", "rubrica": [{"criterio": "Ecuación de fuerzas y constante del resorte", "pts": "3"}, {"criterio": "Plantea la EDO", "pts": "3"}, {"criterio": "Las dos condiciones iniciales", "pts": "2"}, {"criterio": "Resuelve con la ecuación característica", "pts": "4"}, {"criterio": "Calcula $C_1$ y $C_2$", "pts": "4"}, {"criterio": "Escribe la solución", "pts": "1"}, {"criterio": "Determina la amplitud", "pts": "3"}], "confianza": "pauta", "variantes": ["Guía 3, ej. 9", "Clase 14, ejemplos 1 a 3"]}, {"fuente": "Control 2 · 2026-1 (abril, versión 15+30+15)", "pregunta": "P1", "tema": "t4", "puntaje": "15 pts", "enunciado": "Encuentre una solución de la EDO $y''+2y'+y=x+\\cos(x)$.", "estrategia": "Piden **una** solución (basta una particular). Coef. indeterminados con polinomio completo de grado 1 + seno y coseno. Ninguno choca con $r=-1$ doble.", "pasos": [{"titulo": "Propuesta", "md": "$y_p=a+bx+c\\sin x+d\\cos x$; $y_p'=b+c\\cos x-d\\sin x$; $y_p''=-c\\sin x-d\\cos x$."}, {"titulo": "Parte polinómica", "md": "$2b+a+bx=x$ ⇒ $b=1$, $a=-2$."}, {"titulo": "Parte trigonométrica", "md": "$(-c-2d+c)\\sin x+(-d+2c+d)\\cos x=-2d\\sin x+2c\\cos x=\\cos x$ ⇒ $c=\\frac12$, $d=0$."}, {"titulo": "Alternativa", "md": "También se puede separar en dos EDO (una con $x$ y otra con $\\cos x$) y sumar, o usar VP con $y_1=e^{-x}$, $y_2=xe^{-x}$, $W=e^{-2x}$."}], "respuesta": "$y_p=x-2+\\frac12\\sin x$", "tiempo": "10 min", "rubrica": [{"criterio": "Plantea la forma correcta de la solución particular", "pts": "8"}, {"criterio": "Encuentra los valores de las constantes", "pts": "7"}, {"criterio": "(Vía VP) Encuentra las soluciones de la homogénea", "pts": "4"}], "confianza": "pauta"}, {"fuente": "Control 2 · 2026-1 (abril, versión 15+30+15)", "pregunta": "P2", "tema": "t2", "puntaje": "5 + 10 + 15 pts", "enunciado": "Considere $xy''-(x+1)y'+y=x^2$. a) Muestre que $e^x$ es solución de la homogénea asociada. b) Muestre que usando reducción de orden se obtiene $y_2=-x-1$. c) Encuentre una solución particular. Ayuda: $\\int xe^{-x}dx=-xe^{-x}-e^{-x}$.", "estrategia": "Pregunta encadenada: a) reemplazar; b) reducción de orden ($y_2=ue^x$ o Abel); c) variación de parámetros con $y_1,y_2$ (normalizando: $f=x$).", "pasos": [{"titulo": "a) Verificar", "md": "$xe^x-(x+1)e^x+e^x=0$ ✓."}, {"titulo": "b) $y_2=ue^x$", "md": "Reemplazando: $xu''e^x+(x-1)u'e^x=0$ ⇒ con $v=u'$: $v'+\\left(1-\\frac1x\\right)v=0$."}, {"titulo": "b) Separable", "md": "$\\ln v=\\ln x-x$ ⇒ $v=xe^{-x}$ ⇒ $u=-xe^{-x}-e^{-x}$ ⇒ $y_2=ue^x=-x-1$."}, {"titulo": "c) Wronskianos", "md": "Normalizada: $f=\\frac{x^2}{x}=x$. $W=\\begin{vmatrix}e^x&-x-1\\\\e^x&-1\\end{vmatrix}=xe^x$."}, {"titulo": "c) $u_1$, $u_2$", "md": "$u_1'=\\frac{x(x+1)}{xe^x}=(x+1)e^{-x}$ ⇒ $u_1=-xe^{-x}-2e^{-x}$; $u_2'=\\frac{e^x\\cdot x}{xe^x}=1$ ⇒ $u_2=x$."}, {"titulo": "c) Armar", "md": "$y_p=u_1e^x+u_2(-x-1)=(-x-2)+x(-x-1)=-x^2-2x-2$."}], "respuesta": "$y_2=-x-1$; $y_p=-x^2-2x-2$ (equivale a $-x^2-x-1$ sumando la homogénea $x+1$)", "tiempo": "22 min", "rubrica": [{"criterio": "a) Reemplazo y verificación", "pts": "5"}, {"criterio": "b) Plantea la forma de la segunda solución", "pts": "3"}, {"criterio": "b) Encuentra la función $v$", "pts": "5"}, {"criterio": "b) Determina la segunda solución", "pts": "2"}, {"criterio": "c) Plantea las fórmulas de variación de parámetros", "pts": "7"}, {"criterio": "c) Obtiene la solución particular", "pts": "8"}], "descuentos": ["En c), usar $f=x^2$ en vez de $f=x$ (sin normalizar) arruina los 8 pts del resultado."], "confianza": "pauta", "variantes": ["Guía 3, ej. 2c y 2e (reducción + VP)"]}, {"fuente": "Control 2 · 2026-1 (abril, versión 15+30+15)", "pregunta": "P3", "tema": "t5", "puntaje": "15 pts", "enunciado": "Encuentre la solución general de $x^2y''+3xy'+y=0$.", "estrategia": "Cauchy-Euler homogénea; la indicial es un cuadrado perfecto ⇒ raíz doble ⇒ aparece $\\ln x$.", "pasos": [{"titulo": "Indicial", "md": "$y=x^m$: $m(m-1)x^m+3mx^m+x^m=0$ ⇒ $m^2+2m+1=(m+1)^2=0$."}, {"titulo": "Raíz doble", "md": "$m=-1$ ⇒ $y_1=x^{-1}$ y $y_2=x^{-1}\\ln x$."}], "respuesta": "$y=\\alpha x^{-1}+\\beta x^{-1}\\ln x$", "tiempo": "6 min", "rubrica": [{"criterio": "Reconoce que es Cauchy-Euler", "pts": "5"}, {"criterio": "Encuentra la primera solución", "pts": "5"}, {"criterio": "Encuentra la segunda", "pts": "3"}, {"criterio": "Expresa la solución general", "pts": "2"}], "confianza": "pauta"}, {"fuente": "Control 2 · 2026-1 (versión 60 min)", "pregunta": "P1", "tema": "t4", "puntaje": "35 pts", "enunciado": "Determine la solución del problema de valor inicial $y''-2y'+y=t^2+1-e^t$, $y(0)=2$, $y'(0)=2$.", "estrategia": "Coef. indeterminados separando $g$ en dos partes (superposición). Para $-e^t$: $r=1$ es raíz **doble** ⇒ multiplicar por $t^2$. Al final, las C.I. con la solución completa.", "pasos": [{"titulo": "Homogénea", "md": "$(r-1)^2=0$ ⇒ $y_h=C_1e^t+C_2te^t$."}, {"titulo": "Parte $t^2+1$", "md": "$y_{p1}=At^2+Bt+C$: $At^2+(-4A+B)t+(2A-2B+C)=t^2+1$ ⇒ $A=1$, $B=4$, $C=7$."}, {"titulo": "Parte $-e^t$", "md": "$y_{p2}=Dt^2e^t$: al reemplazar todo se cancela salvo $2De^t=-e^t$ ⇒ $D=-\\frac12$."}, {"titulo": "General", "md": "$y=C_1e^t+C_2te^t+t^2+4t+7-\\frac12t^2e^t$."}, {"titulo": "$y(0)=2$", "md": "$C_1+7=2$ ⇒ $C_1=-5$."}, {"titulo": "$y'(0)=2$", "md": "$y'(0)=C_1+C_2+4=2$ ⇒ $C_2=3$."}], "respuesta": "$y(t)=-5e^t+3te^t+t^2+4t+7-\\frac12t^2e^t$", "tiempo": "20 min", "rubrica": [{"criterio": "Nivel 1: solución de la homogénea asociada", "pts": "5"}, {"criterio": "Nivel 2: estructura correcta de la particular", "pts": "12"}, {"criterio": "Nivel 3: solución particular correcta", "pts": "20"}, {"criterio": "Nivel 4: solución general correcta", "pts": "27"}, {"criterio": "Nivel 5: solución del PVI", "pts": "35"}], "descuentos": ["Rúbrica por niveles (acumulativa): un error en la propuesta te deja en nivel 1 aunque el resto esté bien hecho."], "confianza": "pauta"}, {"fuente": "Control 2 · 2026-1 (versión 60 min)", "pregunta": "P2", "tema": "t4", "puntaje": "25 pts", "enunciado": "Determine una solución particular de la ecuación $y''-6y'+9y=t^{-3}e^{3t}$.", "estrategia": "$t^{-3}$ no es polinomio: coef. indeterminados no sirve. Variación de parámetros (la rúbrica lo pide \"preferentemente\").", "pasos": [{"titulo": "Homogénea", "md": "$(r-3)^2=0$ ⇒ $y_1=e^{3t}$, $y_2=te^{3t}$."}, {"titulo": "Wronskiano", "md": "$W=e^{3t}(1+3t)e^{3t}-3e^{3t}\\cdot te^{3t}=e^{6t}$."}, {"titulo": "$u_1$", "md": "$u_1'=-\\frac{te^{3t}\\cdot t^{-3}e^{3t}}{e^{6t}}=-t^{-2}$ ⇒ $u_1=t^{-1}$."}, {"titulo": "$u_2$", "md": "$u_2'=\\frac{e^{3t}\\cdot t^{-3}e^{3t}}{e^{6t}}=t^{-3}$ ⇒ $u_2=-\\frac1{2t^2}$."}, {"titulo": "Armar", "md": "$y_p=\\frac1te^{3t}-\\frac1{2t^2}te^{3t}=\\frac{e^{3t}}t-\\frac{e^{3t}}{2t}=\\frac{e^{3t}}{2t}$."}], "respuesta": "$y_p(t)=\\dfrac{e^{3t}}{2t}$", "tiempo": "12 min", "rubrica": [{"criterio": "Nivel 1: plantea correctamente la particular (preferentemente VP)", "pts": "7"}, {"criterio": "Nivel 2: plantea y resuelve los parámetros con errores", "pts": "17"}, {"criterio": "Nivel 4: obtiene la particular correcta", "pts": "25"}], "confianza": "pauta"}]};
+const GADGETS = {};
+</script>
+<script>
+/* ===== utilidades compartidas ===== */
+const TX = (v, d = 3) => U.fmt(v, d).replace(",", "{,}");           // número con coma decimal para LaTeX
+const sgn = (v, d = 3) => (v < 0 ? "-" : "+") + TX(Math.abs(v), d);   // " + 3" / " - 3"
+const near = (a, b, e = 1e-9) => Math.abs(a - b) < e;
+const limpia = s => s.replace(/e\^\{1x\}/g, "e^{x}").replace(/e\^\{-1x\}/g, "e^{-x}").replace(/e\^\{0x\}/g, "").replace(/x\^\{1\}/g, "x").replace(/x\^\{0\}/g, "")
+  .replace(/\\(cos|sin) 1([xt])/g, "\\$1 $2").replace(/\((1)\\ln x\)/g, "(\\ln x)").replace(/\\pm1(\\,)?i/g, "\\pm i");   // 1x → x, x^{1} → x, ±1i → ±i
+const lead = (v, d = 2) => near(v, 1) ? "" : near(v, -1) ? "-" : TX(v, d);                      // coeficiente líder
+const term = (v, s, d = 2) => near(v, 0) ? "" : (v < 0 ? "-" : "+") + (near(Math.abs(v), 1) && s ? "" : TX(Math.abs(v), d)) + s; // término intermedio
+function rk4(f, y0, t0, t1, h) {                                     // y' = f(t, y), y vector
+  const out = [{t: t0, y: y0.slice()}]; let y = y0.slice(), t = t0; const n = Math.round((t1 - t0) / h);
+  for (let i = 0; i < n; i++) {
+    const k1 = f(t, y), k2 = f(t + h / 2, y.map((v, j) => v + h / 2 * k1[j])), k3 = f(t + h / 2, y.map((v, j) => v + h / 2 * k2[j])), k4 = f(t + h, y.map((v, j) => v + h * k3[j]));
+    y = y.map((v, j) => v + h / 6 * (k1[j] + 2 * k2[j] + 2 * k3[j] + k4[j])); t += h; out.push({t, y: y.slice()});
+  }
+  return out;
+}
+function interp(arr, t) {                                            // arr ordenado por t
+  if (t <= arr[0].t) return arr[0].y[0];
+  if (t >= arr[arr.length - 1].t) return arr[arr.length - 1].y[0];
+  const h = arr[1].t - arr[0].t, i = Math.floor((t - arr[0].t) / h), a = arr[i], b = arr[i + 1] || a, w = (t - a.t) / h;
+  return a.y[0] * (1 - w) + b.y[0] * w;
+}
+function stepper(el, U, problemas) {                                 // ejercicio con pasos revelables
+  const box = U.el("div"), ctr = U.el("div", {class: "g-row"});
+  let prob = problemas[0], k = 0;
+  const render = () => {
+    box.innerHTML = `<p><b>Ejercicio:</b> ${prob.enun}</p>` + prob.pasos.slice(0, k).map((p, i) =>
+      `<div style="border-left:3px solid var(--acc);padding:4px 12px;margin:8px 0"><b>Paso ${i + 1}. ${p[0]}</b><br>${p[1]}</div>`).join("") +
+      (k >= prob.pasos.length ? `<p class="g-out"><span class="pill ok">Resultado</span> ${prob.res}</p>` : `<p style="color:var(--muted)">Pasos mostrados: ${k} de ${prob.pasos.length}</p>`);
+    U.tex(box);
+  };
+  U.select(el, {label: "Ejercicio", options: problemas.map(p => p.nombre), onChange: v => { prob = problemas.find(p => p.nombre === v); k = 0; render(); }});
+  el.append(ctr);
+  U.button(ctr, "Siguiente paso", () => { if (k < prob.pasos.length) k++; render(); });
+  U.button(ctr, "Ver todo", () => { k = prob.pasos.length; render(); });
+  U.button(ctr, "Reiniciar", () => { k = 0; render(); });
+  el.append(box);
+}
+
+/* ===== T1: intervalo del teorema ===== */
+GADGETS["g_intervalo"] = (el, U) => {
+  const P = Math.PI;
+  const eqs = [
+    {n: "(x−1)y'' − xy' + y = 0", tex: "(x-1)y''-xy'+y=0", s: [1], why: "a_2(x)=x-1"},
+    {n: "x²y'' − xy' + y = 0", tex: "x^2y''-xy'+y=0", s: [0], why: "a_2(x)=x^2"},
+    {n: "(1−x²)y'' − 2xy' + 2y = 0", tex: "(1-x^2)y''-2xy'+2y=0", s: [-1, 1], why: "a_2(x)=1-x^2"},
+    {n: "xy'' − (x+1)y' + y = x²", tex: "xy''-(x+1)y'+y=x^2", s: [0], why: "a_2(x)=x"},
+    {n: "y'' + y = tan x", tex: "y''+y=\\tan x", s: [-3 * P / 2, -P / 2, P / 2, 3 * P / 2], why: "g(x)=\\tan x \\text{ no es continua}"},
+    {n: "3y''' + 5y'' − y' + 7y = 0", tex: "3y'''+5y''-y'+7y=0", s: [], why: "a_3=3\\neq0"},
+  ];
+  let eq = eqs[0], x0 = 2;
+  const out = U.el("div", {class: "g-out"});
+  U.select(el, {label: "Ecuación", options: eqs.map(e => e.n), onChange: v => { eq = eqs.find(e => e.n === v); upd(); }});
+  U.slider(el, {label: "Punto inicial x₀", min: -5, max: 5, step: 0.1, value: 2, onInput: v => { x0 = v; upd(); }});
+  const plot = U.plot(el, {xmin: -5, xmax: 5, ymin: -1, ymax: 1, height: 110});
+  el.append(out);
+  function upd() {
+    const s = eq.s;
+    if (s.some(p => Math.abs(p - x0) < 0.05)) {
+      plot.draw({vlines: s.map(p => ({x: p, c: 3})), points: [{x: x0, y: 0, c: 3, r: 6}]});
+      out.innerHTML = `<span class="pill bad">Punto singular</span> En $x_0=${TX(x0, 2)}$ se tiene $${eq.why}$ problemática: el teorema <b>no</b> garantiza nada.`;
+      return U.tex(out);
+    }
+    const L = Math.max(-Infinity, ...s.filter(p => p < x0)), R = Math.min(Infinity, ...s.filter(p => p > x0));
+    const a = isFinite(L) ? L : -5, b = isFinite(R) ? R : 5;
+    plot.draw({vlines: s.map(p => ({x: p, c: 3})), shade: {f: () => 0.5, a, b, c: 0}, points: [{x: x0, y: 0, c: 1, r: 6}]});
+    const f = v => isFinite(v) ? (near(Math.abs(v), P / 2, 1e-6) ? (v < 0 ? "-\\tfrac{\\pi}{2}" : "\\tfrac{\\pi}{2}") : near(Math.abs(v), 3 * P / 2, 1e-6) ? (v < 0 ? "-\\tfrac{3\\pi}{2}" : "\\tfrac{3\\pi}{2}") : TX(v, 2)) : (v < 0 ? "-\\infty" : "\\infty");
+    out.innerHTML = `Para $${eq.tex}$ con $x_0=${TX(x0, 2)}$: solución única garantizada en $I=(${f(L)},\\ ${f(R)})$` + (s.length ? `, porque ahí $${eq.why}$ no da problemas.` : `, porque $${eq.why}$ en todo $\\mathbb R$.`);
+    U.tex(out);
+  }
+};
+
+/* ===== T1: wronskiano ===== */
+GADGETS["g_wronskiano"] = (el, U) => {
+  const pares = [
+    {n: "eˣ y e⁻ˣ", t: ["e^x", "e^{-x}"], y1: x => Math.exp(x), y2: x => Math.exp(-x), W: x => -2, wt: "-2", xm: -2, xM: 2},
+    {n: "eˣ y x·eˣ", t: ["e^x", "xe^x"], y1: x => Math.exp(x), y2: x => x * Math.exp(x), W: x => Math.exp(2 * x), wt: "e^{2x}", xm: -3, xM: 1},
+    {n: "cos x y sen x", t: ["\\cos x", "\\sin x"], y1: Math.cos, y2: Math.sin, W: x => 1, wt: "\\cos^2x+\\sin^2x=1", xm: -4, xM: 4},
+    {n: "x y x ln x (x>0)", t: ["x", "x\\ln x"], y1: x => x, y2: x => x * Math.log(x), W: x => x, wt: "x\\,(\\ln x+1)-1\\cdot x\\ln x=x", xm: 0.05, xM: 3},
+    {n: "e³ᵗ y t·e³ᵗ", t: ["e^{3t}", "te^{3t}"], y1: x => Math.exp(3 * x), y2: x => x * Math.exp(3 * x), W: x => Math.exp(6 * x), wt: "e^{6t}", xm: -1, xM: 0.4},
+    {n: "x y 3x", t: ["x", "3x"], y1: x => x, y2: x => 3 * x, W: x => 0, wt: "x\\cdot3-1\\cdot3x=0", xm: -2, xM: 2},
+    {n: "x y x² (ojo)", t: ["x", "x^2"], y1: x => x, y2: x => x * x, W: x => x * x, wt: "x\\cdot2x-1\\cdot x^2=x^2", xm: -2, xM: 2},
+    {n: "cos(ln x) y sen(ln x)", t: ["\\cos(\\ln x)", "\\sin(\\ln x)"], y1: x => Math.cos(Math.log(x)), y2: x => Math.sin(Math.log(x)), W: x => 1 / x, wt: "\\tfrac{1}{x}", xm: 0.1, xM: 4},
+  ];
+  const out = U.el("div", {class: "g-out"}), host = U.el("div");
+  U.select(el, {label: "Par de funciones", options: pares.map(p => p.n), onChange: v => draw(pares.find(p => p.n === v))});
+  el.append(host, out);
+  function draw(p) {
+    host.innerHTML = ""; const plot = U.plot(host, {xmin: p.xm, xmax: p.xM, ymin: -4, ymax: 4, height: 230});
+    plot.draw({fns: [{f: p.W, c: 0}, {f: p.y1, c: 1}, {f: p.y2, c: 2}]});
+    let v = "";
+    if (p.wt.endsWith("=0")) v = `<span class="pill bad">LD</span> $W\\equiv0$: una es múltiplo de la otra ($3x=3\\cdot x$).`;
+    else if (p.n.includes("ojo")) v = `<span class="pill bad">Cuidado</span> $W=x^2$ se anula en $x=0$, pero $x$ y $x^2$ <b>son LI</b>. No contradice el teorema: son soluciones de $x^2y''-2xy'+2y=0$, cuyo $a_2$ se anula justo en $0$. En $(0,\\infty)$ sí forman un conjunto fundamental.`;
+    else v = `<span class="pill ok">LI</span> $W\\neq0$ en todo el intervalo: forman un conjunto fundamental.`;
+    out.innerHTML = `$W[${p.t[0]},\\,${p.t[1]}]=${p.wt}$<br>${v}`; U.tex(out);
+  }
+};
+
+/* ===== T2: reducción de orden ===== */
+GADGETS["g_abel"] = (el, U) => stepper(el, U, [
+  {nombre: "Control 2025-2: (x−1)y'' − xy' + y = 0", enun: "$(x-1)y''-xy'+y=0$, $y_1=x$.",
+   pasos: [["Normalizar", "$y''-\\frac{x}{x-1}y'+\\frac{1}{x-1}y=0$, así $P(x)=-\\frac{x}{x-1}$."],
+           ["Integrar P", "$\\int P\\,dx=-\\int\\left(1+\\frac{1}{x-1}\\right)dx=-x-\\ln|x-1|$"],
+           ["Exponencial", "$e^{-\\int P}=e^{x+\\ln|x-1|}=e^x(x-1)$"],
+           ["Integrando", "$\\frac{e^x(x-1)}{x^2}=\\frac{e^x}{x}-\\frac{e^x}{x^2}=\\frac{d}{dx}\\left(\\frac{e^x}{x}\\right)$"],
+           ["Segunda solución", "$y_2=x\\cdot\\frac{e^x}{x}=e^x$"]], res: "$y=C_1x+C_2e^x$"},
+  {nombre: "Clase 10: x²y'' − xy' + y = 0", enun: "$x^2y''-xy'+y=0$, $x>0$, $y_1=x$.",
+   pasos: [["Normalizar", "$P(x)=-\\frac1x$"], ["Exponencial", "$e^{-\\int P}=e^{\\ln x}=x$"], ["Integrar", "$y_2=x\\int\\frac{x}{x^2}dx=x\\ln x$"]], res: "$y=C_1x+C_2x\\ln x$"},
+  {nombre: "Guía 3 #1: xy'' + 3y' = 0", enun: "$xy''+3y'=0$, $y_1=1$.",
+   pasos: [["Normalizar", "$y''+\\frac3xy'=0$, $P=\\frac3x$"], ["Exponencial", "$e^{-\\int P}=e^{-3\\ln x}=x^{-3}$"], ["Integrar", "$y_2=1\\cdot\\int x^{-3}dx=-\\frac{1}{2x^2}$ → se toma $\\frac1{x^2}$"]], res: "$y=C_1+\\dfrac{C_2}{x^2}$"},
+  {nombre: "Guía 3 #13a: x²y'' − 7xy' + 16y = 0", enun: "$x^2y''-7xy'+16y=0$, $y_1=x^4$.",
+   pasos: [["Normalizar", "$P=-\\frac7x$"], ["Exponencial", "$e^{-\\int P}=x^7$"], ["Integrar", "$y_2=x^4\\int\\frac{x^7}{x^8}dx=x^4\\ln x$"], ["Chequeo", "Es Cauchy-Euler: indicial $m^2-8m+16=(m-4)^2$, raíz doble ⇒ $x^4\\ln x$ ✓"]], res: "$y=C_1x^4+C_2x^4\\ln x$"},
+  {nombre: "Control abril 2026: xy'' − (x+1)y' + y = 0", enun: "$xy''-(x+1)y'+y=0$, $y_1=e^x$ (vía $y_2=ue^x$).",
+   pasos: [["Proponer", "$y_2=ue^x$, $y_2'=(u'+u)e^x$, $y_2''=(u''+2u'+u)e^x$"],
+           ["Reemplazar", "Los términos con $u$ se cancelan: $xu''e^x+(x-1)u'e^x=0$"],
+           ["v = u'", "$v'+\\left(1-\\frac1x\\right)v=0$, separable"],
+           ["Resolver v", "$\\ln v=\\ln x-x$ ⇒ $v=xe^{-x}$"],
+           ["Integrar", "$u=\\int xe^{-x}dx=-xe^{-x}-e^{-x}$"],
+           ["Segunda solución", "$y_2=ue^x=-x-1$"]], res: "$y=C_1e^x+C_2(x+1)$"},
+]);
+
+/* ===== T3: raíces de ay''+by'+cy ===== */
+GADGETS["g_raices"] = (el, U) => {
+  let a = 1, b = 2, c = 5; const out = U.el("div", {class: "g-out"});
+  U.slider(el, {label: "a", min: 1, max: 4, step: 0.5, value: 1, onInput: v => { a = v; upd(); }});
+  U.slider(el, {label: "b", min: -6, max: 6, step: 0.5, value: 2, onInput: v => { b = v; upd(); }});
+  U.slider(el, {label: "c", min: -6, max: 12, step: 0.5, value: 5, onInput: v => { c = v; upd(); }});
+  const plot = U.plot(el, {xmin: 0, xmax: 6, ymin: -2, ymax: 2, height: 220}); el.append(out);
+  function upd() {
+    const D = b * b - 4 * a * c; let caso, yh;
+    if (D > 1e-9) { const r1 = (-b + Math.sqrt(D)) / (2 * a), r2 = (-b - Math.sqrt(D)) / (2 * a); caso = `Reales distintas: $m_1=${TX(r1)}$, $m_2=${TX(r2)}$`; yh = `c_1e^{${TX(r1)}x}+c_2e^{${TX(r2)}x}`; }
+    else if (D > -1e-9) { const r = -b / (2 * a); caso = `Real doble: $m=${TX(r)}$`; yh = `(c_1+c_2x)e^{${TX(r)}x}`; }
+    else { const al = -b / (2 * a), be = Math.sqrt(-D) / (2 * a); caso = `Complejas: $m=${TX(al)}\\pm${TX(be)}\\,i$`; yh = (near(al, 0) ? "" : `e^{${TX(al)}x}`) + `\\left(c_1\\cos ${TX(be)}x+c_2\\sin ${TX(be)}x\\right)`; }
+    const sol = rk4((t, y) => [y[1], -(b * y[1] + c * y[0]) / a], [1, 0], 0, 6, 0.01);
+    plot.draw({fns: [{f: t => interp(sol, t), c: 0}]});
+    const tend = D < -1e-9 ? (b > 0 ? "oscila y se apaga" : b < 0 ? "oscila y crece" : "oscila sin decaer") : (Math.max(-b + Math.sqrt(Math.max(D, 0)), -b) > 0 ? "crece sin oscilar" : "decae sin oscilar");
+    out.innerHTML = `Auxiliar: $${lead(a)}m^2${term(b, "m")}${term(c, "")}=0$, discriminante $\\Delta=${TX(D, 2)}$<br>${limpia(caso)}<br>$y_h=${limpia(yh)}$<br><span style="color:var(--muted)">Con $y(0)=1$, $y'(0)=0$ la solución ${tend}.</span>`;
+    U.tex(out);
+  }
+};
+
+/* ===== T3: constructor de y_h ===== */
+GADGETS["g_constructor"] = (el, U) => {
+  let raices = [];
+  const out = U.el("div", {class: "g-out"});
+  const tipo = U.select(el, {label: "Tipo de raíz", options: ["real r", "par complejo α ± βi"], onChange: () => {}});
+  const row = U.el("div", {class: "g-row"});
+  const iA = U.el("input", {type: "text", value: "1", style: "width:70px"}), iB = U.el("input", {type: "text", value: "2", style: "width:70px"}), iK = U.el("select", {}, [1, 2, 3, 4].map(k => U.el("option", {value: k}, "mult. " + k)));
+  row.append(U.el("label", {}, "r ó α:"), iA, U.el("label", {style: "min-width:auto"}, "β:"), iB, iK); el.append(row);
+  const row2 = U.el("div", {class: "g-row"}); el.append(row2);
+  U.button(row2, "Agregar raíz", () => { const A = U.num(iA.value), B = Math.abs(U.num(iB.value)), k = +iK.value; if (!isFinite(A)) return;
+    if (tipo.value.startsWith("par") && isFinite(B) && B > 0) raices.push({a: A, b: B, k}); else raices.push({a: A, b: 0, k}); upd(); });
+  U.button(row2, "Limpiar", () => { raices = []; upd(); });
+  const row3 = U.el("div", {class: "g-row"}); row3.append(U.el("label", {}, "Ejemplos:")); el.append(row3);
+  const ej = {
+    "Control 30/04: (r²+4)(r−3)": [{a: 3, b: 0, k: 1}, {a: 0, b: 2, k: 1}],
+    "Clase 11: m³(m−1)²(m+1)²": [{a: 0, b: 0, k: 3}, {a: 1, b: 0, k: 2}, {a: -1, b: 0, k: 2}],
+    "Clase 11: y''' + y = 0": [{a: -1, b: 0, k: 1}, {a: 0.5, b: Math.sqrt(3) / 2, k: 1}],
+    "(m² + 1)² (orden 4)": [{a: 0, b: 1, k: 2}],
+  };
+  Object.entries(ej).forEach(([n, r]) => U.button(row3, n, () => { raices = r.map(o => ({...o})); upd(); }));
+  el.append(out);
+  const ex = r => near(r, 0) ? "" : `e^{${near(r, 1) ? "" : near(r, -1) ? "-" : TX(r)}x}`;
+  const xp = j => j === 0 ? "" : j === 1 ? "x" : `x^{${j}}`;
+  const bt = b => near(b, Math.sqrt(3) / 2, 1e-6) ? "\\tfrac{\\sqrt3}{2}" : near(b, 1) ? "" : TX(b);
+  function upd() {
+    let terms = [], n = 0, i = 1;
+    raices.forEach(r => {
+      for (let j = 0; j < r.k; j++) {
+        if (r.b === 0) { const f = xp(j) + ex(r.a); terms.push(`c_{${i++}}${f || "\\cdot1"}`); n++; }
+        else { terms.push(`c_{${i++}}${xp(j)}${ex(r.a)}\\cos ${bt(r.b)}x`); terms.push(`c_{${i++}}${xp(j)}${ex(r.a)}\\sin ${bt(r.b)}x`); n += 2; }
+      }
+    });
+    const lista = raices.map(r => r.b === 0 ? `$${TX(r.a)}$ (mult. ${r.k})` : `$${TX(r.a)}\\pm${TX(r.b)}i$ (mult. ${r.k}, cuenta ${2 * r.k})`).join(", ");
+    out.innerHTML = raices.length ? `Raíces: ${lista}<br>Orden de la EDO: <b>${n}</b> → ${n} funciones LI<br>$$y_h=${terms.join("+").replace(/\\cdot1/g, "")}$$` : "Agrega raíces o elige un ejemplo.";
+    U.tex(out);
+  }
+  upd();
+};
+
+/* ===== T4: generador de propuestas ===== */
+GADGETS["g_propuesta"] = (el, U) => {
+  const homs = [
+    {n: "y'' − 2y' + y   (r = 1 doble)", r: [{a: 1, b: 0, k: 2}], yh: "C_1e^x+C_2xe^x"},
+    {n: "y'' + y   (r = ±i)", r: [{a: 0, b: 1, k: 1}], yh: "C_1\\cos x+C_2\\sin x"},
+    {n: "y'' + 4y   (r = ±2i)", r: [{a: 0, b: 2, k: 1}], yh: "C_1\\cos2x+C_2\\sin2x"},
+    {n: "y'' − 3y' + 2y   (r = 1, 2)", r: [{a: 1, b: 0, k: 1}, {a: 2, b: 0, k: 1}], yh: "C_1e^x+C_2e^{2x}"},
+    {n: "y''' − 3y'' + 4y' − 12y   (r = 3, ±2i)", r: [{a: 3, b: 0, k: 1}, {a: 0, b: 2, k: 1}], yh: "C_1e^{3x}+C_2\\cos2x+C_3\\sin2x"},
+    {n: "y'' + 2y' + y   (r = −1 doble)", r: [{a: -1, b: 0, k: 2}], yh: "C_1e^{-x}+C_2xe^{-x}"},
+    {n: "y'' + y'   (r = 0, −1)", r: [{a: 0, b: 0, k: 1}, {a: -1, b: 0, k: 1}], yh: "C_1+C_2e^{-x}"},
+    {n: "y''' − 5y'' + 6y'   (r = 0, 2, 3)", r: [{a: 0, b: 0, k: 1}, {a: 2, b: 0, k: 1}, {a: 3, b: 0, k: 1}], yh: "C_1+C_2e^{2x}+C_3e^{3x}"},
+    {n: "y'' − 2y' + 2y   (r = 1 ± i)", r: [{a: 1, b: 1, k: 1}], yh: "e^x(C_1\\cos x+C_2\\sin x)"},
+  ];
+  let H = homs[0], m = 0, k = 0, be = 1, trig = "sen";
+  const out = U.el("div", {class: "g-out"});
+  U.select(el, {label: "Parte homogénea", options: homs.map(h => h.n), onChange: v => { H = homs.find(h => h.n === v); upd(); }});
+  U.slider(el, {label: "Grado m del polinomio", min: 0, max: 3, step: 1, value: 0, onInput: v => { m = v; upd(); }});
+  U.slider(el, {label: "k (en e^kx)", min: -3, max: 3, step: 1, value: 0, onInput: v => { k = v; upd(); }});
+  U.slider(el, {label: "β (0 = sin trig.)", min: 0, max: 3, step: 1, value: 1, onInput: v => { be = v; upd(); }});
+  U.select(el, {label: "Función trig.", options: ["sen", "cos"], onChange: v => { trig = v; upd(); }});
+  el.append(out);
+  const poly = (L, m) => { const t = []; for (let j = m; j >= 0; j--) t.push(`${L}_{${j}}${j === 0 ? "" : j === 1 ? "x" : "x^{" + j + "}"}`); return m === 0 ? `${L}` : "(" + t.join("+") + ")"; };
+  function upd() {
+    const xm = m === 0 ? "" : m === 1 ? "x" : `x^{${m}}`, e = k === 0 ? "" : `e^{${k === 1 ? "" : k === -1 ? "-" : k}x}`, bx = be === 1 ? "x" : be + "x";
+    const g = (xm + e + (be ? `\\${trig === "sen" ? "sin" : "cos"} ${bx}` : "")) || "1";
+    const s = (H.r.find(r => near(r.a, k) && near(r.b, be)) || {k: 0}).k;
+    const num = be ? (k === 0 ? `${be === 1 ? "" : be}i` : `${k}${"+" + (be === 1 ? "" : be)}i`) : `${k}`;
+    const pre = s === 0 ? "" : s === 1 ? "x" : `x^{${s}}`;
+    let yp;
+    if (be && !pre && !e) yp = `${poly("A", m)}\\cos ${bx}+${poly("B", m)}\\sin ${bx}`;
+    else if (be) yp = `${pre}${e}\\left[${poly("A", m)}\\cos ${bx}+${poly("B", m)}\\sin ${bx}\\right]`;
+    else if (m === 0) yp = `A${pre}${e}`;
+    else yp = pre || e ? `${pre}${poly("A", m)}${e}` : poly("A", m).slice(1, -1);
+    out.innerHTML = `$g(x)=${g}$ &nbsp;·&nbsp; $y_h=${H.yh}$<br>Número de prueba: $${num}$ → ` +
+      (s ? `<span class="pill bad">es raíz (mult. ${s})</span> hay que multiplicar por $${pre}$` : `<span class="pill ok">no es raíz</span> no hay corrección`) +
+      `<br>$$y_p=${yp}$$` + (be ? `<span style="color:var(--muted)">Siempre con seno y coseno, aunque $g$ tenga solo ${trig === "sen" ? "seno" : "coseno"}.</span>` : "");
+    U.tex(out);
+  }
+};
+
+/* ===== T4: variación de parámetros ===== */
+GADGETS["g_vp"] = (el, U) => stepper(el, U, [
+  {nombre: "Control 30/04: x²y'' − 2xy' + 2y = x² ln x", enun: "$x^2y''-2xy'+2y=x^2\\ln x$",
+   pasos: [["Homogénea", "Cauchy-Euler: $m^2-3m+2=0$ ⇒ $y_1=x$, $y_2=x^2$"], ["Normalizar", "$y''-\\frac2xy'+\\frac2{x^2}y=\\ln x$ ⇒ $f=\\ln x$"],
+           ["Wronskianos", "$W=x^2$, $W_1=-x^2\\ln x$, $W_2=x\\ln x$"], ["u₁", "$u_1=\\int-\\ln x\\,dx=x-x\\ln x$"], ["u₂", "$u_2=\\int\\frac{\\ln x}{x}dx=\\frac{\\ln^2x}{2}$"],
+           ["Armar", "$y_p=x^2-x^2\\ln x+\\frac{x^2\\ln^2x}{2}$"]], res: "$y=C_1x+C_2x^2-x^2\\ln x+\\frac{x^2\\ln^2x}{2}$"},
+  {nombre: "Control 60 min: y'' − 6y' + 9y = t⁻³e³ᵗ", enun: "$y''-6y'+9y=t^{-3}e^{3t}$",
+   pasos: [["Homogénea", "$(r-3)^2$ ⇒ $y_1=e^{3t}$, $y_2=te^{3t}$"], ["Normalizar", "Ya lo está: $f=t^{-3}e^{3t}$"], ["Wronskiano", "$W=e^{6t}$"],
+           ["u₁", "$u_1'=-\\frac{y_2f}{W}=-t^{-2}$ ⇒ $u_1=\\frac1t$"], ["u₂", "$u_2'=\\frac{y_1f}{W}=t^{-3}$ ⇒ $u_2=-\\frac1{2t^2}$"], ["Armar", "$y_p=\\frac{e^{3t}}{t}-\\frac{e^{3t}}{2t}$"]], res: "$y_p=\\dfrac{e^{3t}}{2t}$"},
+  {nombre: "Clase 12: y'' + y = tan x", enun: "$y''+y=\\tan x$",
+   pasos: [["Homogénea", "$y_1=\\cos x$, $y_2=\\sin x$"], ["Wronskiano", "$W=1$"], ["u₁", "$u_1'=-\\sin x\\tan x=\\cos x-\\sec x$ ⇒ $u_1=\\sin x-\\ln|\\sec x+\\tan x|$"],
+           ["u₂", "$u_2'=\\sin x$ ⇒ $u_2=-\\cos x$"], ["Armar", "$y_p=\\cos x\\sin x-\\cos x\\ln|\\sec x+\\tan x|-\\sin x\\cos x$"]], res: "$y_p=-\\cos x\\ln|\\sec x+\\tan x|$"},
+  {nombre: "Control abril: xy'' − (x+1)y' + y = x²", enun: "$xy''-(x+1)y'+y=x^2$, con $y_1=e^x$, $y_2=-x-1$",
+   pasos: [["Normalizar", "Dividir por $x$: $f=x$"], ["Wronskiano", "$W=\\begin{vmatrix}e^x&-x-1\\\\e^x&-1\\end{vmatrix}=xe^x$"],
+           ["u₁", "$u_1'=\\frac{x(x+1)}{xe^x}=(x+1)e^{-x}$ ⇒ $u_1=-xe^{-x}-2e^{-x}$"], ["u₂", "$u_2'=\\frac{e^x\\,x}{xe^x}=1$ ⇒ $u_2=x$"],
+           ["Armar", "$y_p=(-x-2)+x(-x-1)=-x^2-2x-2$"]], res: "$y_p=-x^2-2x-2$"},
+  {nombre: "Control 2025: x'' + x = 2cos t (resonancia)", enun: "$x''+x=2\\cos t$",
+   pasos: [["Homogénea", "$y_1=\\cos t$, $y_2=\\sin t$, $W=1$"], ["W₁ y W₂", "$W_1=-2\\sin t\\cos t=-\\sin2t$, $W_2=2\\cos^2t=1+\\cos2t$"],
+           ["Integrar", "$u_1=\\frac12\\cos2t$, $u_2=t+\\frac12\\sin2t$"], ["Armar", "$x_p=\\frac12\\cos2t\\cos t+\\left(t+\\frac12\\sin2t\\right)\\sin t=t\\sin t+\\frac12\\cos t$"],
+           ["Absorber", "$\\frac12\\cos t$ es de la homogénea: basta $x_p=t\\sin t$"]], res: "$x_p=t\\sin t$"},
+]);
+
+/* ===== T5: laboratorio Cauchy-Euler ===== */
+GADGETS["g_euler"] = (el, U) => {
+  let a = 1, b = -1, c = 2; const out = U.el("div", {class: "g-out"});
+  const sa = U.slider(el, {label: "a", min: 1, max: 3, step: 1, value: 1, onInput: v => { a = v; upd(); }});
+  const sb = U.slider(el, {label: "b", min: -6, max: 10, step: 1, value: -1, onInput: v => { b = v; upd(); }});
+  const sc = U.slider(el, {label: "c", min: -4, max: 16, step: 0.5, value: 2, onInput: v => { c = v; upd(); }});
+  const row = U.el("div", {class: "g-row"}); el.append(row);
+  const set = (A, B, C) => { [[sa, A], [sb, B], [sc, C]].forEach(([s, v]) => { s.value = v; s.dispatchEvent(new Event("input")); }); };
+  U.button(row, "Control 29/04: x²y'' − 3xy' + αy", () => set(1, -3, 3));
+  U.button(row, "Control 2025: x²y'' − xy' + 2y", () => set(1, -1, 2));
+  U.button(row, "Abril: x²y'' + 3xy' + y", () => set(1, 3, 1));
+  U.button(row, "Guía: x²y'' + 10xy' + 8y", () => set(1, 10, 8));
+  const plot = U.plot(el, {xmin: 0.2, xmax: 5, ymin: -3, ymax: 3, height: 220}); el.append(out);
+  function upd() {
+    const B = b - a, D = B * B - 4 * a * c; let caso, yh;
+    if (D > 1e-9) { const m1 = (-B + Math.sqrt(D)) / (2 * a), m2 = (-B - Math.sqrt(D)) / (2 * a); caso = `Reales distintas $m_1=${TX(m1)}$, $m_2=${TX(m2)}$`; yh = `c_1x^{${TX(m1)}}+c_2x^{${TX(m2)}}`; }
+    else if (D > -1e-9) { const m = -B / (2 * a); caso = `<b>Raíz doble</b> $m=${TX(m)}$ → aparece $\\ln x$`; yh = `x^{${TX(m)}}(c_1+c_2\\ln x)`; }
+    else { const al = -B / (2 * a), be = Math.sqrt(-D) / (2 * a); caso = `Complejas $m=${TX(al)}\\pm${TX(be)}i$`; yh = (near(al, 0) ? "" : `x^{${TX(al)}}`) + `\\left[c_1\\cos(${TX(be)}\\ln x)+c_2\\sin(${TX(be)}\\ln x)\\right]`; }
+    const f = (x, y) => [y[1], -(b * x * y[1] + c * y[0]) / (a * x * x)];
+    const fw = rk4(f, [1, 0], 1, 5, 0.005), bw = rk4((x, y) => f(-x, y).map(v => -v), [1, 0], -1, -0.2, 0.002).map(p => ({t: -p.t, y: p.y})).reverse();
+    const sol = x => x >= 1 ? interp(fw, x) : interp(bw, x);
+    plot.draw({fns: [{f: sol, c: 0}]});
+    out.innerHTML = `EDO: $${lead(a)}x^2y''${term(b, "xy'")}${term(c, "y")}=0$<br>Indicial: $${lead(a)}m(m-1)${term(b, "m")}${term(c, "")}=${lead(a)}m^2${term(B, "m")}${term(c, "")}=0$<br>${limpia(caso)}<br>$y_h=${limpia(yh)}$<br>Con $x=e^t$: $${lead(a)}Y''${term(B, "Y'")}${term(c, "Y")}=0$ (coeficientes constantes)<br><span style="color:var(--muted)">Gráfico: solución con $y(1)=1$, $y'(1)=0$.</span>`;
+    U.tex(out);
+  }
+};
+
+/* ===== T6: traductor de condiciones iniciales ===== */
+GADGETS["g_signos"] = (el, U) => {
+  const box = U.el("div"), row = U.el("div", {class: "g-row"}), fb = U.el("div", {class: "g-out"});
+  const i0 = U.el("input", {type: "text", placeholder: "x(0)", style: "width:90px"}), i1 = U.el("input", {type: "text", placeholder: "x'(0)", style: "width:90px"});
+  let sol = [0, 0], conv = 1, racha = 0;
+  const pick = a => a[Math.floor(Math.random() * a.length)];
+  function nuevo() {
+    const u = pick(["m", "pie", "cm"]), d = pick([0.5, 1, 2, 3, 4]), v = pick([2, 3, 5, 10, 12]);
+    const pos = pick(["abajo", "arriba", "eq"]), vel = pick(["reposo", "arriba", "abajo"]);
+    conv = Math.random() < 0.75 ? 1 : -1;
+    const tPos = pos === "eq" ? "desde la posición de equilibrio" : `desde un punto ${U.fmt(d, 1)} ${u} ${pos === "abajo" ? pick(["bajo", "abajo de", "por debajo de"]) : pick(["sobre", "arriba de", "por encima de"])} la posición de equilibrio`;
+    const tVel = vel === "reposo" ? pick(["desde el reposo", "con velocidad inicial cero"]) : `con una velocidad ${vel === "arriba" ? pick(["ascendente", "hacia arriba"]) : pick(["descendente", "hacia abajo"])} de ${v} ${u}/s`;
+    const x0 = pos === "eq" ? 0 : (pos === "abajo" ? d : -d) * conv, v0 = vel === "reposo" ? 0 : (vel === "abajo" ? v : -v) * conv;
+    if (pos === "eq" && vel === "reposo") return nuevo();
+    sol = [x0, v0];
+    box.innerHTML = `<p style="font-size:1.05rem">“La masa se libera ${tPos}, ${tVel}.”</p><p><b>Convención:</b> ${conv === 1 ? "abajo positivo (la de clase)" : "el enunciado dice: <i>tome como positiva la dirección hacia arriba</i>"}.</p>`;
+    i0.value = ""; i1.value = ""; fb.innerHTML = "";
+  }
+  row.append(U.el("label", {}, "x(0) ="), i0, U.el("label", {style: "min-width:auto"}, "x'(0) ="), i1);
+  el.append(box, row, fb); const r2 = U.el("div", {class: "g-row"}); el.append(r2);
+  U.button(r2, "Revisar", () => {
+    const a = U.num(i0.value), b = U.num(i1.value), ok = near(a, sol[0], 1e-6) && near(b, sol[1], 1e-6);
+    racha = ok ? racha + 1 : 0;
+    fb.innerHTML = (ok ? `<span class="pill ok">Correcto</span> Racha: ${racha}` : `<span class="pill bad">Revisa</span> Era $x(0)=${TX(sol[0], 1)}$, $x'(0)=${TX(sol[1], 1)}$.`) +
+      ` <span style="color:var(--muted)">Regla: lo que va en la dirección positiva lleva signo +; “reposo” ⇒ velocidad 0.</span>`; U.tex(fb);
+  });
+  U.button(r2, "Nuevo enunciado", nuevo);
+  nuevo();
+};
+
+/* ===== T6: amplitud y fase ===== */
+GADGETS["g_fase"] = (el, U) => {
+  let c1 = -1, c2 = -2.5, w = 4; const out = U.el("div", {class: "g-out"});
+  U.slider(el, {label: "c₁ (cos)", min: -3, max: 3, step: 0.1, value: -1, onInput: v => { c1 = v; upd(); }});
+  U.slider(el, {label: "c₂ (sen)", min: -3, max: 3, step: 0.1, value: -2.5, onInput: v => { c2 = v; upd(); }});
+  U.slider(el, {label: "ω", min: 1, max: 6, step: 0.5, value: 4, onInput: v => { w = v; upd(); }});
+  const plot = U.plot(el, {xmin: 0, xmax: 2 * Math.PI / 1, ymin: -4.5, ymax: 4.5, height: 220}); el.append(out);
+  function upd() {
+    const A = Math.hypot(c1, c2); if (A < 1e-9) { out.innerHTML = "Con $c_1=c_2=0$ no hay movimiento."; return U.tex(out); }
+    let phi = Math.atan2(c1, c2); if (phi < 0) phi += 2 * Math.PI;
+    const naive = near(c2, 0) ? (c1 > 0 ? Math.PI / 2 : -Math.PI / 2) : Math.atan(c1 / c2), malo = !near(Math.sin(naive), Math.sin(phi), 1e-6);
+    const fns = [{f: t => c1 * Math.cos(w * t) + c2 * Math.sin(w * t), c: 0}, {f: t => A * Math.sin(w * t + phi) + 0.0, c: 2}];
+    if (malo) fns.push({f: t => A * Math.sin(w * t + naive), c: 3});
+    plot.draw({fns, segments: [{x1: 0, y1: A, x2: 2 * Math.PI, y2: A, c: 4}, {x1: 0, y1: -A, x2: 2 * Math.PI, y2: -A, c: 4}]});
+    const cuad = c1 >= 0 ? (c2 >= 0 ? "I" : "II") : (c2 >= 0 ? "IV" : "III");
+    out.innerHTML = `$x(t)=${near(c1, 0) ? "" : lead(c1, 1) + "\\cos " + TX(w, 1) + "t"}${term(c2, "\\sin " + TX(w, 1) + "t", 1)}$<br>$A=\\sqrt{c_1^2+c_2^2}=${TX(A, 3)}$ &nbsp; · &nbsp; $T=\\frac{2\\pi}{\\omega}=${TX(2 * Math.PI / w, 3)}$<br>` +
+      `$\\sin\\varphi=\\frac{c_1}{A}$, $\\cos\\varphi=\\frac{c_2}{A}$ ⇒ cuadrante ${cuad} ⇒ $\\varphi=${TX(phi, 3)}$ rad<br>` +
+      (malo ? `<span class="pill bad">Trampa</span> $\\arctan(c_1/c_2)=${TX(naive, 3)}$ cae en el cuadrante equivocado (curva roja): hay que sumarle $\\pi$.` : `<span class="pill ok">OK</span> Aquí $\\arctan(c_1/c_2)$ ya da el ángulo correcto.`);
+    U.tex(out);
+  }
+};
+
+/* ===== T6: simulador masa-resorte ===== */
+GADGETS["g_resorte"] = (el, U) => {
+  const S = {m: 1, c: 4, k: 4, x0: -2, v0: 0, F: 0, g: 1};
+  const out = U.el("div", {class: "g-out"}), sl = {};
+  const def = [["m", "masa m", 0.25, 4, 0.25], ["c", "amortiguamiento c", 0, 12, 0.25], ["k", "constante k", 1, 40, 1],
+               ["x0", "x(0)", -3, 3, 0.5], ["v0", "x'(0)", -12, 12, 1], ["F", "F₀ (fuerza)", 0, 10, 0.5], ["g", "γ (frec. fuerza)", 0, 8, 0.25]];
+  def.forEach(([key, lab, mn, mx, st]) => { sl[key] = U.slider(el, {label: lab, min: mn, max: mx, step: st, value: S[key], onInput: v => { S[key] = v; upd(); }}); });
+  const row = U.el("div", {class: "g-row"}); el.append(row);
+  const set = o => Object.entries(o).forEach(([k, v]) => { sl[k].value = v; sl[k].dispatchEvent(new Event("input")); });
+  U.button(row, "29/04: crítico (c=4)", () => set({m: 1, c: 4, k: 4, x0: -2, v0: 0, F: 0, g: 1}));
+  U.button(row, "30/04: libre", () => set({m: 2, c: 0, k: 32, x0: -1, v0: -10, F: 0, g: 1}));
+  U.button(row, "Clase 15: sobreamortiguado", () => set({m: 1, c: 10, k: 16, x0: 1, v0: -12, F: 0, g: 1}));
+  U.button(row, "Guía #8: subamortiguado", () => set({m: 1, c: 2, k: 2, x0: 3, v0: 0, F: 0, g: 1}));
+  U.button(row, "2025: resonancia", () => set({m: 1, c: 0, k: 1, x0: 0, v0: 0, F: 2, g: 1}));
+  const plot = U.plot(el, {xmin: 0, xmax: 10, height: 240}); el.append(out);
+  function upd() {
+    const {m, c, k, x0, v0, F, g} = S, D = c * c - 4 * m * k, w = Math.sqrt(k / m), al = c / (2 * m);
+    const sol = rk4((t, y) => [y[1], (F * Math.cos(g * t) - c * y[1] - k * y[0]) / m], [x0, v0], 0, 10, 0.005);
+    let cruces = 0; for (let i = 1; i < sol.length; i++) if (sol[i - 1].y[0] * sol[i].y[0] < 0) cruces++;
+    const fns = [{f: t => interp(sol, t), c: 0}];
+    let caso;
+    if (near(c, 0)) caso = `<b>Sin amortiguamiento</b>: $\\omega=\\sqrt{k/m}=${TX(w)}$, $T=${TX(2 * Math.PI / w)}$`;
+    else if (D > 1e-9) caso = `<b>Sobreamortiguado</b> ($c^2=${TX(c * c, 2)}\\gt 4mk=${TX(4 * m * k, 2)}$): $\\lambda=${TX((-c + Math.sqrt(D)) / (2 * m))},\\ ${TX((-c - Math.sqrt(D)) / (2 * m))}$`;
+    else if (D > -1e-9) caso = `<b>Crítico</b> ($c^2=4mk=${TX(4 * m * k, 2)}$): $\\lambda=${TX(-al)}$ doble`;
+    else {
+      const ws = Math.sqrt(-D) / (2 * m); caso = `<b>Subamortiguado</b> ($c^2=${TX(c * c, 2)}\\lt 4mk=${TX(4 * m * k, 2)}$): $\\lambda=${TX(-al)}\\pm${TX(ws)}i$, $\\omega^*=${TX(ws)}$`;
+      if (F === 0) { const A = Math.hypot(x0, (v0 + al * x0) / ws); fns.push({f: t => A * Math.exp(-al * t), c: 4}, {f: t => -A * Math.exp(-al * t), c: 4}); }
+    }
+    plot.draw({fns});
+    const res = F > 0 && near(c, 0) && Math.abs(g - w) < 0.13;
+    out.innerHTML = limpia(`EDO: $${lead(m)}x''${term(c, "x'")}${term(k, "x")}=${F > 0 ? TX(F, 1) + "\\cos " + TX(g, 2) + "t" : "0"}$, &nbsp;$x(0)=${TX(x0, 1)}$, $x'(0)=${TX(v0, 1)}$<br>${caso}<br>` +
+      `Cruces por el equilibrio en $0\\lt t\\le10$: <b>${cruces}</b>` + (F > 0 && c > 0 ? `<br><span style="color:var(--muted)">Con roce, la parte homogénea (transitoria) se apaga y queda la oscilación forzada (estacionaria).</span>` : "") +
+      (res ? `<br><span class="pill bad">Resonancia</span> $\\gamma\\approx\\omega$ sin roce: la amplitud crece como $t$.` : ""));
+    U.tex(out);
+  }
+};
+
+</script>
+<script>
+(() => {
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const M = DATA.meta || {}, T = DATA.temas || [], Q = DATA.quiz || [], E = DATA.evaluaciones || [];
+const KEY = "pe:" + (M.ramo || "") + ":" + (M.evaluacion || "");
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(KEY + k); return v ? JSON.parse(v) : d; } catch { return d; } },
+  set(k, v) { try { localStorage.setItem(KEY + k, JSON.stringify(v)); } catch {} }
+};
+/* ---------- estilo según ramo ---------- */
+const PRESETS = {
+  datos:        {acc: "#1D3F7A", accd: "#8FB0EE", side: "#16284A", line: "#3B5582", muted: "#8FA3C7", ink: "#C9D3E6", papel: "cuadriculado", unidad: "Capítulo"},
+  matematica:   {acc: "#4A2F8A", accd: "#B9A6F2", side: "#231845", line: "#4A3D7A", muted: "#A99BD6", ink: "#D6CEF0", papel: "cuadriculado", unidad: "Capítulo"},
+  fisica:       {acc: "#0E5E5E", accd: "#72D0CA", side: "#0C2F31", line: "#2F5E5F", muted: "#8BBDBA", ink: "#CFE6E4", papel: "milimetrado", unidad: "Capítulo"},
+  finanzas:     {acc: "#1F5B3A", accd: "#82D3A4", side: "#122D1F", line: "#355E47", muted: "#95BFA6", ink: "#D2E6DA", papel: "rayado", unidad: "Unidad"},
+  programacion: {acc: "#8A4F00", accd: "#F2B544", side: "#1A1D23", line: "#3A3F4A", muted: "#9AA1AE", ink: "#D5D9E0", papel: "puntos", unidad: "Módulo"},
+  humanidades:  {acc: "#7A1F33", accd: "#F2A0B2", side: "#35111B", line: "#5E3040", muted: "#C99AA6", ink: "#EBD3D9", papel: "rayado", unidad: "Unidad", pen: "#1F4E8C", pend: "#8FB0EE"},
+  gestion:      {acc: "#7A4E0E", accd: "#E9B96E", side: "#2E1F0A", line: "#5A4526", muted: "#C7AE85", ink: "#EBDDC4", papel: "puntos", unidad: "Unidad", pen: "#A1263A", pend: "#F28B9A"}
+};
+const ES = M.estilo || {}, P = Object.assign({}, PRESETS[ES.preset] || PRESETS.datos);
+if (ES.acento) { P.acc = ES.acento; P.accd = ES.acento_oscuro || ES.acento; }
+const R = document.documentElement.style;
+[["--acc-l", P.acc], ["--acc-d", P.accd], ["--side", P.side], ["--side-line", P.line], ["--side-muted", P.muted], ["--side-ink", P.ink]].forEach(([k, v]) => R.setProperty(k, v));
+if (P.pen) { R.setProperty("--pen-l", P.pen); R.setProperty("--pen-d", P.pend || P.pen); }
+document.body.className = "p-" + (ES.papel || P.papel);
+const UNI = ES.unidad || P.unidad;
+
+function md(s) {
+  if (s == null) return "";
+  const math = [];
+  s = String(s).replace(/\$\$[\s\S]+?\$\$|(?<!\\)\$[^$\n]+?(?<!\\)\$/g, m => { math.push(m); return "\u0000" + (math.length - 1) + "\u0000"; });
+  s = esc(s).replace(/`([^`]+)`/g, "<code>$1</code>").replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>").replace(/(^|[^*\w])\*([^*\n]+)\*/g, "$1<i>$2</i>");
+  let out = "", list = null;
+  for (const l of s.split("\n")) {
+    const m = l.match(/^\s*[-•]\s+(.*)/), n = l.match(/^\s*\d+[.)]\s+(.*)/);
+    const t = m ? "ul" : n ? "ol" : null;
+    if (t) { if (list !== t) { if (list) out += `</${list}>`; out += `<${t}>`; list = t; } out += "<li>" + (m || n)[1] + "</li>"; }
+    else { if (list) { out += `</${list}>`; list = null; } if (l.trim()) out += "<p>" + l + "</p>"; }
+  }
+  if (list) out += `</${list}>`;
+  return out.replace(/\u0000(\d+)\u0000/g, (_, i) => esc(math[i]));
+}
+const inl = s => md(s).replace(/<\/?p>/g, " ").trim();
+let texTries = 0;
+function tex(el) {
+  if (window.MathJax && MathJax.typesetPromise) MathJax.startup.promise.then(() => MathJax.typesetPromise([el])).catch(() => {});
+  else if (texTries++ < 60) setTimeout(() => tex(el), 250);
+}
+const idx = id => T.findIndex(t => t.id === id) + 1;
+const temaById = Object.fromEntries(T.map(t => [t.id, t]));
+const tituloTema = id => temaById[id]?.titulo || id;
+const pregPorTema = id => E.filter(e => e.tema === id).length;
+const fmtN = (x, d = 1) => (+x.toFixed(d)).toLocaleString("es-CL", {minimumFractionDigits: d, maximumFractionDigits: d});
+const notaCL = p => p < 0.6 ? 1 + 3 * p / 0.6 : 4 + 3 * (p - 0.6) / 0.4;   // escala 1–7, exigencia 60 %
+const dots = n => `<span class="dots" aria-label="Frecuencia en evaluaciones: ${n || 1} de 3">${[0, 1, 2].map(i => `<i class="${i < (n || 1) ? "f" : ""}"></i>`).join("")}</span>`;
+const sh = (titulo, der = "") => `<div class="sh"><h3>${titulo}</h3>${der}</div>`;
+
+/* ---------- utilidades para gadgets ---------- */
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const U = {
+  el(tag, attrs = {}, ...kids) {
+    const e = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs || {})) k === "html" ? (e.innerHTML = v) : k.startsWith("on") ? e.addEventListener(k.slice(2), v) : e.setAttribute(k, v);
+    kids.flat().forEach(k => e.append(k?.nodeType ? k : document.createTextNode(k ?? "")));
+    return e;
+  },
+  fmt(x, d = 3) { if (!isFinite(x)) return String(x); return (+x.toFixed(d)).toLocaleString("es-CL", {maximumFractionDigits: d, useGrouping: false}); },
+  num(s) { return parseFloat(String(s).trim().replace(/\s/g, "").replace(",", ".")); },
+  color(i = 0) { return css("--c" + (((i % 5) + 5) % 5)); },
+  mean: xs => xs.reduce((a, b) => a + b, 0) / xs.length,
+  median(xs) { const s = [...xs].sort((a, b) => a - b), n = s.length; return n % 2 ? s[(n - 1) / 2] : (s[n / 2 - 1] + s[n / 2]) / 2; },
+  sd(xs, muestral = true) { const m = U.mean(xs); return Math.sqrt(xs.reduce((a, x) => a + (x - m) ** 2, 0) / (xs.length - (muestral ? 1 : 0))); },
+  rand(a, b, d = 0) { return +(a + Math.random() * (b - a)).toFixed(d); },
+  normPdf: (x, m = 0, s = 1) => Math.exp(-0.5 * ((x - m) / s) ** 2) / (s * Math.sqrt(2 * Math.PI)),
+  normCdf(x, m = 0, s = 1) { const z = (x - m) / (s * Math.SQRT2), t = 1 / (1 + 0.3275911 * Math.abs(z)); const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-z * z); return 0.5 * (1 + Math.sign(z) * y); },
+  tex,
+  slider(p, {label, min = 0, max = 10, step = 1, value = min, onInput}) {
+    const inp = U.el("input", {type: "range", min, max, step, value}), v = U.el("span", {class: "v"});
+    const upd = () => { const x = +inp.value; v.textContent = U.fmt(x, 4); onInput && onInput(x); };
+    inp.addEventListener("input", upd); p.append(U.el("div", {class: "g-row"}, U.el("label", {}, label), inp, v)); setTimeout(upd); return inp;
+  },
+  select(p, {label, options = [], onChange}) {
+    const s = U.el("select", {}, options.map(o => U.el("option", {value: o}, o)));
+    s.addEventListener("change", () => onChange && onChange(s.value)); p.append(U.el("div", {class: "g-row"}, U.el("label", {}, label || ""), s));
+    setTimeout(() => onChange && onChange(s.value)); return s;
+  },
+  button(p, txt, fn) { const b = U.el("button", {class: "btn", onclick: fn}, txt); p.append(b); return b; },
+  numInput(p, {label = "Tu respuesta", ok, tol = 1e-6, exp = ""}) {
+    const i = U.el("input", {type: "text", inputmode: "decimal", placeholder: "ej. 3,14"}), fb = U.el("div", {class: "g-out"});
+    const chk = () => { const x = U.num(i.value); const good = Math.abs(x - ok) <= tol; fb.innerHTML = (good ? '<span class="pill ok">Correcto</span>' : '<span class="pill bad">Revisa</span> Respuesta: <b>' + U.fmt(ok, 4) + "</b>") + (exp ? " " + md(exp) : ""); tex(fb); };
+    p.append(U.el("div", {class: "g-row"}, U.el("label", {}, label), i, U.el("button", {class: "btn", onclick: chk}, "Revisar")), fb); return i;
+  },
+  chart(p, cfg) { const c = U.el("canvas"); p.append(U.el("div", {style: "position:relative;height:260px"}, c)); cfg.options = Object.assign({responsive: true, maintainAspectRatio: false}, cfg.options || {}); return new Chart(c, cfg); },
+  plot(p, o = {}) {
+    const H = o.height || 240, cv = U.el("canvas"); p.append(cv); let last = null;
+    const draw = (d = last || {}) => {
+      last = d; const W = Math.max(260, cv.parentElement.clientWidth || 600), r = window.devicePixelRatio || 1;
+      cv.width = W * r; cv.height = H * r; cv.style.width = W + "px"; cv.style.height = H + "px";
+      const g = cv.getContext("2d"); g.scale(r, r); g.clearRect(0, 0, W, H);
+      const xmin = o.xmin ?? 0, xmax = o.xmax ?? 10, N = 300, fs = d.fns || [];
+      let ymin = o.ymin, ymax = o.ymax;
+      if (ymin == null || ymax == null) {
+        const ys = [];
+        fs.forEach(f => { for (let i = 0; i <= N; i++) { const y = f.f(xmin + (xmax - xmin) * i / N); if (isFinite(y)) ys.push(y); } });
+        (d.points || []).forEach(q => ys.push(q.y));
+        const lo = ys.length ? Math.min(...ys) : 0, hi = ys.length ? Math.max(...ys) : 1, pad = (hi - lo || 1) * .1;
+        ymin = ymin ?? Math.min(0, lo - pad); ymax = ymax ?? hi + pad;
+      }
+      const L = 40, R = 10, T = 10, B = 26, X = x => L + (x - xmin) / (xmax - xmin) * (W - L - R), Y = y => T + (ymax - y) / (ymax - ymin) * (H - T - B);
+      g.font = "11px Inter,sans-serif"; g.fillStyle = css("--muted"); g.strokeStyle = css("--line"); g.lineWidth = 1;
+      const tick = (a, b) => { const s = Math.pow(10, Math.floor(Math.log10((b - a) / 5))); const m = (b - a) / s > 25 ? 5 : (b - a) / s > 10 ? 2 : 1; return s * m; };
+      const tx = tick(xmin, xmax), ty = tick(ymin, ymax);
+      for (let x = Math.ceil(xmin / tx) * tx; x <= xmax + 1e-9; x += tx) { g.beginPath(); g.moveTo(X(x), T); g.lineTo(X(x), H - B); g.stroke(); g.fillText(U.fmt(x, 3), X(x) - 8, H - 8); }
+      for (let y = Math.ceil(ymin / ty) * ty; y <= ymax + 1e-9; y += ty) { g.beginPath(); g.moveTo(L, Y(y)); g.lineTo(W - R, Y(y)); g.stroke(); g.fillText(U.fmt(y, 3), 2, Y(y) + 4); }
+      g.strokeStyle = css("--muted"); g.beginPath(); if (ymin <= 0 && ymax >= 0) { g.moveTo(L, Y(0)); g.lineTo(W - R, Y(0)); } if (xmin <= 0 && xmax >= 0) { g.moveTo(X(0), T); g.lineTo(X(0), H - B); } g.stroke();
+      if (d.shade) { const s = d.shade; g.fillStyle = U.color(s.c ?? 0) + "44"; g.beginPath(); g.moveTo(X(s.a), Y(Math.max(ymin, 0))); for (let i = 0; i <= N; i++) { const x = s.a + (s.b - s.a) * i / N; g.lineTo(X(x), Y(s.f(x))); } g.lineTo(X(s.b), Y(Math.max(ymin, 0))); g.fill(); }
+      fs.forEach((f, k) => { g.strokeStyle = U.color(f.c ?? k); g.lineWidth = 2; g.beginPath(); let on = false; for (let i = 0; i <= N; i++) { const x = xmin + (xmax - xmin) * i / N, y = f.f(x); if (!isFinite(y)) { on = false; continue; } on ? g.lineTo(X(x), Y(y)) : g.moveTo(X(x), Y(y)); on = true; } g.stroke(); });
+      (d.segments || []).forEach(s => { g.strokeStyle = U.color(s.c ?? 1); g.lineWidth = 1.5; g.beginPath(); g.moveTo(X(s.x1), Y(s.y1)); g.lineTo(X(s.x2), Y(s.y2)); g.stroke(); });
+      (d.vlines || []).forEach(v => { g.strokeStyle = g.fillStyle = U.color(v.c ?? 1); g.setLineDash([5, 4]); g.beginPath(); g.moveTo(X(v.x), T); g.lineTo(X(v.x), H - B); g.stroke(); g.setLineDash([]); if (v.label) g.fillText(v.label, X(v.x) + 4, T + 12); });
+      (d.points || []).forEach(q => { g.fillStyle = U.color(q.c ?? 0); g.beginPath(); g.arc(X(q.x), Y(q.y), q.r || 4, 0, 7); g.fill(); });
+    };
+    addEventListener("resize", () => last && draw());
+    return {draw, canvas: cv};
+  }
+};
+window.U = U;
+
+/* ---------- barra lateral ---------- */
+const NAV = [["resumen", "§ 0", "Formulario"], ["temas", "§ 1–" + T.length, UNI === "Capítulo" ? "Capítulos" : UNI + "es"], ["quiz", "§ Q", "Autoevaluación"], ["evals", "§ E", "Evaluaciones anteriores"]];
+let tabActual = "resumen", temaActual = store.get("tema", T[0]?.id);
+function side() {
+  const hist = store.get("hist", {});
+  const el = $("#side");
+  el.innerHTML = `<div><div class="lbl">${esc(M.carrera || "Ingeniería")}</div><h1>${esc(M.ramo || "")}</h1></div>
+  <nav aria-label="Secciones" style="display:flex;flex-direction:column;gap:2px">${NAV.map(([id, c, t]) => `<button class="nav${id === tabActual ? " on" : ""}" data-go="${id}"><span class="mono">${c}</span><span>${esc(t)}</span></button>`).join("")}</nav>
+  <div style="display:flex;flex-direction:column;gap:8px"><div class="lbl">Dominio por ${esc(UNI.toLowerCase())}</div>
+  ${T.map((t, i) => { const s = hist[t.id], p = s ? Math.round(100 * s.ok / s.n) : null;
+    return `<button class="dom" data-tema="${esc(t.id)}" title="${esc(t.titulo)}"><span class="mono">${i + 1}</span><span class="b"><i style="width:${p ?? 0}%;background:${p >= 60 ? "var(--bar-ok)" : "var(--bar-bad)"}"></i></span><span class="mono" style="text-align:right">${p == null ? "—" : p + "%"}</span></button>`; }).join("")}
+  </div>
+  <div class="rotulo"><div><span class="lbl">Evaluación</span>${esc(M.evaluacion || "—")}</div><div><span class="lbl">Fecha</span>${esc(M.fecha || "—")}</div>
+  <div class="w"><span class="lbl">Contenidos</span>${esc(M.contenidos || (T.length ? `${UNI.slice(0, 3)}. 1 a ${T.length}` : "—"))}</div>
+  <div><span class="lbl">Semestre</span>${esc(M.semestre || "—")}</div><div><span class="lbl">Hoja</span>0${NAV.findIndex(n => n[0] === tabActual) + 1} / 04</div></div>
+  <button class="tbtn" id="themeBtn">Tema: ${{auto: "automático", light: "claro", dark: "oscuro"}[th]}</button>`;
+  el.querySelectorAll("[data-go]").forEach(b => b.onclick = () => go(b.dataset.go));
+  el.querySelectorAll("[data-tema]").forEach(b => b.onclick = () => { temaActual = b.dataset.tema; go("temas"); });
+  $("#themeBtn").onclick = () => { th = ["auto", "light", "dark"][(["auto", "light", "dark"].indexOf(th) + 1) % 3]; store.set("theme", th); applyTheme(); side(); };
+}
+let th = store.get("theme", "auto");
+const applyTheme = () => th === "auto" ? document.documentElement.removeAttribute("data-theme") : document.documentElement.setAttribute("data-theme", th);
+applyTheme();
+$("#menuBtn").onclick = () => document.body.classList.toggle("menu");
+document.addEventListener("click", e => { if (document.body.classList.contains("menu") && !e.target.closest("#side") && !e.target.closest("#menuBtn")) document.body.classList.remove("menu"); });
+$("#mtitle").textContent = (M.evaluacion || "") + " · " + (M.ramo || "");
+document.title = (M.evaluacion || "Estudio") + " · " + (M.ramo || "");
+const main = $("#main");
+function go(id, arg) {
+  tabActual = id; document.body.classList.remove("menu");
+  main.innerHTML = ""; ({resumen: vResumen, temas: vTemas, quiz: vQuiz, evals: vEvals})[id](arg);
+  side(); tex(main); scrollTo(0, 0); store.set("tab", id);
+}
+const node = h => { const d = document.createElement("div"); d.innerHTML = h.trim(); return d.firstElementChild; };
+const hdr = (kicker, titulo, sub, num) => node(`<header class="hdr"><div class="lbl">${kicker}</div><h2>${num ? `<span class="n">${num}</span>` : ""}${esc(titulo)}</h2>${sub ? `<p>${sub}</p>` : ""}</header>`);
+
+/* ---------- formulario ---------- */
+function vResumen() {
+  const palabras = JSON.stringify(DATA.resumen || []).split(/\s+/).length;
+  main.append(hdr(`Formulario · ${esc(M.evaluacion || "")} · Lectura: ${Math.max(3, Math.round(palabras / 180))} min`, "Formulario y resumen express",
+    `Las fórmulas numeradas, la idea que las ordena y el error que más cuesta puntos. Los cuadros indican cuánto se ha preguntado cada ${esc(UNI.toLowerCase())}.${M.fuentes?.length ? `<br><span class="lbl">Basado en: ${M.fuentes.map(esc).join(" · ")}</span>` : ""}`));
+  const g = node(`<div class="grid2"></div>`);
+  (DATA.resumen || []).forEach(r => {
+    const n = idx(r.tema), t = temaById[r.tema] || {};
+    const fs = (r.formulas || []).map((f, k) => { const o = typeof f === "string" ? {tex: f} : f; const tx = /^\s*\$/.test(o.tex) ? o.tex : "$" + o.tex + "$";
+      return `<div class="eqrow"><div><div class="mx">${esc(tx)}</div>${o.nota ? `<div class="nt">${esc(o.nota)}</div>` : ""}</div><span class="num">(${n}.${k + 1})</span></div>`; }).join("");
+    const c = node(`<section class="sheet">${sh(`<span class="sec">§${n}</span>${esc(t.titulo || r.tema)}`, dots(t.peso))}<div class="sb">${fs}
+      ${(r.ideas || []).length ? `<div style="margin-top:12px"><b>Ideas clave.</b>${md(r.ideas.map(i => "- " + i).join("\n"))}</div>` : ""}
+      <div class="row sp" style="align-items:flex-end;margin-top:6px"><div>${(r.ojo || []).map(o => `<div class="pen">ojo: ${inl(o)}</div>`).join("")}</div><button class="btn" data-t="${esc(r.tema)}">Ver ${esc(UNI.toLowerCase())} ${n} →</button></div></div></section>`);
+    c.querySelector("[data-t]").onclick = () => { temaActual = r.tema; go("temas"); };
+    g.append(c);
+  });
+  main.append(g);
+}
+
+/* ---------- capítulos ---------- */
+function vTemas() {
+  const nav = node(`<div class="subnav"></div>`);
+  T.forEach((t, i) => { const b = node(`<button class="chip${t.id === temaActual ? " on" : ""}">§${i + 1} ${esc(t.titulo)}</button>`); b.onclick = () => { temaActual = t.id; store.set("tema", t.id); go("temas"); }; nav.append(b); });
+  main.append(nav);
+  const t = temaById[temaActual] || T[0]; if (!t) return;
+  const n = idx(t.id), k = pregPorTema(t.id);
+  main.append(hdr(`${esc(UNI)} ${n}${k ? ` · Aparece en ${k} pregunta${k > 1 ? "s" : ""} de evaluaciones anteriores` : ""}`, t.titulo, md(t.intro).replace(/<\/?p>/g, " "), n));
+  const chap = node(`<div class="chap"></div>`), cnt = {sec: 0, eq: 0, def: 0, ej: 0, lab: 0, fig: 0};
+  (t.bloques || []).forEach(b => { const el = bloque(b, n, cnt); if (el) chap.append(el); });
+  main.append(chap);
+  const nx = T[n], pie = node(`<div class="row"></div>`);
+  if (Q.some(q => q.tema === t.id)) pie.append(btn("Practicar este " + UNI.toLowerCase(), () => go("quiz", {temas: [t.id]}), true));
+  if (k) pie.append(btn("Ver preguntas anteriores", () => go("evals", {tema: t.id})));
+  if (nx) pie.append(btn(`Siguiente: §${n + 1} ${nx.titulo} →`, () => { temaActual = nx.id; store.set("tema", nx.id); go("temas"); }));
+  main.append(pie);
+}
+function btn(txt, fn, pri) { const b = document.createElement("button"); b.className = "btn" + (pri ? " pri" : ""); b.textContent = txt; b.onclick = fn; return b; }
+const pasosHTML = ps => (ps || []).map(p => `<div class="step"><b class="t">${esc(p.titulo || "")}</b>${md(p.md)}</div>`).join("");
+function bloque(b, n, c) {
+  const blk = h => node(`<div class="blk">${h}</div>`);
+  switch (b.tipo) {
+    case "texto": return blk((b.titulo ? `<h3 class="h3"><span class="sec">${n}.${++c.sec}</span>${esc(b.titulo)}</h3>` : "") + md(b.md));
+    case "definicion": return blk(`<div class="defi"><b>${esc(b.etiqueta || "Definición")} ${n}.${++c.def}</b>${b.nombre ? ` <span class="nm">(${esc(b.nombre)})</span>` : ""}. ${inl(b.md)}</div>`);
+    case "formula": return blk(`<div class="formula"><div class="mx">${esc("$$" + b.tex + "$$")}</div><span class="num">(${n}.${++c.eq})</span></div>${b.nota ? md(b.nota) : ""}`);
+    case "nota": return node(`<aside class="nota"><span class="lbl">Nota ${n}.${String.fromCharCode(97 + (c.nota = (c.nota || 0) + 1) - 1)}</span>${md(b.md)}</aside>`);
+    case "lapiz": return node(`<div class="pen lapiz">${inl(b.texto || b.md)}</div>`);
+    case "tabla": return blk((b.titulo ? `<h3 class="h3" style="font-size:1.15rem">${esc(b.titulo)}</h3>` : "") + `<div class="tbl"><table><tr>${(b.columnas || []).map(x => `<th>${inl(x)}</th>`).join("")}</tr>${(b.filas || []).map(f => `<tr>${f.map(x => `<td>${inl(x)}</td>`).join("")}</tr>`).join("")}</table></div>`);
+    case "ojo": return blk(`<div class="ojo"><span class="lbl">Errores típicos</span>${md((b.items || []).map(i => "- " + i).join("\n"))}</div>`);
+    case "codigo": return blk((b.titulo ? `<h3 class="h3" style="font-size:1.15rem">${esc(b.titulo)}</h3>` : "") + `<pre class="code">${esc(b.codigo)}</pre>${b.salida ? `<div class="out">${esc(b.salida)}</div>` : ""}${b.nota ? md(b.nota) : ""}`);
+    case "ejemplo": {
+      const e = blk(`<p><b>Ejemplo ${n}.${++c.ej}${b.titulo ? ` — ${esc(b.titulo)}` : ""}.</b></p>${md(b.enunciado)}<div class="row" style="margin-top:8px"></div><div class="hide sol"><p><span class="serif" style="font-style:italic;font-size:1.1em">Solución.</span></p>${pasosHTML(b.pasos)}${b.respuesta ? `<div class="ans">${md(b.respuesta)}</div>` : ""}${b.lapiz ? `<div class="pen" style="margin-top:6px">${inl(b.lapiz)}</div>` : ""}<div class="qed">∎</div></div>`);
+      const sol = e.querySelector(".sol"), bt = btn("Ver solución", () => { sol.classList.toggle("hide"); bt.textContent = sol.classList.contains("hide") ? "Ver solución" : "Ocultar solución"; tex(sol); });
+      e.querySelector(".row").append(bt); return e;
+    }
+    case "gadget": {
+      const L = String.fromCharCode(65 + c.lab++);
+      const e = blk(`<section class="sheet gadget">${sh(`<span class="sec">LAB ${n}.${L}</span>${esc(b.titulo || "")}`, `<span class="lbl">Interactivo</span>`)}<div class="sb">${md(b.instrucciones)}<div class="g-body"></div>${b.figura ? `<p style="font-size:.9rem;color:var(--muted);margin-top:10px"><b>Figura ${n}.${++c.fig}</b> — ${inl(b.figura)}</p>` : ""}</div></section>`);
+      const body = e.querySelector(".g-body");
+      setTimeout(() => { try { GADGETS[b.id] ? GADGETS[b.id](body, U) : body.append("Gadget no encontrado: " + b.id); tex(body); } catch (err) { body.append("Error en el gadget: " + err.message); console.error(err); } });
+      return e;
+    }
+    default: return blk(md(b.md || ""));
+  }
+}
+
+/* ---------- autoevaluación ---------- */
+function vQuiz(pre) {
+  const temas = T.filter(t => Q.some(q => q.tema === t.id));
+  const sel = new Set(pre?.temas || temas.map(t => t.id)); let cant = 10, modo = "mix";
+  const fall = store.get("fallidas", []);
+  main.append(hdr("Autoevaluación · " + Q.length + " preguntas disponibles", "Autoevaluación con diagnóstico", `Responde como en la prueba. Cada respuesta actualiza tu dominio por ${esc(UNI.toLowerCase())}; al final verás tu nota estimada y qué repasar primero.`));
+  const c = node(`<section class="sheet">${sh("Configurar ronda")}<div class="sb" style="display:flex;flex-direction:column;gap:12px"></div></section>`), sb = c.querySelector(".sb");
+  const grupo = (titulo, items, isOn, onPick) => { const w = node(`<div><div class="lbl" style="margin-bottom:6px">${titulo}</div><div class="row"></div></div>`), r = w.querySelector(".row");
+    items.forEach(([v, l]) => { const b = node(`<button class="chip${isOn(v) ? " on" : ""}">${esc(l)}</button>`); b.onclick = () => { onPick(v); r.querySelectorAll(".chip").forEach((x, i) => x.classList.toggle("on", isOn(items[i][0]))); }; r.append(b); }); return w; };
+  sb.append(grupo(UNI + "es", temas.map(t => [t.id, `§${idx(t.id)} ${t.titulo}`]), v => sel.has(v), v => sel.has(v) ? sel.delete(v) : sel.add(v)),
+    grupo("Cantidad", [[5, "5"], [10, "10"], [20, "20"], [999, "Todas"]], v => v === cant, v => cant = v),
+    grupo("Modo", [["mix", "Mezcladas"], ["err", `Solo las que fallé (${fall.length})`]], v => v === modo, v => modo = v),
+    node(`<div class="row"></div>`));
+  sb.lastChild.append(btn("Comenzar", () => {
+    let pool = Q.map((q, i) => ({...q, i})).filter(q => sel.has(q.tema));
+    if (modo === "err") pool = pool.filter(q => fall.includes(q.i));
+    if (!pool.length) return alert("No hay preguntas con esa selección.");
+    pool.sort(() => Math.random() - .5); correr(pool.slice(0, cant));
+  }, true));
+  main.append(c);
+  const hist = store.get("hist", {});
+  if (Object.keys(hist).length) main.append(hoja("Historial acumulado", hist, true));
+}
+function hoja(titulo, st, reset) {
+  const ok = Object.values(st).reduce((a, s) => a + s.ok, 0), n = Object.values(st).reduce((a, s) => a + s.n, 0), flojos = [];
+  const rows = Object.entries(st).map(([id, s]) => { const p = s.ok / s.n; if (p < 0.6) flojos.push(id);
+    return `<tr><td><span class="sec">§${idx(id)}</span>${esc(tituloTema(id))}</td><td class="mono" style="text-align:right;${p < 0.6 ? "color:var(--pen);font-weight:600" : ""}">${s.ok}/${s.n}</td></tr>`; }).join("");
+  const c = node(`<section class="sheet">${sh(esc(titulo))}<div class="sb">
+    <div class="row" style="gap:16px;align-items:baseline;margin-bottom:12px"><span class="big">${ok}<small>/${n}</small></span><span class="pen" style="font-size:1.7rem">nota estimada ${fmtN(notaCL(n ? ok / n : 0))}</span></div>
+    <div class="tbl"><table><tr><th>${esc(UNI)}</th><th style="text-align:right">Correctas</th></tr>${rows}</table></div>
+    <p class="lbl" style="margin-top:8px">Escala 1 a 7 con 60 % de exigencia</p></div></section>`);
+  if (flojos.length) { const d = node(`<div class="ojo" style="margin-top:14px"><span class="lbl">Repasa primero</span><div class="row" style="margin-top:6px"></div></div>`);
+    flojos.forEach(id => d.querySelector(".row").append(btn(`§${idx(id)} ${tituloTema(id)} →`, () => { temaActual = id; go("temas"); }))); c.querySelector(".sb").append(d); }
+  if (reset) { const r = node(`<div class="row" style="margin-top:12px"></div>`); r.append(btn("Borrar historial", () => { if (confirm("¿Borrar historial?")) { store.set("hist", {}); store.set("fallidas", []); go("quiz"); } })); c.querySelector(".sb").append(r); }
+  return c;
+}
+function correr(qs) {
+  let k = 0; const ses = {}, hist = store.get("hist", {}), fall = new Set(store.get("fallidas", []));
+  const show = () => {
+    main.innerHTML = "";
+    if (k >= qs.length) { main.append(hdr("Autoevaluación · Resultado", "Hoja de resultados", "")); main.append(hoja("Esta ronda", ses));
+      const r = node(`<div class="row"></div>`); r.append(btn("Otra ronda", () => go("quiz"), true), btn("Ir a evaluaciones anteriores", () => go("evals"))); main.append(r); side(); tex(main); return; }
+    const q = qs[k], dif = "●".repeat(q.dif || 1) + "○".repeat(3 - (q.dif || 1));
+    const c = node(`<section class="sheet">${sh(`<span class="mono" style="font-size:.9rem">Pregunta ${k + 1} de ${qs.length} <span style="color:var(--muted);font-weight:400">· §${idx(q.tema)} · Dificultad ${dif}</span></span>`, q.pts ? `<span class="mono">(${esc(q.pts)} pts)</span>` : "")}<div class="sb"><div class="serif" style="font-size:1.35rem;line-height:1.45;margin-bottom:10px">${md(q.q)}</div><div class="ops"></div><div class="fb"></div><div class="row sp" style="margin-top:14px"><span></span></div></div></section>`);
+    const fb = c.querySelector(".fb"), ops = c.querySelector(".ops"), foot = c.querySelector(".row.sp");
+    const next = btn(k + 1 < qs.length ? "Siguiente pregunta →" : "Ver hoja de resultados", () => { k++; show(); }, true); next.classList.add("hide"); foot.append(next);
+    const mark = ok => {
+      for (const o of [ses, hist]) { o[q.tema] = o[q.tema] || {ok: 0, n: 0}; o[q.tema].n++; if (ok) o[q.tema].ok++; }
+      ok ? fall.delete(q.i) : fall.add(q.i); store.set("hist", hist); store.set("fallidas", [...fall]);
+      fb.innerHTML = `<div style="border-top:1px solid var(--ink);padding-top:12px;margin-top:10px"><span class="serif" style="font-style:italic;font-size:1.15rem">${ok ? "Correcto." : "Incorrecto."}</span> ${md(q.exp)}</div>`;
+      next.classList.remove("hide"); side(); tex(fb);
+    };
+    if (q.tipo === "num") {
+      const r = node(`<div class="g-row"><label>Tu respuesta</label><input type="text" inputmode="decimal" placeholder="ej. 4,2"></div>`), i = r.querySelector("input");
+      const b = btn("Responder", () => { const x = U.num(i.value); if (isNaN(x)) return; b.disabled = i.disabled = true; const ok = Math.abs(x - q.ok) <= (q.tol ?? 1e-6);
+        if (!ok) r.append(node(`<span class="pen">esperado: ${U.fmt(q.ok, 4)}</span>`)); mark(ok); });
+      i.addEventListener("keydown", e => e.key === "Enter" && b.click()); r.append(b); ops.append(r);
+    } else {
+      (q.op || []).map((t, j) => ({t, j})).sort(() => Math.random() - .5).forEach((o, pos) => {
+        const b = node(`<button class="opt"><span class="bub">${"abcdefgh"[pos]})</span><span class="tx">${inl(o.t)}</span><span class="tg"></span></button>`);
+        b.onclick = () => { ops.querySelectorAll(".opt").forEach(x => { x.disabled = true; if (+x.dataset.j === q.ok) { x.classList.add("ok"); x.querySelector(".tg").textContent = "✓ correcta"; } });
+          if (o.j !== q.ok) { b.classList.add("bad"); b.querySelector(".tg").textContent = "✗ tu respuesta"; } mark(o.j === q.ok); };
+        b.dataset.j = o.j; ops.append(b);
+      });
+    }
+    main.append(c); tex(main);
+  };
+  show();
+}
+
+/* ---------- evaluaciones anteriores ---------- */
+function vEvals(pre) {
+  const hechas = new Set(store.get("hechas", [])); let ft = pre?.tema || "todos", ff = "todas";
+  const fuentes = [...new Set(E.map(e => e.fuente))];
+  main.append(hdr(`Evaluaciones anteriores · ${E.length} preguntas${fuentes.length ? ` de ${fuentes.length} evaluaciones` : ""}`, "Banco de preguntas anteriores", "Intenta cada pregunta antes de abrir la solución. Después revisa la rúbrica: ahí está lo que separa un 5 de un 7."));
+  const freq = {}; E.forEach(e => freq[e.tema] = (freq[e.tema] || 0) + 1); const mx = Math.max(1, ...Object.values(freq));
+  const top = node(`<section style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:32px;align-items:end"><div><div class="lbl" style="margin-bottom:6px">Frecuencia por ${esc(UNI.toLowerCase())}</div>${Object.entries(freq).sort((a, b) => b[1] - a[1]).map(([id, n]) => `<div class="freq"><span><span class="sec">§${idx(id)}</span>${esc(tituloTema(id))}</span><div class="hbar"><i style="width:${100 * n / mx}%"></i></div><span class="mono" style="text-align:right">${n}</span></div>`).join("")}</div>
+    <div class="sheet" style="padding:14px 20px"><div class="lbl">Resueltas</div><div class="big" id="prog"></div></div></section>`);
+  main.append(top);
+  const fil = node(`<div class="row"></div>`);
+  [["todos", "Todos"], ...Object.keys(freq).map(id => [id, `§${idx(id)} ${tituloTema(id)}`])].forEach(([id, l]) => { const b = node(`<button class="chip${id === ft ? " on" : ""}">${esc(l)}</button>`); b.onclick = () => { ft = id; fil.querySelectorAll(".chip").forEach(x => x.classList.remove("on")); b.classList.add("on"); lista(); }; fil.append(b); });
+  if (fuentes.length > 1) { const s = node(`<select aria-label="Filtrar por evaluación"><option value="todas">Todas las evaluaciones</option>${fuentes.map(f => `<option>${esc(f)}</option>`).join("")}</select>`); s.onchange = () => { ff = s.value; lista(); }; fil.append(s); }
+  main.append(fil);
+  const cont = node(`<div style="display:flex;flex-direction:column;gap:30px"></div>`); main.append(cont);
+  const prog = () => $("#prog").innerHTML = `${hechas.size}<small>/${E.length}</small>`;
+  function lista() {
+    cont.innerHTML = ""; prog();
+    E.map((e, i) => ({...e, i})).filter(e => (ft === "todos" || e.tema === ft) && (ff === "todas" || e.fuente === ff)).forEach(e => {
+      const of = e.confianza === "pauta";
+      const rub = (e.rubrica || []).length ? `<div class="tbl"><table><tr><th>Criterio de la pauta</th><th style="text-align:right">Pts</th></tr>${e.rubrica.map(r => `<tr><td>${inl(r.criterio)}</td><td class="mono" style="text-align:right">${esc(r.pts)}</td></tr>`).join("")}</table></div>`
+        : (e.puntaje_max || []).length ? `<div class="lbl" style="color:var(--acc)">Lo que suma puntos</div>${md(e.puntaje_max.map(x => "- " + x).join("\n"))}` : "";
+      const desc = [...(e.descuentos || []), ...(e.errores || [])];
+      const panes = [
+        ["I · Estrategia", (e.estrategia ? md(e.estrategia) : "") + (e.tiempo ? `<div class="pen">tiempo sugerido: ${esc(e.tiempo)}</div>` : "")],
+        ["II · Solución", pasosHTML(e.pasos) + (e.respuesta ? `<div class="ans">${md(e.respuesta)}</div>` : "") + `<div class="qed">∎</div>`],
+        ["III · Rúbrica de puntaje", rub + (desc.length ? `<div style="margin-top:12px"><div class="lbl" style="color:var(--pen)">Descuentos frecuentes</div>${desc.map(d => `<div class="pen">${inl(d)}</div>`).join("")}</div>` : "") + ((e.variantes || []).length ? `<p class="lbl" style="margin-top:12px">También apareció en: ${e.variantes.map(esc).join(" · ")}</p>` : "")]
+      ].filter(p => p[1].replace(/<[^>]+>|∎/g, "").trim());
+      const k = node(`<article class="exam"><div class="rot"><div><span class="lbl">Fuente</span>${esc(e.fuente)}${e.pregunta ? " — " + esc(e.pregunta) : ""}</div><div><span class="lbl">Puntaje</span>${esc(e.puntaje || "—")}</div><div class="${of ? "of" : "pr"}"><span class="lbl" style="color:inherit">Solución</span>${of ? "Pauta oficial" : "Propuesta"}</div></div>
+        <div class="en"><div class="lbl" style="margin-bottom:6px">§${idx(e.tema)} · ${esc(tituloTema(e.tema))}</div>${md(e.enunciado)}</div><div class="tabs"></div><div class="pane"><p class="lbl">Intenta resolverla antes de abrir la solución.</p></div>
+        <div class="foot"><span></span><label class="chk"><input type="checkbox"${hechas.has(e.i) ? " checked" : ""}> La resolví</label></div></article>`);
+      const tabs = k.querySelector(".tabs"), pane = k.querySelector(".pane");
+      panes.forEach(([l, h]) => { const b = node(`<button class="tab">${l}</button>`); b.onclick = () => { tabs.querySelectorAll(".tab").forEach(x => x.classList.remove("on")); b.classList.add("on"); pane.innerHTML = h; tex(pane); }; tabs.append(b); });
+      k.querySelector("input").onchange = ev => { ev.target.checked ? hechas.add(e.i) : hechas.delete(e.i); store.set("hechas", [...hechas]); prog(); };
+      cont.append(k);
+    });
+    if (!cont.children.length) cont.append(node(`<p class="lbl">No hay preguntas con ese filtro.</p>`));
+    tex(cont);
+  }
+  lista();
+}
+
+go(store.get("tab", "resumen"));
+})();
+</script>
+</body>
+</html>
